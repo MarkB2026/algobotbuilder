@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+<defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#08111c"/><stop offset="1" stop-color="#0b1c2d"/></linearGradient></defs>
+<rect width="1280" height="720" fill="url(#g)"/><text x="640" y="270" text-anchor="middle" font-family="Segoe UI,Arial" font-size="34" font-weight="700" fill="#20d8ea">ScriptsAI</text><text x="640" y="350" text-anchor="middle" font-family="Segoe UI,Arial" font-size="58" font-weight="800" fill="white">Wheel Strategy Tracker</text><text x="640" y="410" text-anchor="middle" font-family="Segoe UI,Arial" font-size="28" fill="#9fb1c4">Track the entire wheel.</text></svg>

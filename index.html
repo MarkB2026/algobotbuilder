@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ScriptsAI — useful software, built with AI. Local-first Windows tools for traders and investors." />
+  <title>ScriptsAI — Useful software, built with AI.</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="ScriptsAI home">
+      <span class="brand-word">Scripts<span>AI</span></span>
+      <span class="brand-dot">.org</span>
+    </a>
+    <nav>
+      <a href="#tools">Tools</a>
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">SCRIPTS • SOFTWARE • UTILITIES</p>
+        <h1>Useful software,<br><span>built with AI.</span></h1>
+        <p class="lede">Practical Windows tools designed to solve real problems without unnecessary complexity.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#tools">Explore the tools</a>
+          <a class="button secondary" href="#about">What is ScriptsAI?</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img src="assets/scriptsai-logo.png" alt="ScriptsAI logo" />
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Key principles">
+      <div><strong>Local-first</strong><span>Your data stays on your computer.</span></div>
+      <div><strong>Purpose-built</strong><span>Focused tools instead of bloated platforms.</span></div>
+      <div><strong>AI-assisted</strong><span>Built with AI, controlled by people.</span></div>
+    </section>
+
+    <section id="tools" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">CURRENT TOOLS</p>
+        <h2>Built to make complicated tracking simpler.</h2>
+      </div>
+
+      <article class="tool-card">
+        <div class="tool-copy">
+          <div class="pill">Windows desktop</div>
+          <h3>Wheel Strategy Tracker</h3>
+          <p class="tagline">Track the entire wheel.</p>
+          <p>Follow a wheel strategy from opening premium through assignment, stock ownership, covered calls and completed cycles—all in one place.</p>
+          <ul>
+            <li>Read-only broker position import</li>
+            <li>Whole-wheel profit and transaction tracking</li>
+            <li>Manual tracking remains available</li>
+            <li>Local SQLite storage and backups</li>
+          </ul>
+          <div class="card-actions">
+            <button class="button primary disabled" disabled>Download coming soon</button>
+            <a class="text-link" href="#wheel-video">Watch demo ↓</a>
+          </div>
+        </div>
+        <div class="tool-media" id="wheel-video">
+          <video controls playsinline preload="metadata">
+            <source src="assets/wheel-demo.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+        </div>
+      </article>
+
+      <article class="tool-card reverse">
+        <div class="tool-copy">
+          <div class="pill">Windows desktop</div>
+          <h3>Dividend &amp; NAV Tracker</h3>
+          <p class="tagline">Your yield. The whole picture.</p>
+          <p>See dividend income alongside NAV gain or decay so you can tell the difference between distributions received and actual portfolio return.</p>
+          <ul>
+            <li>Track selected positions—not your whole account</li>
+            <li>Actual IBKR Flex dividend history when available</li>
+            <li>Estimated public distribution history otherwise</li>
+            <li>Gross income, NAV movement and net result</li>
+          </ul>
+          <div class="card-actions">
+            <button class="button primary disabled" disabled>Download coming soon</button>
+            <a class="text-link" href="#dividend-video">Watch demo ↓</a>
+          </div>
+        </div>
+        <div class="tool-media" id="dividend-video">
+          <video controls playsinline preload="metadata">
+            <source src="assets/dividend-demo.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+        </div>
+      </article>
+    </section>
+
+    <section id="about" class="section split-section">
+      <div>
+        <p class="eyebrow">ABOUT SCRIPTSAI</p>
+        <h2>Software ideas turned into working tools.</h2>
+      </div>
+      <div class="body-copy">
+        <p>ScriptsAI is a home for practical software created through human direction and AI-assisted development. The goal is simple: build useful tools, keep them understandable, and make them easy to run.</p>
+        <p>The applications shown here are not autonomous AI trading systems. AI is part of the development process; the software itself does exactly what it says it does.</p>
+      </div>
+    </section>
+
+    <section id="privacy" class="privacy-card">
+      <p class="eyebrow">LOCAL-FIRST BY DESIGN</p>
+      <h2>Your financial data does not need another cloud.</h2>
+      <p>ScriptsAI desktop tools are designed to run locally. Broker connections are used only for the specific read-only information a tool needs. Trading data and application databases remain on your computer unless you choose to export or share them.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand footer-brand"><span class="brand-word">Scripts<span>AI</span></span><span class="brand-dot">.org</span></div>
+    <p>Useful software, built with AI.</p>
+    <p class="copyright">© <span id="year"></span> ScriptsAI</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
