@@ -243,28 +243,43 @@
       </button>
     </div>
 
-   
+<section id="support" class="support-card compact-support">
 
-</section>
+  <div class="support-copy">
+    <p class="eyebrow">SUPPORT SCRIPTSAI</p>
+    <h2>Support continued development.</h2>
+    <p>
+      ScriptsAI tools are free to use. If you find them useful,
+      Bitcoin contributions are appreciated.
+    </p>
+  </div>
 
-  </main>
+  <div class="bitcoin-box compact-bitcoin-box">
 
-
-  <!-- FOOTER -->
-  <footer>
-
-    <div class="brand footer-brand">
-      <span class="brand-word">Scripts<span>AI</span></span>
-      <span class="brand-dot">.org</span>
+    <div class="btc-label">
+      Bitcoin (BTC) — Bitcoin Network
     </div>
 
-    <p>Useful software, built with AI.</p>
+    <div class="btc-address-row">
+      <input
+        id="btc-address"
+        type="text"
+        value="YOUR_BITCOIN_ADDRESS"
+        readonly
+        aria-label="ScriptsAI Bitcoin address"
+      />
 
-    <p class="copyright">
-      © <span id="year"></span> ScriptsAI
-    </p>
+      <button
+        class="button primary"
+        type="button"
+        onclick="copyBitcoinAddress()">
+        Copy address
+      </button>
+    </div>
 
-  </footer>
+  </div>
+
+</section>
 
 
   <!-- JAVASCRIPT -->
