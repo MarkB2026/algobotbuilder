@@ -457,53 +457,87 @@ footer {
 
 /* ---------- Support ScriptsAI ---------- */
 
-.support-card {
-  margin: 70px 0;
-  padding: 42px;
-  border-radius: 24px;
+.compact-support {
+  margin: 40px 0 20px;
+  padding: 26px 30px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  text-align: center;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 28px;
+  align-items: center;
 }
 
-.support-card h2 {
-  margin: 8px 0 14px;
+.compact-support h2 {
+  margin: 6px 0 10px;
+  font-size: 28px;
 }
 
-.support-card > p:not(.eyebrow):not(.support-note) {
-  max-width: 680px;
-  margin: 0 auto;
-  line-height: 1.7;
+.compact-support p {
+  margin-bottom: 0;
 }
 
-.support-actions {
-  margin-top: 26px;
+.compact-bitcoin-box {
+  text-align: left;
+}
+
+.btc-label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.btc-address-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btc-address-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.btc-address-row .button {
+  white-space: nowrap;
+  padding: 11px 16px;
 }
 
 .bitcoin-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 22px;
-  border-radius: 12px;
-  background: #f7931a;
-  color: #fff;
+  display: inline-block;
+  margin-top: 10px;
+  color: #35c6ff;
   text-decoration: none;
-  font-weight: 700;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .bitcoin-button:hover {
-  transform: translateY(-2px);
-  opacity: 0.92;
+  text-decoration: underline;
 }
 
-.bitcoin-symbol {
-  font-size: 21px;
-}
+@media (max-width: 860px) {
+  .compact-support {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 24px;
+  }
 
-.support-note {
-  margin-top: 16px;
-  font-size: 13px;
-  opacity: 0.6;
+  .btc-address-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btc-address-row .button {
+    width: 100%;
+  }
 }
