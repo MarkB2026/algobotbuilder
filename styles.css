@@ -455,89 +455,125 @@ footer {
   }
 }
 
-/* ---------- Support ScriptsAI ---------- */
+/* =========================================================
+   SCRIPTSAI BITCOIN SUPPORT — FINAL OVERRIDE
+   ========================================================= */
 
-.compact-support {
-  margin: 40px 0 20px;
-  padding: 26px 30px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.support-card.compact-support {
+  margin: 50px 0 30px !important;
+  padding: 28px 32px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,0.035) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
 
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-  gap: 28px;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 40px !important;
+
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
 }
 
-.compact-support h2 {
-  margin: 6px 0 10px;
-  font-size: 28px;
+.support-card.compact-support .support-copy {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 650px !important;
 }
 
-.compact-support p {
-  margin-bottom: 0;
+.support-card.compact-support .support-copy .eyebrow {
+  margin: 0 0 8px !important;
 }
 
-.compact-bitcoin-box {
-  text-align: left;
+.support-card.compact-support .support-copy h2 {
+  margin: 0 0 10px !important;
+  font-size: 28px !important;
+  line-height: 1.15 !important;
+  white-space: normal !important;
 }
 
-.btc-label {
-  margin-bottom: 8px;
-  font-size: 13px;
-  opacity: 0.7;
+.support-card.compact-support .support-copy p {
+  margin: 0 !important;
+  line-height: 1.6 !important;
+  max-width: 650px !important;
 }
 
-.btc-address-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.support-card.compact-support .compact-bitcoin-box {
+  flex: 0 0 440px !important;
+  width: 440px !important;
+  max-width: 440px !important;
+  min-width: 0 !important;
+  text-align: left !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border: none !important;
 }
 
-.btc-address-row input {
-  width: 100%;
-  min-width: 0;
-  padding: 11px 12px;
-  border-radius: 9px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
-  color: #fff;
-  font-family: monospace;
-  font-size: 13px;
+.support-card.compact-support .btc-label {
+  margin: 0 0 9px !important;
+  font-size: 13px !important;
+  opacity: 0.7 !important;
 }
 
-.btc-address-row .button {
-  white-space: nowrap;
-  padding: 11px 16px;
+.support-card.compact-support .btc-address-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 0 !important;
 }
 
-.bitcoin-button {
-  display: inline-block;
-  margin-top: 10px;
-  color: #35c6ff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
+.support-card.compact-support .btc-address-row input {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  padding: 0 12px !important;
+
+  border-radius: 9px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #fff !important;
+
+  font-family: monospace !important;
+  font-size: 12px !important;
+  box-sizing: border-box !important;
 }
 
-.bitcoin-button:hover {
-  text-decoration: underline;
+.support-card.compact-support .btc-address-row button {
+  flex: 0 0 auto !important;
+  height: 44px !important;
+  padding: 0 18px !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
 }
 
+
+/* Mobile */
 @media (max-width: 860px) {
-  .compact-support {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 24px;
+
+  .support-card.compact-support {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 22px !important;
+    padding: 24px !important;
   }
 
-  .btc-address-row {
-    flex-direction: column;
-    align-items: stretch;
+  .support-card.compact-support .compact-bitcoin-box {
+    flex: none !important;
+    width: 100% !important;
+    max-width: none !important;
   }
 
-  .btc-address-row .button {
-    width: 100%;
+  .support-card.compact-support .btc-address-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .support-card.compact-support .btc-address-row input,
+  .support-card.compact-support .btc-address-row button {
+    width: 100% !important;
   }
 }
