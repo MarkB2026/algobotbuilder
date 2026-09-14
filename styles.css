@@ -615,6 +615,84 @@ li {
 
 
 /* =========================================================
+   OTHER SCRIPTS & TOOLS
+   ========================================================= */
+
+.other-tools-section {
+  padding-top: 90px;
+}
+
+.other-tools-section .section-intro {
+  color: #b6c2cf;
+  font-size: 1rem;
+  max-width: 760px;
+}
+
+.mini-tools-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100%;
+}
+
+.mini-tool {
+  min-width: 0;
+  padding: 20px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(
+    145deg,
+    rgba(15,25,39,.88),
+    rgba(8,13,21,.92)
+  ) !important;
+}
+
+.mini-tool:hover {
+  border-color: rgba(46,216,255,.25) !important;
+  background: rgba(255,255,255,.04) !important;
+}
+
+.mini-tool h3 {
+  font-size: 1.08rem !important;
+  line-height: 1.25 !important;
+  letter-spacing: -.01em !important;
+  margin: 0 0 9px !important;
+}
+
+.mini-tool p {
+  margin: 0 !important;
+  color: #aebac7 !important;
+  font-size: .86rem !important;
+  line-height: 1.5 !important;
+}
+
+.other-tools-note {
+  margin: 26px 0 17px;
+  color: #b6c2cf;
+  font-size: .95rem;
+}
+
+
+/* 2 columns on tablet */
+@media (max-width: 1000px) {
+
+  .mini-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+}
+
+
+/* 1 column on phone */
+@media (max-width: 560px) {
+
+  .mini-tools-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
+
+/* =========================================================
    FOOTER
    ========================================================= */
 
