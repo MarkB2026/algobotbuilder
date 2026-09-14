@@ -210,32 +210,42 @@
 
 
     <!-- BITCOIN SUPPORT -->
-    <section id="support" class="support-card">
+    <section id="support" class="support-card compact-support">
+  <div class="support-copy">
+    <p class="eyebrow">SUPPORT SCRIPTSAI</p>
+    <h2>Support continued development with Bitcoin.</h2>
+    <p>
+      ScriptsAI tools are free to use. If you find them useful, Bitcoin contributions are appreciated.
+    </p>
+  </div>
 
-      <p class="eyebrow">SUPPORT SCRIPTSAI</p>
+  <div class="bitcoin-box compact-bitcoin-box">
+    <div class="btc-label">Bitcoin (BTC) — Bitcoin Network</div>
 
-      <h2>Support ScriptsAI with Bitcoin</h2>
+    <div class="btc-address-row">
+      <input
+        id="btc-address"
+        type="text"
+        value="bc1qsmmrmpfad5hx4ek7f4k6pws2f5hn6ugfglg6yu"
+        readonly
+        aria-label="ScriptsAI Bitcoin address"
+      />
 
-      <p>
-        ScriptsAI tools are free to use. If you find them useful and want to
-        support continued development, Bitcoin contributions are appreciated.
-      </p>
+      <button
+        class="button primary"
+        type="button"
+        onclick="copyBitcoinAddress()">
+        Copy address
+      </button>
+    </div>
 
-      <div class="bitcoin-box">
-
-        <div class="btc-label">
-          Bitcoin (BTC) — Bitcoin Network
-        </div>
-
-        <div class="btc-address-row">
-
-          <input
-            id="btc-address"
-            type="text"
-            value="YOUR_BITCOIN_ADDRESS"
-            readonly
-            aria-label="ScriptsAI Bitcoin address"
-          />
+    <a
+      class="bitcoin-button"
+      href="bc1qsmmrmpfad5hx4ek7f4k6pws2f5hn6ugfglg6yu">
+      ₿ Open in wallet
+    </a>
+  </div>
+</section>
 
           <button
             class="button primary"
