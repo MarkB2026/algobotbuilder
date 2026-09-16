@@ -332,7 +332,7 @@ h3 {
 
 .beebot-flagship {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 2fr;
   overflow: hidden;
   border: 1px solid rgba(46,216,255,.22);
   border-radius: 26px;
@@ -1168,5 +1168,5 @@ footer {
 }
 
 body {
-  border-top: 10px solid yellow !important;
+  border-top: 10px solid green !important;
 }
