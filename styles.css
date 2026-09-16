@@ -474,9 +474,7 @@ h3 {
 
 .beebot-video {
   margin-top: 24px;
-  width: 130%;
-  position: relative;
-  z-index: 10;
+  width: 100%;
 }
 
 .beebot-video video {
