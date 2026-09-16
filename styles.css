@@ -1226,11 +1226,11 @@ footer {
 
 /* AVAILABLE SCRIPT — BLUE/BLACK CARD */
 .mini-tool.live {
-  background: rgba(7, 20, 34, 0.88);
-  border-color: rgba(45, 120, 180, 0.45);
+  background: #071f3d;
+  border: 1px solid #168ee0;
 }
 
 /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
 body {
-  border-top: 10px solid yellow !important;
+  border-top: 10px solid green !important;
 }
