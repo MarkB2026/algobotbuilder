@@ -1166,3 +1166,7 @@ footer {
 .mini-tool.live .download-btn:hover {
   color: #8de2ff;
 }
+
+body {
+  border-top: 10px solid red !important;
+}
