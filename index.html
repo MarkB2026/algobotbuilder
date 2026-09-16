@@ -1,367 +1,614 @@
-<!-- =========================================================
-     BEEBOT + THE HIVE — FLAGSHIP
-     ========================================================= -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="BotScripts.org — free practical software, trading tools and automation built with AI." />
+  <title>BotScripts.org — Powerful software, built with AI.</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-<section id="beebot" class="section beebot-section">
+<body>
 
-  <div class="section-heading">
-    <p class="eyebrow">BEEBOT + THE HIVE</p>
-    <h2>Trade locally. Learn collectively.</h2>
+  <header class="site-header">
+    <a class="brand brand-logo-link" href="#top" aria-label="BotScripts home">
+      <img class="header-logo" src="assets/botscripts-logo.gif" alt="BotScripts.org" />
+    </a>
 
-    <p class="section-intro">
-      BEEBOT is an RSI mean-reversion trading bot with an optional
-      connection to The Hive — a community trade database built from
-      participating BEEBOT users.
-    </p>
-  </div>
+    <nav>
+      <a href="#beebot">BEEBOT + Hive</a>
+      <a href="#tools">Trading Tools</a>
+      <a href="#other-tools">More Tools</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#support">Donate Bitcoin</a>
+    </nav>
+  </header>
 
+  <main id="top">
 
-  <article class="beebot-flagship">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">STOCKS • OPTIONS • TRADING</p>
 
-    <!-- BEEBOT SIDE -->
-    <div class="beebot-panel">
+        <h1>
+          Powerful software,<br>
+          <span>built with AI.</span>
+        </h1>
 
-      <div class="pill-row">
-        <div class="pill">Windows desktop</div>
-        <div class="pill beta-pill">Public Beta</div>
-        <div class="pill">RSI Mean Reversion</div>
+        <p class="lede">
+          Products and tools designed to simplify trading without unnecessary complexity.
+          No subscriptions. Free to use.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button primary" href="#beebot">Explore BEEBOT</a>
+          <a class="button secondary" href="#tools">Explore the tools</a>
+        </div>
       </div>
 
-      <p class="eyebrow">BEEBOT</p>
+      <div class="hero-art">
+        <img src="assets/botscripts-logo.gif" alt="BotScripts.org logo" />
+      </div>
+    </section>
 
-      <h3>Your bot. Your rules.</h3>
-
-      <p class="tagline">
-        Automated mean-reversion trading with local control.
-      </p>
-
-      <p>
-        BEEBOT scans for RSI mean-reversion opportunities, evaluates
-        candidates against your configured trading plan and can execute
-        trades through your broker.
-      </p>
-
-      <p>
-        Every trade is recorded in your own local database. You decide
-        whether BEEBOT operates independently or connects to The Hive.
-      </p>
-
-      <ul>
-        <li>RSI mean-reversion strategy</li>
-        <li>Configurable trading plan and execution rules</li>
-        <li>Paper and live trading modes</li>
-        <li>Local trade history and analytics</li>
-        <li>Controlled position sizing and safety overrides</li>
-        <li>Optional Hive connectivity</li>
-      </ul>
-
-      <div class="card-actions">
-
-        <!-- Enable this when installer is uploaded -->
-        <button class="button primary disabled" disabled>
-          Free download coming soon
-        </button>
-
-        <a class="text-link" href="#beebot-video">
-          Watch demo ↓
-        </a>
-
+    <!-- PRINCIPLES -->
+    <section class="trust-strip" aria-label="Key principles">
+      <div>
+        <strong>Free to use</strong>
+        <span>Download it, use it and help make it better.</span>
       </div>
 
-    </div>
+      <div>
+        <strong>Local-first</strong>
+        <span>Your data stays on your computer unless you choose to share it.</span>
+      </div>
 
+      <div>
+        <strong>Built in public</strong>
+        <span>Real-world feedback helps shape what comes next.</span>
+      </div>
+    </section>
 
-    <!-- THE HIVE SIDE -->
-    <div class="hive-panel">
+    <!-- PUBLIC BETA INTRO -->
+    <section class="beta-intro">
+      <div>
+        <p class="eyebrow">PUBLIC BETA</p>
+        <h2>
+          Free software. Built in public.<br>
+          Improved by users.
+        </h2>
+      </div>
 
-      <div class="hive-icon">⬡</div>
+      <div class="beta-intro-copy">
+        <p>
+          BotScripts tools are free to download and use. These applications are
+          actively developed, and real-world feedback helps determine what gets
+          fixed, improved and built next.
+        </p>
 
-      <p class="eyebrow">THE HIVE</p>
+        <p>
+          Found a bug? Report it. Have an idea? Suggest a feature.
+          Need a completely different utility? Request a new script.
+        </p>
+      </div>
+    </section>
 
-      <h3>Shared data.<br>Better context.</h3>
+    <!-- BEEBOT + THE HIVE -->
+    <section id="beebot" class="section beebot-section">
+      <div class="section-heading">
+        <p class="eyebrow">BEEBOT + THE HIVE</p>
+        <h2>Trade locally. Learn collectively.</h2>
+        <p class="section-intro">
+          BEEBOT is an RSI mean-reversion trading bot with an optional connection
+          to The Hive — a community trade database built from participating BEEBOT users.
+        </p>
+      </div>
 
-      <p>
-        Connect BEEBOT to The Hive to contribute structured trade data
-        and compare your setups with trades shared by other participating
-        BEEBOT users.
-      </p>
-
-
-      <div class="hive-example">
-
-        <div class="hive-example-header">
-          EXAMPLE SIMILAR-TRADE MATCH
-        </div>
-
-        <div class="hive-match-count">
-          34
-        </div>
-
-        <div class="hive-match-label">
-          similar trades found
-        </div>
-
-        <div class="hive-stats">
-
-          <div>
-            <strong>23</strong>
-            <span>Wins</span>
+      <article class="beebot-flagship">
+        <div class="beebot-panel">
+          <div class="pill-row">
+            <div class="pill">Windows desktop</div>
+            <div class="pill beta-pill">Public Beta</div>
+            <div class="pill">RSI Mean Reversion</div>
           </div>
 
-          <div>
-            <strong>11</strong>
-            <span>Losses</span>
+          <p class="eyebrow">BEEBOT</p>
+          <h3>Your bot. Your rules.</h3>
+          <p class="tagline">Automated mean-reversion trading with local control.</p>
+
+          <p>
+            BEEBOT scans for RSI mean-reversion opportunities, evaluates candidates
+            against your configured trading plan and can execute trades through your broker.
+          </p>
+
+          <p>
+            Every trade is recorded in your own local database. You decide whether
+            BEEBOT operates independently or connects to The Hive.
+          </p>
+
+          <ul>
+            <li>RSI mean-reversion strategy</li>
+            <li>Configurable trading plan and execution rules</li>
+            <li>Paper and live trading modes</li>
+            <li>Local trade history and analytics</li>
+            <li>Controlled position sizing and safety overrides</li>
+            <li>Optional Hive connectivity</li>
+          </ul>
+
+          <div class="card-actions">
+            <button class="button primary disabled" disabled>
+              Free download coming soon
+            </button>
+            <a class="text-link" href="#beebot-video">Watch demo ↓</a>
+          </div>
+        </div>
+
+        <div class="hive-panel">
+          <div class="hive-icon">⬡</div>
+          <p class="eyebrow">THE HIVE</p>
+          <h3>Shared data.<br>Better context.</h3>
+
+          <p>
+            Connect BEEBOT to The Hive to contribute structured trade data and compare
+            your setups with trades shared by other participating BEEBOT users.
+          </p>
+
+          <div class="hive-example">
+            <div class="hive-example-header">EXAMPLE SIMILAR-TRADE MATCH</div>
+            <div class="hive-match-count">34</div>
+            <div class="hive-match-label">similar trades found</div>
+
+            <div class="hive-stats">
+              <div><strong>23</strong><span>Wins</span></div>
+              <div><strong>11</strong><span>Losses</span></div>
+              <div><strong>+1.8%</strong><span>Avg. result</span></div>
+              <div><strong>0.72</strong><span>Avg. ATR</span></div>
+            </div>
+
+            <div class="hive-example-note">
+              Illustrative example — not actual trading results.
+            </div>
           </div>
 
-          <div>
-            <strong>+1.8%</strong>
-            <span>Avg. result</span>
+          <div class="hive-features">
+            <div class="hive-feature">
+              <strong>SCAN THE HIVE</strong>
+              <span>See candidates currently appearing across participating BEEBOTs.</span>
+            </div>
+
+            <div class="hive-feature">
+              <strong>COMPARE YOUR TRADE</strong>
+              <span>
+                Find historical trades with characteristics similar to your current
+                setup and review their outcomes.
+              </span>
+            </div>
+
+            <div class="hive-feature">
+              <strong>BUILD THE DATASET</strong>
+              <span>
+                Shared trades add observations that can improve future comparisons
+                for the community.
+              </span>
+            </div>
           </div>
-
-          <div>
-            <strong>0.72</strong>
-            <span>Avg. ATR</span>
-          </div>
-
         </div>
+      </article>
 
-        <div class="hive-example-note">
-          Illustrative example — not actual trading results.
+      <div class="beebot-video" id="beebot-video">
+        <div class="video-placeholder">
+          <p class="eyebrow">BEEBOT DEMO</p>
+          <h3>Video coming soon.</h3>
+          <p>
+            See BEEBOT scan, evaluate and execute an RSI mean-reversion trade —
+            then compare the setup against The Hive.
+          </p>
         </div>
-
-      </div>
-
-
-      <div class="hive-features">
-
-        <div class="hive-feature">
-          <strong>SCAN THE HIVE</strong>
-          <span>
-            See candidates currently appearing across participating BEEBOTs.
-          </span>
-        </div>
-
-        <div class="hive-feature">
-          <strong>COMPARE YOUR TRADE</strong>
-          <span>
-            Find historical trades with characteristics similar to your
-            current setup and review their outcomes.
-          </span>
-        </div>
-
-        <div class="hive-feature">
-          <strong>BUILD THE DATASET</strong>
-          <span>
-            Shared trades add observations that can improve future
-            comparisons for the community.
-          </span>
-        </div>
-
-      </div>
-
-    </div>
-
-  </article>
-
-
-  <!-- BEEBOT VIDEO -->
-  <div class="beebot-video" id="beebot-video">
-
-    <div class="video-placeholder">
-
-      <p class="eyebrow">BEEBOT DEMO</p>
-
-      <h3>Video coming soon.</h3>
-
-      <p>
-        See BEEBOT scan, evaluate and execute an RSI mean-reversion
-        trade — then compare the setup against The Hive.
-      </p>
-
-    </div>
-
-    <!--
-    WHEN VIDEO IS READY, REPLACE THE PLACEHOLDER ABOVE WITH:
-
-    <video controls playsinline preload="metadata">
-      <source
-        src="assets/videos/beebot-demo.mp4"
-        type="video/mp4"
-      />
-      Your browser does not support embedded video.
-    </video>
-    -->
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     TRADING TOOLS
-     ========================================================= -->
-
-<section id="tools" class="section">
-
-  <div class="section-heading">
-
-    <p class="eyebrow">TRADING TOOLS</p>
-
-    <h2>
-      Track the strategy. See the whole result.
-    </h2>
-
-    <p class="section-intro">
-      Local-first tools for tracking options strategies, income
-      and portfolio performance.
-    </p>
-
-  </div>
-
-
-  <!-- =======================================================
-       WHEEL STRATEGY TRACKER
-       ======================================================= -->
-
-  <article class="tool-card">
-
-    <div class="tool-copy">
-
-      <div class="pill-row">
-        <div class="pill">Windows desktop</div>
-        <div class="pill beta-pill">Public Beta</div>
-      </div>
-
-      <h3>Wheel Strategy Tracker</h3>
-
-      <p class="tagline">
-        Track the entire wheel.
-      </p>
-
-      <p>
-        Follow a wheel strategy from opening premium through assignment,
-        stock ownership, covered calls and completed cycles — all in one place.
-      </p>
-
-      <ul>
-        <li>Read-only broker position import</li>
-        <li>Whole-wheel profit and transaction tracking</li>
-        <li>Manual tracking remains available</li>
-        <li>Local SQLite storage and backups</li>
-      </ul>
-
-      <div class="card-actions">
 
         <!--
-        CHANGE THE FILENAME BELOW TO YOUR ACTUAL INSTALLER
+        When the video is ready, replace .video-placeholder above with:
+
+        <video controls playsinline preload="metadata">
+          <source src="assets/videos/beebot-demo.mp4" type="video/mp4" />
+          Your browser does not support embedded video.
+        </video>
         -->
+      </div>
+    </section>
 
-        <a
-          class="button primary"
-          href="downloads/WheelStrategyTracker_Setup.exe"
-          download
-        >
-          Download for Windows
-        </a>
-
-        <a class="text-link" href="#wheel-video">
-          Watch demo ↓
-        </a>
-
+    <!-- TRADING TOOLS -->
+    <section id="tools" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">TRADING TOOLS</p>
+        <h2>Track the strategy. See the whole result.</h2>
+        <p class="section-intro">
+          Local-first tools for tracking options strategies, income and portfolio performance.
+        </p>
       </div>
 
-    </div>
+      <!-- WHEEL STRATEGY TRACKER -->
+      <article class="tool-card">
+        <div class="tool-copy">
+          <div class="pill-row">
+            <div class="pill">Windows desktop</div>
+            <div class="pill beta-pill">Public Beta</div>
+          </div>
 
+          <h3>Wheel Strategy Tracker</h3>
+          <p class="tagline">Track the entire wheel.</p>
 
-    <div class="tool-media" id="wheel-video">
+          <p>
+            Follow a wheel strategy from opening premium through assignment,
+            stock ownership, covered calls and completed cycles — all in one place.
+          </p>
 
-      <video controls playsinline preload="metadata">
+          <ul>
+            <li>Read-only broker position import</li>
+            <li>Whole-wheel profit and transaction tracking</li>
+            <li>Manual tracking remains available</li>
+            <li>Local SQLite storage and backups</li>
+          </ul>
 
-        <source
-          src="assets/videos/wheel-demo.mp4"
-          type="video/mp4"
-        />
+          <div class="card-actions">
+            <button class="button primary disabled" disabled>
+              Free download coming soon
+            </button>
+            <a class="text-link" href="#wheel-video">Watch demo ↓</a>
+          </div>
+        </div>
 
-        Your browser does not support embedded video.
+        <div class="tool-media" id="wheel-video">
+          <video controls playsinline preload="metadata">
+            <source src="assets/videos/wheel-demo.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+        </div>
+      </article>
 
-      </video>
+      <!-- DIVIDEND & NAV TRACKER -->
+      <article class="tool-card reverse">
+        <div class="tool-copy">
+          <div class="pill-row">
+            <div class="pill">Windows desktop</div>
+            <div class="pill beta-pill">Public Beta</div>
+          </div>
 
-    </div>
+          <h3>Dividend &amp; NAV Tracker</h3>
+          <p class="tagline">Your yield. The whole picture.</p>
 
-  </article>
+          <p>
+            See dividend income alongside NAV gain or decay so you can tell
+            the difference between distributions received and actual portfolio return.
+          </p>
 
+          <ul>
+            <li>Track selected positions — not your whole account</li>
+            <li>Actual IBKR Flex dividend history when available</li>
+            <li>Estimated public distribution history otherwise</li>
+            <li>Gross income, NAV movement and net result</li>
+          </ul>
 
+          <div class="card-actions">
+            <button class="button primary disabled" disabled>
+              Free download coming soon
+            </button>
+            <a class="text-link" href="#dividend-video">Watch demo ↓</a>
+          </div>
+        </div>
 
-  <!-- =======================================================
-       DIVIDEND & NAV TRACKER
-       ======================================================= -->
+        <div class="tool-media" id="dividend-video">
+          <video controls playsinline preload="metadata">
+            <source src="assets/videos/dividend-demo.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+        </div>
+      </article>
+    </section>
 
-  <article class="tool-card reverse">
+    <!-- OTHER SCRIPTS & TOOLS -->
+    <section id="other-tools" class="section other-tools-section">
+      <div class="section-heading">
+        <p class="eyebrow">OTHER SCRIPTS &amp; TOOLS</p>
+        <h2>Specialized automation.</h2>
 
-    <div class="tool-copy">
-
-      <div class="pill-row">
-        <div class="pill">Windows desktop</div>
-        <div class="pill beta-pill">Public Beta</div>
+        <p class="section-intro">
+          BotScripts also develops focused utilities, market-analysis tools
+          and local trading automation. Some are simple standalone tools;
+          others are experimental or specialized systems.
+        </p>
       </div>
 
-      <h3>Dividend &amp; NAV Tracker</h3>
+      <div class="mini-tools-grid">
+        <div class="mini-tool">
+          <h3>Dynamic Options Plotter</h3>
+          <p>Visualize option positions, payoff structures and changing trade scenarios.</p>
+        </div>
 
-      <p class="tagline">
-        Your yield. The whole picture.
+        <div class="mini-tool">
+          <h3>Simple Wheel Tracker</h3>
+          <p>A lightweight interface for manually tracking wheel trades and completed cycles.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>Earnings Scanner</h3>
+          <p>Scan upcoming earnings and surface potential opportunities using configurable criteria.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>Leg In / Leg Out</h3>
+          <p>Tools for managing multi-leg option strategies one position at a time.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>ScalpBot</h3>
+          <p>Local automated trading system designed around short-duration intraday strategies.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>SwingBot</h3>
+          <p>Local automation for longer-duration technical and momentum-based trades.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>Financial History Bot</h3>
+          <p>Collect and organize historical financial and market information for analysis.</p>
+        </div>
+
+        <div class="mini-tool">
+          <h3>Dividend History Tracker</h3>
+          <p>A simple, fully manual tool for recording and reviewing dividend payment history.</p>
+        </div>
+      </div>
+
+      <p class="other-tools-note">
+        Interested in one of these tools? Request access, suggest an improvement,
+        or ask about adapting it for your own workflow.
       </p>
+
+      <a class="button secondary" href="#feedback">Request a Tool</a>
+    </section>
+
+    <!-- WINDOWS INSTALLATION -->
+    <section id="install" class="section install-section">
+      <div class="section-heading">
+        <p class="eyebrow">WINDOWS INSTALLATION</p>
+        <h2>Download. Install. Start using it.</h2>
+
+        <p class="section-intro">
+          BotScripts desktop tools are currently built for Windows 10 and Windows 11.
+          Application data is stored locally unless a feature explicitly lets you
+          choose to share data.
+        </p>
+      </div>
+
+      <div class="install-steps">
+        <div class="install-step">
+          <span class="install-number">1</span>
+          <div>
+            <h3>Download</h3>
+            <p>
+              Click <strong>Download for Windows</strong> on the tool you want.
+              The download is the ready-to-install Windows application.
+            </p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <span class="install-number">2</span>
+          <div>
+            <h3>Run the installer</h3>
+            <p>
+              Open the downloaded <strong>.exe</strong> file and follow the
+              installation prompts.
+            </p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <span class="install-number">3</span>
+          <div>
+            <h3>Windows security message</h3>
+            <p>
+              Windows may display a security or SmartScreen message because
+              BotScripts is independently distributed. Only continue if you
+              downloaded the installer directly from <strong>BotScripts.org</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <span class="install-number">4</span>
+          <div>
+            <h3>Launch the tool</h3>
+            <p>
+              Open the application from your Start menu or desktop shortcut.
+              Your local application data remains on your computer.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-note">
+        <strong>Connections depend on the tool.</strong>
+        Tracker applications use supported broker connections for the information
+        they need. Trading applications such as BEEBOT may place orders only when
+        configured by the user for trading execution.
+      </div>
+    </section>
+
+    <!-- COMMUNITY / FEEDBACK -->
+    <section id="feedback" class="section community-section">
+      <div class="section-heading community-heading">
+        <p class="eyebrow">HELP BUILD BOTSCRIPTS</p>
+
+        <h2>Use it. Break it. Improve it.</h2>
+
+        <p>
+          BotScripts is being developed with the people actually using it.
+          Feedback is not an afterthought — it is part of the development process.
+        </p>
+      </div>
+
+      <div class="feedback-grid">
+        <article class="feedback-card">
+          <div class="feedback-icon">!</div>
+          <h3>Report a Bug</h3>
+
+          <p>
+            Something broken, displaying the wrong result or behaving unexpectedly?
+            Tell us what happened so it can be fixed.
+          </p>
+
+          <a
+            class="button secondary feedback-button"
+            href="https://github.com/MarkB2026/botscripts/issues/new?title=Bug%20Report%3A%20"
+            target="_blank"
+            rel="noopener noreferrer">
+            Report a Bug
+          </a>
+        </article>
+
+        <article class="feedback-card">
+          <div class="feedback-icon">+</div>
+          <h3>Suggest a Feature</h3>
+
+          <p>
+            Have an idea that would make one of the existing tools more useful?
+            Suggest it and help shape future versions.
+          </p>
+
+          <a
+            class="button secondary feedback-button"
+            href="https://github.com/MarkB2026/botscripts/issues/new?title=Feature%20Request%3A%20"
+            target="_blank"
+            rel="noopener noreferrer">
+            Suggest a Feature
+          </a>
+        </article>
+
+        <article class="feedback-card">
+          <div class="feedback-icon">&lt;/&gt;</div>
+          <h3>Request a Script</h3>
+
+          <p>
+            Need something specific? Request anything from a simple utility to
+            turnkey automation — including automated trading bots, semi-automated
+            systems and CSV-driven execution tools. Custom development may be
+            available in exchange for a contribution to BotScripts.
+          </p>
+
+          <a
+            class="button secondary feedback-button"
+            href="https://github.com/MarkB2026/botscripts/issues/new?title=New%20Script%20Request%3A%20"
+            target="_blank"
+            rel="noopener noreferrer">
+            Request a Script
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section split-section">
+      <div>
+        <p class="eyebrow">ABOUT BOTSCRIPTS</p>
+        <h2>Software ideas turned into working tools.</h2>
+      </div>
+
+      <div class="body-copy">
+        <p>
+          BotScripts is a home for practical software created through human
+          direction and AI-assisted development. The goal is simple: build
+          useful tools, keep them understandable and make them easy to run.
+        </p>
+
+        <p>
+          AI is part of the development process. Each application has its own
+          defined purpose, rules and capabilities.
+        </p>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section id="privacy" class="privacy-card">
+      <p class="eyebrow">LOCAL-FIRST BY DESIGN</p>
+
+      <h2>Your financial data does not need another cloud.</h2>
 
       <p>
-        See dividend income alongside NAV gain or decay so you can tell
-        the difference between distributions received and actual portfolio return.
+        BotScripts desktop tools are designed to run locally. Trading data and
+        application databases remain on your computer unless you explicitly use
+        a feature that shares data, such as optionally contributing BEEBOT trade
+        information to The Hive.
       </p>
+    </section>
 
-      <ul>
-        <li>Track selected positions — not your whole account</li>
-        <li>Actual IBKR Flex dividend history when available</li>
-        <li>Estimated public distribution history otherwise</li>
-        <li>Gross income, NAV movement and net result</li>
-      </ul>
+    <!-- BITCOIN SUPPORT -->
+    <section id="support" class="support-card compact-support">
+      <div class="support-copy">
+        <p class="eyebrow">SUPPORT BOTSCRIPTS</p>
+        <h2>Support continued development.</h2>
 
-      <div class="card-actions">
-
-        <!--
-        CHANGE THE FILENAME BELOW TO YOUR ACTUAL INSTALLER
-        -->
-
-        <a
-          class="button primary"
-          href="downloads/DividendNAVTracker_Setup.exe"
-          download
-        >
-          Download for Windows
-        </a>
-
-        <a class="text-link" href="#dividend-video">
-          Watch demo ↓
-        </a>
-
+        <p>
+          BotScripts tools are free to use. If you find them useful,
+          Bitcoin contributions are appreciated.
+        </p>
       </div>
 
-    </div>
+      <div class="bitcoin-box compact-bitcoin-box">
+        <div class="btc-label">Bitcoin (BTC) — Bitcoin Network</div>
 
+        <div class="btc-address-row">
+          <input
+            id="btc-address"
+            type="text"
+            value="bc1qsmmrmpfad5hx4ek7f4k6pws2f5hn6ugfglg6yu"
+            readonly
+            aria-label="BotScripts Bitcoin address"
+          />
 
-    <div class="tool-media" id="dividend-video">
+          <button
+            class="button primary"
+            type="button"
+            onclick="copyBitcoinAddress()">
+            Copy address
+          </button>
+        </div>
+      </div>
+    </section>
 
-      <video controls playsinline preload="metadata">
+  </main>
 
-        <source
-          src="assets/videos/dividend-demo.mp4"
-          type="video/mp4"
-        />
+  <!-- FOOTER -->
+  <footer>
+    <a class="footer-logo-link" href="#top" aria-label="BotScripts home">
+      <img class="footer-logo" src="assets/botscripts-logo.gif" alt="BotScripts.org" />
+    </a>
 
-        Your browser does not support embedded video.
+    <p>Free software. Built in public. Improved by users.</p>
 
-      </video>
+    <p class="copyright">
+      © <span id="year"></span> BotScripts
+    </p>
+  </footer>
 
-    </div>
+  <!-- JAVASCRIPT -->
+  <script>
+    document.getElementById('year').textContent =
+      new Date().getFullYear();
 
-  </article>
+    function copyBitcoinAddress() {
+      const address =
+        document.getElementById('btc-address').value;
 
-</section>
+      navigator.clipboard.writeText(address).then(() => {
+        alert('Bitcoin address copied.');
+      });
+    }
+  </script>
+
+</body>
+</html>
