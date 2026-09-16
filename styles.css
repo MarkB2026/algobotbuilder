@@ -56,6 +56,37 @@ a {
   align-items: center;
 }
 
+
+/* BotScripts text mark used in header/footer */
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  white-space: nowrap;
+  font-weight: 850;
+  letter-spacing: -.04em;
+}
+
+.brand-word {
+  color: #f3f7fb;
+  font-size: 1.38rem;
+}
+
+.brand-word > span {
+  color: var(--cyan);
+}
+
+.brand-dot {
+  color: #8d9bab;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.footer-brand .brand-word {
+  font-size: 1.15rem;
+}
+
 .brand-logo-link {
   flex: 0 0 auto;
 }
@@ -1091,3 +1122,23 @@ footer {
 }
 
 
+/* Conservative BEEBOT integration: keeps the established BotScripts card language */
+.beebot-flagship {
+  border-radius: 24px;
+  box-shadow: 0 20px 70px rgba(0,0,0,.28);
+}
+
+.beebot-panel,
+.hive-panel {
+  padding: 42px;
+}
+
+.hive-match-count {
+  font-size: 3rem;
+}
+
+@media (max-width: 860px) {
+  .site-header {
+    min-height: 72px;
+  }
+}
