@@ -1223,6 +1223,40 @@ footer {
   color: #8de2ff;
 }
 
+
+/* AVAILABLE / LIVE SCRIPT */
+.mini-tool.live {
+  background: linear-gradient(
+    145deg,
+    rgba(8, 24, 42, 0.98),
+    rgba(4, 13, 24, 0.98)
+  );
+  border: 1px solid rgba(58, 153, 255, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(58, 153, 255, 0.08),
+    0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+.mini-tool.live h3 {
+  color: #ffffff;
+}
+
+.mini-tool.live p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mini-tool.live .download-btn {
+  background: #1677d2;
+  color: #ffffff;
+  border-color: #1677d2;
+}
+
+.mini-tool.live .download-btn:hover {
+  background: #2389ed;
+  border-color: #2389ed;
+}
+
+/* Manually change to display a colored bar at the top of the page to know when css has taken effect. */
 body {
   border-top: 10px solid green !important;
 }
