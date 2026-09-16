@@ -472,21 +472,18 @@ h3 {
   line-height: 1.5;
 }
 
-/* BEEBOT demo - match main demo video size */
+/* BEEBOT demo larger */
 .beebot-video {
-  width: calc(120% + 28px);
-  margin-left: -14px;
+  width: 135% !important;
+  max-width: none !important;
   margin-top: 24px;
+  margin-left: 0;
 }
 
 .beebot-video video {
-  display: block;
-  width: 100%;
+  width: 100% !important;
+  max-width: none !important;
   height: auto;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: #000;
-  box-shadow: 0 18px 50px rgba(0,0,0,.35);
 }
 
 .video-placeholder {
