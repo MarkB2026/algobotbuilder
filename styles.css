@@ -667,6 +667,62 @@ li {
 }
 
 /* =========================================================
+   SEMI-AUTONOMOUS TRADING BOTS
+   ========================================================= */
+
+.semi-autonomous-section {
+  padding-top: 90px;
+}
+
+.bot-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.trading-bot {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  border-color: rgba(46,216,255,.22);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46,216,255,.07), transparent 18rem),
+    linear-gradient(145deg, rgba(12,27,41,.96), rgba(7,14,23,.96));
+}
+
+.trading-bot .pill-row {
+  margin-bottom: 22px;
+}
+
+.trading-bot h3 {
+  font-size: 1.35rem;
+}
+
+.tool-status {
+  margin-top: auto;
+  padding-top: 22px;
+  color: #718295;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.mini-tool.live {
+  display: flex;
+  flex-direction: column;
+}
+
+.mini-tool.live .download-btn {
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+@media (max-width: 900px) {
+  .bot-tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
    WINDOWS INSTALLATION
    ========================================================= */
 
