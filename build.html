@@ -455,9 +455,9 @@ button:hover{
 
 <body>
 
-<button type="button" class="local-info-button" onclick="openLocalInfo()">
-  WHY LOCAL-FIRST?
-</button>
+<!-- ============================================================
+     WHY LOCAL-FIRST POPUP
+     ============================================================ -->
 
 <div id="localInfoModal" class="local-modal" onclick="closeLocalInfoOutside(event)">
   <div class="local-modal-box">
@@ -470,87 +470,79 @@ button:hover{
       &times;
     </button>
 
-    <p class="local-modal-eyebrow">Your trading bot runs where it belongs — on your computer.</p>
+    <p class="local-modal-eyebrow">WHY LOCAL-FIRST?</p>
 
-    <h2>Your bot runs on your computer not in the clouds.</h2>
+    <h2>Your trading bot runs on your computer.</h2>
 
-   <!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+    <p class="local-modal-intro">
+      BuildATradingBot takes a different approach from typical cloud trading
+      platforms. Your bot is built as a Windows application that you download,
+      install and run locally on your own computer.
+    </p>
 
-<title>Build A Trading Bot</title>
+    <div class="local-benefits">
 
-<style>
+      <div class="local-benefit">
+        <strong>DIRECT BROKER CONNECTION</strong>
+        <p>
+          Your bot connects directly to your locally running trading platform.
+          With the platform signed in and the required API settings enabled,
+          the bot can connect automatically using its configured local
+          connection settings.
+        </p>
+      </div>
 
-/* =========================================================
-   WHY LOCAL-FIRST POPUP
-   ========================================================= */
+      <div class="local-benefit">
+        <strong>NO BROKER LOGIN ENTERED</strong>
+        <p>
+          Your broker username and password are never entered into
+          BuildATradingBot.com. Only the connection information required
+          for the local API connection is configured.
+        </p>
+      </div>
 
-.local-info-button {
-  background:#071b2b;
-  color:#7ddcff;
-  border:1px solid #28536a;
-  border-radius:8px;
-  padding:11px 18px;
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:.06em;
-  cursor:pointer;
-  transition:.2s ease;
-}
+      <div class="local-benefit">
+        <strong>INDEPENDENT OPERATION</strong>
+        <p>
+          Once installed, your bot does not depend on BuildATradingBot.com
+          being online. Start it, stop it and run it directly from your computer.
+        </p>
+      </div>
 
-.local-info-button:hover {
-  background:#0b2a40;
-  border-color:#55d8ff;
-  box-shadow:0 0 18px rgba(85,216,255,.16);
-}
+      <div class="local-benefit">
+        <strong>YOUR DATA STAYS LOCAL</strong>
+        <p>
+          Trading history, scans, decisions, settings and bot data can remain
+          in your bot's own local database instead of requiring your complete
+          trading activity to be stored on our servers.
+        </p>
+      </div>
 
-.local-modal {
-  display:none;
-  position:fixed;
-  z-index:9999;
-  inset:0;
-  background:rgba(0,0,0,.78);
-  backdrop-filter:blur(4px);
-  padding:30px 18px;
-  overflow-y:auto;
-}
+      <div class="local-benefit hive-benefit">
+        <strong>OPTIONAL SHARED DATABASE — THE HIVE</strong>
+        <p>
+          Local doesn't mean isolated. Participating bots can optionally connect
+          to The Hive, a shared network database.
+        </p>
+        <p>
+          Bots that choose to contribute structured trade data can benefit from
+          the growing pool of data contributed by other participating bots,
+          including community candidates and similar historical trades.
+        </p>
+      </div>
 
-.local-modal.open {
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
+    </div>
 
-.local-modal-box {
-  position:relative;
-  width:min(900px,100%);
-  margin:auto;
-  background:#071016;
-  border:1px solid #168ee0;
-  border-radius:14px;
-  padding:34px;
-  box-shadow:
-    0 24px 70px rgba(0,0,0,.65),
-    0 0 35px rgba(22,142,224,.10);
-}
+    <div class="local-modal-bottom">
+      <strong>LOCAL EXECUTION. SHARED INTELLIGENCE.</strong>
+      <span>
+        Your computer runs the bot. The Hive optionally connects it
+        to the knowledge of the network.
+      </span>
+    </div>
 
-.local-modal-close {
-  position:absolute;
-  top:14px;
-  right:18px;
-  width:40px;
-  height:40px;
-  border:0;
-  background:transparent;
-  color:#7ddcff;
-  font-size:32px;
-  line-height:1;
-  cursor:pointer;
-}
-
+  </div>
+</div>
 .local-modal-close:hover {
   color:#fff;
 }
