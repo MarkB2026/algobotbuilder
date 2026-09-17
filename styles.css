@@ -1675,6 +1675,54 @@ footer {
     flex-direction: column;
   }
 }
+
+/* =========================================================
+   BLUE-BLACK CARD BACKGROUNDS
+   ========================================================= */
+
+.tool-card,
+.mini-tool,
+.feedback-card,
+.install-step,
+.install-note,
+.trust-strip > div {
+  background: #071b2b;
+}
+
+/* Trading bot cards keep a tiny bit of depth */
+.trading-bot {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46,216,255,.07), transparent 18rem),
+    #071b2b;
+}
+
+/* Main BeeBot / Hive feature block */
+.beebot-flagship {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46,216,255,.10), transparent 34rem),
+    #071b2b;
+}
+
+.hive-panel {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(46,216,255,.09), transparent 25rem),
+    #071b2b;
+}
+
+/* Public Beta box */
+.beta-intro {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(46,216,255,.08), transparent 30rem),
+    #071b2b;
+}
+
+/* Keep hover blue-black instead of turning grey */
+.mini-tool:hover {
+  background: #0a263a;
+  border-color: rgba(46,216,255,.32);
+}
+
+
 /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
 body {
   border-top: 10px solid green !important;
