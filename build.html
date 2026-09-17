@@ -88,6 +88,16 @@ button{
   cursor:pointer
 }
 
+button:hover{
+  filter:brightness(1.08)
+}
+
+.review-button{
+  background:#0d2531;
+  color:#7ddcff;
+  border:1px solid #28536a
+}
+
 .note{
   font-size:13px;
   margin-top:16px
@@ -108,58 +118,121 @@ button{
 
 
 /* ============================================================
+   BOT REVIEW
+   ============================================================ */
+
+.review-panel{
+  display:none;
+  margin-top:28px;
+  padding:24px;
+  background:#071016;
+  border:1px solid #28536a;
+  border-radius:12px
+}
+
+.review-panel.show{
+  display:block
+}
+
+.review-title{
+  margin:0 0 20px;
+  color:#eef7fb;
+  font-size:23px
+}
+
+.review-section{
+  padding:14px 0;
+  border-top:1px solid #1c3b4c
+}
+
+.review-section:first-of-type{
+  border-top:0
+}
+
+.review-label{
+  display:block;
+  margin-bottom:7px;
+  color:#7ddcff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase
+}
+
+.review-value{
+  color:#eef7fb;
+  line-height:1.6
+}
+
+.review-live-warning{
+  display:none;
+  margin-top:18px;
+  padding:16px;
+  background:#241b08;
+  border:1px solid #72591c;
+  border-radius:9px;
+  color:#e9d9a4;
+  line-height:1.5
+}
+
+.review-live-warning.show{
+  display:block
+}
+
+
+/* ============================================================
    WHY BUILD A TRADING BOT
    ============================================================ */
 
 .why-bot{
-  margin-top:48px;
+  margin-top:48px
 }
 
 .why-bot-header{
   text-align:center;
   max-width:680px;
-  margin:0 auto 28px;
+  margin:0 auto 28px
 }
 
 .why-bot-header h1{
   margin:8px 0 12px;
-  font-size:30px;
+  font-size:30px
 }
 
 .why-bot-header p{
-  line-height:1.6;
+  line-height:1.6
 }
 
 .why-label{
   color:#7ddcff;
   font-size:12px;
   font-weight:700;
-  letter-spacing:.18em;
+  letter-spacing:.18em
 }
 
 .why-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:16px;
+  gap:16px
 }
 
 .why-card{
   background:#0c141b;
   border:1px solid #1c3b4c;
   border-radius:12px;
-  padding:22px;
+  padding:22px
 }
 
 .why-card h3{
   margin:0 0 10px;
   color:#eef7fb;
-  font-size:17px;
+  font-size:17px
 }
 
 .why-card p{
   margin:0;
   line-height:1.55;
-  font-size:14px;
+  font-size:14px
 }
 
 .why-bottom{
@@ -168,7 +241,7 @@ button{
   padding:26px;
   background:#071016;
   border:1px solid #28536a;
-  border-radius:12px;
+  border-radius:12px
 }
 
 .why-bottom h2{
@@ -176,12 +249,12 @@ button{
   padding:0;
   border:0;
   font-size:22px;
-  color:#7ddcff;
+  color:#7ddcff
 }
 
 .why-bottom p{
   margin:0;
-  line-height:1.55;
+  line-height:1.55
 }
 
 
@@ -193,7 +266,7 @@ button{
 
   .grid,
   .why-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr
   }
 
 }
@@ -402,6 +475,98 @@ quantity and safety settings before enabling execution.
 </div>
 
 
+<!-- ============================================================
+     REVIEW BUTTON
+     ============================================================ -->
+
+<button class="review-button" onclick="reviewBot()">
+REVIEW BOT
+</button>
+
+
+<!-- ============================================================
+     IN-PAGE REVIEW
+     ============================================================ -->
+
+<div id="review_panel" class="review-panel">
+
+<h3 id="review_bot_name" class="review-title">
+Bot Review
+</h3>
+
+
+<div class="review-section">
+
+<span class="review-label">
+BROKER
+</span>
+
+<div id="review_broker" class="review-value"></div>
+
+</div>
+
+
+<div class="review-section">
+
+<span class="review-label">
+TRADE
+</span>
+
+<div id="review_trade" class="review-value"></div>
+
+</div>
+
+
+<div class="review-section">
+
+<span class="review-label">
+ENTRY
+</span>
+
+<div id="review_entry" class="review-value"></div>
+
+</div>
+
+
+<div class="review-section">
+
+<span class="review-label">
+EXIT / PROTECTION
+</span>
+
+<div id="review_exit" class="review-value"></div>
+
+</div>
+
+
+<div class="review-section">
+
+<span class="review-label">
+EXECUTION
+</span>
+
+<div id="review_execution" class="review-value"></div>
+
+</div>
+
+
+<div id="review_live_warning" class="review-live-warning">
+
+<strong>⚠ LIVE TRADING ENABLED</strong>
+
+<br><br>
+
+This configuration may submit REAL orders to IBKR.
+
+<br><br>
+
+<span id="review_live_quantity"></span>
+
+</div>
+
+</div>
+
+
 <button onclick="buildPlan()">
 BUILD MY BOT PLAN
 </button>
@@ -557,19 +722,29 @@ trading bot built around your rules.
 
 
 <!-- ============================================================
-     BOT PLAN BUILDER
+     BOT PLAN JAVASCRIPT
      ============================================================ -->
 
 <script>
+
 
 function v(id){
   return document.getElementById(id).value;
 }
 
 
-function buildPlan(){
+/*
+  ONE PLAN FUNCTION
 
-  const plan = {
+  Both REVIEW BOT and BUILD MY BOT PLAN use this exact function.
+
+  That means the configuration displayed in the review is constructed
+  from exactly the same values that will be written to bot_plan.json.
+*/
+
+function getPlan(){
+
+  return {
 
     schema:"buildatradingbot.plan.v0.2",
 
@@ -618,6 +793,167 @@ function buildPlan(){
 
   };
 
+}
+
+
+/* ============================================================
+   REVIEW BOT
+   ============================================================ */
+
+function reviewBot(){
+
+  const plan=getPlan();
+
+
+  document.getElementById("review_bot_name").textContent =
+    plan.bot_name;
+
+
+  document.getElementById("review_broker").innerHTML =
+
+    plan.broker +
+
+    "<br>" +
+
+    plan.connection.host +
+    " : " +
+    plan.connection.port +
+
+    "<br>" +
+
+    "Client ID: " +
+    plan.connection.client_id;
+
+
+  document.getElementById("review_trade").innerHTML =
+
+    plan.symbol +
+
+    "<br>" +
+
+    plan.direction +
+
+    "<br>" +
+
+    "Quantity: " +
+    plan.quantity;
+
+
+  document.getElementById("review_entry").innerHTML =
+
+    "RSI(" +
+    plan.entry.period +
+    ") on " +
+    plan.entry.timeframe +
+    " bars" +
+
+    "<br>" +
+
+    "Enter when RSI " +
+    plan.entry.operator +
+    " " +
+    plan.entry.value;
+
+
+  document.getElementById("review_exit").innerHTML =
+
+    "RSI exit " +
+    plan.exit.operator +
+    " " +
+    plan.exit.value +
+
+    "<br>" +
+
+    "Initial stop: " +
+    plan.risk.stop_loss_pct +
+    "%" +
+
+    "<br>" +
+
+    "Trailing stop: " +
+    plan.risk.trailing_stop_pct +
+    "%";
+
+
+  document.getElementById("review_execution").innerHTML =
+
+    "Trading mode: " +
+    plan.mode +
+
+    "<br>" +
+
+    "Order execution: " +
+    (plan.execution_enabled ? "ENABLED" : "DISABLED") +
+
+    "<br>" +
+
+    "1 Share Safety Override: " +
+    (plan.one_share_override ? "ON" : "OFF");
+
+
+  const liveWarning =
+    document.getElementById("review_live_warning");
+
+
+  const liveQuantity =
+    document.getElementById("review_live_quantity");
+
+
+  if(plan.mode==="LIVE" && plan.execution_enabled){
+
+    liveWarning.classList.add("show");
+
+
+    if(plan.one_share_override){
+
+      liveQuantity.textContent =
+        "Maximum order quantity with safety override enabled: 1 SHARE.";
+
+    }else{
+
+      liveQuantity.textContent =
+        "1 Share Safety Override is OFF. Requested quantity: " +
+        plan.quantity +
+        ".";
+
+    }
+
+  }else{
+
+    liveWarning.classList.remove("show");
+
+    liveQuantity.textContent="";
+
+  }
+
+
+  const panel =
+    document.getElementById("review_panel");
+
+
+  panel.classList.add("show");
+
+
+  /*
+    Scroll the review into view after it opens.
+  */
+
+  panel.scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+
+}
+
+
+/* ============================================================
+   BUILD / DOWNLOAD PLAN
+   ============================================================ */
+
+function buildPlan(){
+
+  const plan=getPlan();
+
 
   /*
      Extra confirmation before creating a LIVE executable plan.
@@ -631,9 +967,13 @@ function buildPlan(){
 
       "This configuration may submit REAL broker orders.\n\n" +
 
-      "Symbol: " + plan.symbol + "\n" +
+      "Symbol: " +
+      plan.symbol +
+      "\n" +
 
-      "Quantity: " + plan.quantity + "\n" +
+      "Quantity: " +
+      plan.quantity +
+      "\n" +
 
       "1 Share Override: " +
       (plan.one_share_override ? "ON" : "OFF") +
@@ -642,24 +982,33 @@ function buildPlan(){
 
     );
 
+
     if(!ok) return;
 
   }
 
 
   const blob = new Blob(
+
     [JSON.stringify(plan,null,2)],
-    {type:"application/json"}
+
+    {
+      type:"application/json"
+    }
+
   );
 
 
   const a=document.createElement("a");
 
+
   a.href=URL.createObjectURL(blob);
 
   a.download="bot_plan.json";
 
+
   a.click();
+
 
   URL.revokeObjectURL(a.href);
 
