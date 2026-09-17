@@ -1234,3 +1234,83 @@ footer {
 body {
   border-top: 10px solid green !important;
 }
+
+
+
+
+
+/* Build.html css markup */
+<section class="how-it-works">
+  <div class="how-it-works-heading">
+    <p class="eyebrow">HOW IT WORKS</p>
+    <h2>Configure it here. Run it on your computer.</h2>
+
+    <p class="how-intro">
+      Build A Trading Bot does not run your trading bot in the cloud.
+      Use the builder below to choose your strategy, rules and controls.
+      When you're finished, download the bot package, install it on your
+      Windows PC and run it locally.
+    </p>
+  </div>
+
+  <div class="build-steps">
+
+    <div class="build-step">
+      <div class="step-number">1</div>
+      <div>
+        <h3>Configure</h3>
+        <p>
+          Choose your bot's strategy, entry and exit rules, symbols,
+          risk controls and other available settings.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">2</div>
+      <div>
+        <h3>Build</h3>
+        <p>
+          Your selections are turned into a configured bot package
+          using the options you selected.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">3</div>
+      <div>
+        <h3>Download &amp; Install</h3>
+        <p>
+          Download the finished Windows package and install the bot
+          on your own computer.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">4</div>
+      <div>
+        <h3>Run Locally</h3>
+        <p>
+          The installed bot runs on your PC. Broker connections,
+          credentials and trading execution are configured locally —
+          not entered into the public bot builder.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="local-first-note">
+    <span class="local-icon">&lt;/&gt;</span>
+    <div>
+      <strong>LOCAL-FIRST</strong>
+      <p>
+        Your trading bot does not live on BuildATradingBot.com.
+        The website is used to configure and build it. The downloaded
+        application runs on your computer and remains under your control.
+      </p>
+    </div>
+  </div>
+</section>
