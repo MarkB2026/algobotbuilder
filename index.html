@@ -6,6 +6,28 @@
   <meta name="description" content="Free trading bots — free practical software, trading tools and automation built with AI." />
   <title>Free trading bots — Powerful software, built with AI.</title>
   <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    .nav-build { color:#55d8ff !important; font-weight:800; letter-spacing:.04em; }
+    .build-cta {
+      display:inline-flex; align-items:center; justify-content:center; min-height:58px;
+      padding:0 28px; border:1px solid rgba(85,216,255,.72); border-radius:10px;
+      background:linear-gradient(135deg,rgba(0,125,190,.98),rgba(0,73,118,.98));
+      color:#fff !important; font-size:1.05rem; font-weight:900; letter-spacing:.055em;
+      text-transform:uppercase; text-decoration:none; box-shadow:0 0 26px rgba(43,190,255,.22);
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+    }
+    .build-cta:hover { transform:translateY(-2px); border-color:#8ce8ff; box-shadow:0 0 36px rgba(43,190,255,.36); }
+    .build-your-own {
+      margin-top:22px; padding:18px 20px; max-width:650px;
+      border:1px solid rgba(85,216,255,.22); border-radius:12px; background:rgba(5,24,34,.62);
+    }
+    .build-your-own strong { display:block; margin-bottom:5px; color:#8ce8ff; font-size:1rem; letter-spacing:.03em; }
+    .build-your-own p { margin:0; opacity:.88; }
+    .hive-logo { display:block; width:min(100%,330px); height:auto; margin:0 auto 24px; object-fit:contain; }
+    @media (max-width:760px) { .build-cta { width:100%; } }
+  </style>
+
 </head>
 
 <body>
@@ -17,6 +39,7 @@
     </a>
 
     <nav>
+      <a class="nav-build" href="build.html">BUILD A BOT</a>
       <a href="#beebot">BEEBOT + Hive</a>
       <a href="#tools">Products (beta)</a>
       <a href="#semi-autonomous">Trading Bots</a>
@@ -46,8 +69,13 @@
         </p>
 
         <div class="hero-actions">
-          <a class="button primary" href="#tools">Explore the tools</a>
-          <a class="button secondary" href="#feedback">Help improve Free trading bots</a>
+          <a class="build-cta" href="build.html">BUILD YOUR OWN BOT!</a>
+          <a class="button secondary" href="#tools">Explore ready-made bots &amp; tools</a>
+        </div>
+
+        <div class="build-your-own">
+          <strong>BUILD A TRADING BOT</strong>
+          <p>Choose the strategy, rules and risk controls. Build your bot from simple selections, or download one of the ready-made bots and tools below.</p>
         </div>
       </div>
 
@@ -172,13 +200,16 @@
         </div>
 
         <div class="hive-panel">
+          <img class="hive-logo" src="assets/build.png" alt="Build A Trading Bot — Hive connected" />
           <div class="hive-icon">⬡</div>
           <p class="eyebrow">THE HIVE</p>
           <h3>Shared data.<br>Better context.</h3>
 
           <p>
-            Connect BEEBOT to The Hive to contribute structured trade data and compare
-            your setups with trades shared by other participating BEEBOT users.
+            The Hive is the optional shared intelligence layer behind participating bots.
+            Your bot runs locally and keeps its own local database. If you choose to connect,
+            it can contribute structured trade data, scan community candidates and compare
+            a current setup with similar trades shared by other participating bots.
           </p>
 
           <div class="hive-example">
@@ -679,6 +710,9 @@
 
 </body>
 </html>
+
+
+
 
 
 
