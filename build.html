@@ -231,9 +231,135 @@
       </div>
 
 
-      <button onclick="buildPlan()">
-        BUILD MY BOT PLAN
-      </button>
+            <!-- REVIEW + BUILD BUTTONS -->
+      <div class="builder-actions">
+
+        <button
+          type="button"
+          class="review-button"
+          onclick="toggleReview()"
+        >
+          ⓘ REVIEW MY BOT
+        </button>
+
+        <button
+          type="button"
+          class="build-button"
+          onclick="buildPlan()"
+        >
+          BUILD MY BOT PLAN
+        </button>
+
+      </div>
+
+
+      <!-- BOT REVIEW PANEL -->
+      <div id="bot_review" class="bot-review" hidden>
+
+        <div class="bot-review-header">
+          <div>
+            <p class="eyebrow">WHAT WILL BE INSTALLED</p>
+            <h2>Your Bot</h2>
+          </div>
+
+          <span class="review-safe">
+            PAPER / EXECUTION DISABLED
+          </span>
+        </div>
+
+
+        <div class="review-grid">
+
+          <div class="review-item">
+            <span>BOT NAME</span>
+            <strong id="review_bot_name">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>BROKER</span>
+            <strong id="review_broker">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>SYMBOL</span>
+            <strong id="review_symbol">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>DIRECTION</span>
+            <strong id="review_direction">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>ENTRY</span>
+            <strong id="review_entry">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>EXIT</span>
+            <strong id="review_exit">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>QUANTITY</span>
+            <strong id="review_quantity">—</strong>
+          </div>
+
+          <div class="review-item">
+            <span>INITIAL MODE</span>
+            <strong id="review_mode">—</strong>
+          </div>
+
+        </div>
+
+
+        <div class="install-info">
+
+          <h3>Installed on your Windows PC</h3>
+
+          <p>
+            Your download contains a standalone trading-bot application
+            configured using the selections above. The bot runs locally
+            on your computer after installation.
+          </p>
+
+
+          <div class="install-info-grid">
+
+            <div>
+              <strong>INCLUDED</strong>
+
+              <p>
+                Local bot engine, strategy configuration, settings,
+                local storage and required application components.
+              </p>
+            </div>
+
+            <div>
+              <strong>NOT STORED HERE</strong>
+
+              <p>
+                Broker usernames, passwords, API credentials and account
+                information are not entered into the public bot builder.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="local-safety">
+            <strong>FIRST-LAUNCH SAFETY</strong>
+
+            <p>
+              Generated bots start in PAPER mode with live order execution
+              disabled. Broker connections and trading controls are
+              configured locally on your computer.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
 
 
       <p class="note">
@@ -254,9 +380,9 @@
     }
 
 
-    function buildPlan() {
+    function getPlan() {
 
-      const plan = {
+      return {
 
         schema: "buildatradingbot.plan.v0.1",
 
@@ -303,6 +429,68 @@
         execution_enabled:
           false
       };
+    }
+
+
+    function updateReview() {
+
+      const plan = getPlan();
+
+      document.getElementById("review_bot_name").textContent =
+        plan.bot_name;
+
+      document.getElementById("review_broker").textContent =
+        plan.broker;
+
+      document.getElementById("review_symbol").textContent =
+        plan.symbol;
+
+      document.getElementById("review_direction").textContent =
+        plan.direction;
+
+      document.getElementById("review_entry").textContent =
+        "RSI " +
+        plan.entry.operator +
+        " " +
+        plan.entry.value;
+
+      document.getElementById("review_exit").textContent =
+        "RSI " +
+        plan.exit.operator +
+        " " +
+        plan.exit.value;
+
+      document.getElementById("review_quantity").textContent =
+        plan.quantity;
+
+      document.getElementById("review_mode").textContent =
+        plan.mode;
+    }
+
+
+    function toggleReview() {
+
+      const review =
+        document.getElementById("bot_review");
+
+      updateReview();
+
+      if (review.hidden) {
+        review.hidden = false;
+        review.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      }
+      else {
+        review.hidden = true;
+      }
+    }
+
+
+    function buildPlan() {
+
+      const plan = getPlan();
 
 
       const blob =
