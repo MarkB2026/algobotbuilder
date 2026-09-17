@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Build A Trading Bot</title>
 
 <style>
+
 body{
   margin:0;
   background:#05090d;
@@ -63,7 +65,8 @@ label{
   color:#7ddcff
 }
 
-select,input{
+select,
+input{
   background:#071016;
   color:#fff;
   border:1px solid #28536a;
@@ -103,15 +106,111 @@ button{
   grid-column:1/-1
 }
 
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr}
+
+/* ============================================================
+   WHY BUILD A TRADING BOT
+   ============================================================ */
+
+.why-bot{
+  margin-top:48px;
 }
+
+.why-bot-header{
+  text-align:center;
+  max-width:680px;
+  margin:0 auto 28px;
+}
+
+.why-bot-header h1{
+  margin:8px 0 12px;
+  font-size:30px;
+}
+
+.why-bot-header p{
+  line-height:1.6;
+}
+
+.why-label{
+  color:#7ddcff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.18em;
+}
+
+.why-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.why-card{
+  background:#0c141b;
+  border:1px solid #1c3b4c;
+  border-radius:12px;
+  padding:22px;
+}
+
+.why-card h3{
+  margin:0 0 10px;
+  color:#eef7fb;
+  font-size:17px;
+}
+
+.why-card p{
+  margin:0;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.why-bottom{
+  text-align:center;
+  margin-top:18px;
+  padding:26px;
+  background:#071016;
+  border:1px solid #28536a;
+  border-radius:12px;
+}
+
+.why-bottom h2{
+  margin:0 0 10px;
+  padding:0;
+  border:0;
+  font-size:22px;
+  color:#7ddcff;
+}
+
+.why-bottom p{
+  margin:0;
+  line-height:1.55;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media(max-width:600px){
+
+  .grid,
+  .why-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
 </style>
 </head>
+
 
 <body>
 
 <div class="wrap">
+
+
+<!-- ============================================================
+     BOT BUILDER
+     ============================================================ -->
+
 <div class="card">
 
 <h1>BUILD A TRADING BOT</h1>
@@ -192,6 +291,7 @@ and trailing-stop protection.
 
 <div class="field">
 <label>RSI Timeframe</label>
+
 <select id="rsi_timeframe">
 <option value="1 min">1 minute</option>
 <option value="5 mins" selected>5 minutes</option>
@@ -199,14 +299,17 @@ and trailing-stop protection.
 <option value="1 hour">1 hour</option>
 <option value="1 day">Daily</option>
 </select>
+
 </div>
 
 <div class="field">
 <label>Entry Rule</label>
+
 <select id="entry">
 <option value="RSI_BELOW">RSI below</option>
 <option value="RSI_ABOVE">RSI above</option>
 </select>
+
 </div>
 
 <div class="field">
@@ -223,10 +326,12 @@ and trailing-stop protection.
 
 <div class="field">
 <label>RSI Exit Rule</label>
+
 <select id="exit">
 <option value="RSI_ABOVE">RSI above</option>
 <option value="RSI_BELOW">RSI below</option>
 </select>
+
 </div>
 
 <div class="field">
@@ -253,40 +358,54 @@ and trailing-stop protection.
 
 <div class="field">
 <label>Trading Mode</label>
+
 <select id="mode">
 <option>PAPER</option>
 <option>LIVE</option>
 </select>
+
 </div>
 
 <div class="field">
 <label>1 Share Safety Override</label>
+
 <select id="one_share_override">
 <option value="true" selected>ON</option>
 <option value="false">OFF</option>
 </select>
+
 </div>
 
 <div class="field full">
 <label>Order Execution</label>
+
 <select id="execution_enabled">
 <option value="false" selected>DISABLED</option>
 <option value="true">ENABLED</option>
 </select>
+
 </div>
 
 </div>
 
 
 <div class="warning">
-<strong>LIVE TRADING WARNING</strong><br><br>
+
+<strong>LIVE TRADING WARNING</strong>
+
+<br><br>
+
 This bot can connect to IBKR and may submit real orders when LIVE mode
 and order execution are enabled. Confirm the account, port, symbol,
 quantity and safety settings before enabling execution.
+
 </div>
 
 
-<button onclick="buildPlan()">BUILD MY BOT PLAN</button>
+<button onclick="buildPlan()">
+BUILD MY BOT PLAN
+</button>
+
 
 <p class="note">
 Broker credentials are not stored in this plan. The bot connects locally
@@ -294,14 +413,159 @@ to your configured IBKR TWS or Gateway API.
 </p>
 
 </div>
+
+
+
+<!-- ============================================================
+     WHY BUILD A TRADING BOT
+     ============================================================ -->
+
+<section class="why-bot">
+
+<div class="why-bot-header">
+
+<span class="why-label">
+WHY AUTOMATE?
+</span>
+
+<h1>
+Why Build a Trading Bot?
+</h1>
+
+<p>
+A trading bot turns your strategy into a defined set of rules that can
+monitor the market and act consistently — without requiring you to sit
+in front of a chart all day.
+</p>
+
 </div>
 
+
+<div class="why-grid">
+
+
+<div class="why-card">
+
+<h3>
+Trade the Rules, Not the Emotion
+</h3>
+
+<p>
+Define your entry, exit and risk rules before the trade happens.
+Your bot follows those instructions consistently instead of hesitating,
+chasing a move or changing the plan during a trade.
+</p>
+
+</div>
+
+
+<div class="why-card">
+
+<h3>
+Stop Staring at Charts
+</h3>
+
+<p>
+Let the bot monitor the market while you do something else.
+When the conditions you've defined occur, the bot can recognize
+them automatically.
+</p>
+
+</div>
+
+
+<div class="why-card">
+
+<h3>
+React Immediately
+</h3>
+
+<p>
+Automation can respond when your trading conditions are met without
+waiting for you to notice the signal, open an order ticket and manually
+enter the trade.
+</p>
+
+</div>
+
+
+<div class="why-card">
+
+<h3>
+Build In Risk Controls
+</h3>
+
+<p>
+Position size, initial stops, trailing stops and exit conditions can
+be defined before a position is opened rather than decided after
+the market starts moving.
+</p>
+
+</div>
+
+
+<div class="why-card">
+
+<h3>
+Make Strategies Repeatable
+</h3>
+
+<p>
+Turn a trading idea into specific rules that can be executed the same
+way each time. That makes a strategy easier to test, review and improve.
+</p>
+
+</div>
+
+
+<div class="why-card">
+
+<h3>
+You Stay in Control
+</h3>
+
+<p>
+Choose the symbol, direction, indicators, position size, entry rules,
+exit rules and risk controls. Start in paper mode and decide when —
+or whether — live execution should be enabled.
+</p>
+
+</div>
+
+
+</div>
+
+
+<div class="why-bottom">
+
+<h2>
+Your Strategy. Your Rules. Your Bot.
+</h2>
+
+<p>
+BuildATradingBot turns the configuration you create above into a local
+trading bot built around your rules.
+</p>
+
+</div>
+
+</section>
+
+
+</div>
+
+
+
+<!-- ============================================================
+     BOT PLAN BUILDER
+     ============================================================ -->
 
 <script>
 
 function v(id){
   return document.getElementById(id).value;
 }
+
 
 function buildPlan(){
 
@@ -351,7 +615,9 @@ function buildPlan(){
 
     execution_enabled:
       v("execution_enabled")==="true"
+
   };
+
 
   /*
      Extra confirmation before creating a LIVE executable plan.
@@ -360,34 +626,47 @@ function buildPlan(){
   if(plan.mode==="LIVE" && plan.execution_enabled){
 
     const ok = confirm(
+
       "LIVE TRADING IS ENABLED.\n\n" +
+
       "This configuration may submit REAL broker orders.\n\n" +
+
       "Symbol: " + plan.symbol + "\n" +
+
       "Quantity: " + plan.quantity + "\n" +
+
       "1 Share Override: " +
       (plan.one_share_override ? "ON" : "OFF") +
+
       "\n\nContinue?"
+
     );
 
     if(!ok) return;
+
   }
+
 
   const blob = new Blob(
     [JSON.stringify(plan,null,2)],
     {type:"application/json"}
   );
 
+
   const a=document.createElement("a");
 
   a.href=URL.createObjectURL(blob);
+
   a.download="bot_plan.json";
 
   a.click();
 
   URL.revokeObjectURL(a.href);
+
 }
 
 </script>
+
 
 </body>
 </html>
