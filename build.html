@@ -1,524 +1,393 @@
 <!doctype html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build A Trading Bot</title>
 
-  <title>Build A Trading Bot — Build Your Own Trading Bot</title>
+<style>
+body{
+  margin:0;
+  background:#05090d;
+  color:#eef7fb;
+  font:16px Arial,sans-serif
+}
 
-  <meta
-    name="description"
-    content="Configure your trading bot online, download the package and run it locally on your Windows PC."
-  >
+.wrap{
+  max-width:820px;
+  margin:50px auto;
+  padding:28px
+}
 
-  <link rel="stylesheet" href="styles.css">
+.card{
+  background:#0c141b;
+  border:1px solid #1c3b4c;
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 18px 60px #0008
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:32px
+}
+
+h2{
+  margin:30px 0 15px;
+  font-size:18px;
+  color:#7ddcff;
+  border-bottom:1px solid #1c3b4c;
+  padding-bottom:8px
+}
+
+p{
+  color:#9fb4c0
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px
+}
+
+label{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:#7ddcff
+}
+
+select,input{
+  background:#071016;
+  color:#fff;
+  border:1px solid #28536a;
+  border-radius:8px;
+  padding:12px;
+  font-size:15px
+}
+
+button{
+  width:100%;
+  margin-top:28px;
+  padding:15px;
+  border:0;
+  border-radius:9px;
+  background:#6de4ff;
+  color:#001018;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer
+}
+
+.note{
+  font-size:13px;
+  margin-top:16px
+}
+
+.warning{
+  margin-top:22px;
+  padding:16px;
+  background:#241b08;
+  border:1px solid #72591c;
+  border-radius:9px;
+  color:#e9d9a4
+}
+
+.full{
+  grid-column:1/-1
+}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="wrap">
+<div class="wrap">
+<div class="card">
+
+<h1>BUILD A TRADING BOT</h1>
 
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works">
+<p>
+Configure a simple RSI trading bot with broker connection
+and trailing-stop protection.
+</p>
 
-      <div class="how-it-works-heading">
-        <p class="eyebrow">HOW IT WORKS</p>
 
-        <h2>Configure it here. Run it on your computer.</h2>
+<h2>BOT</h2>
 
-        <p class="how-intro">
-          Build A Trading Bot does not run your trading bot in the cloud.
-          Use the builder below to choose your strategy, rules and controls.
-          When you're finished, download the bot package, install it on your
-          Windows PC and run it locally.
-        </p>
-      </div>
+<div class="grid">
 
-      <div class="build-steps">
+<div class="field">
+<label>Bot name</label>
+<input id="bot_name" value="MARA RSI Bot">
+</div>
 
-        <div class="build-step">
-          <div class="step-number">1</div>
+<div class="field">
+<label>Symbol</label>
+<input id="symbol" value="MARA">
+</div>
 
-          <div>
-            <h3>Configure</h3>
+<div class="field">
+<label>Direction</label>
+<select id="direction">
+<option>LONG</option>
+<option>SHORT</option>
+</select>
+</div>
 
-            <p>
-              Choose your bot's strategy, entry and exit rules, symbols,
-              risk controls and other available settings.
-            </p>
-          </div>
-        </div>
+<div class="field">
+<label>Quantity</label>
+<input id="quantity" type="number" min="1" value="1">
+</div>
 
+</div>
 
-        <div class="build-step">
-          <div class="step-number">2</div>
 
-          <div>
-            <h3>Build</h3>
+<h2>BROKER CONNECTION</h2>
 
-            <p>
-              Your selections are turned into a configured bot package
-              using the options you selected.
-            </p>
-          </div>
-        </div>
+<div class="grid">
 
+<div class="field">
+<label>Broker</label>
+<select id="broker">
+<option>IBKR</option>
+</select>
+</div>
 
-        <div class="build-step">
-          <div class="step-number">3</div>
+<div class="field">
+<label>Host</label>
+<input id="host" value="127.0.0.1">
+</div>
 
-          <div>
-            <h3>Download &amp; Install</h3>
+<div class="field">
+<label>Port</label>
+<input id="port" type="number" value="7497">
+</div>
+
+<div class="field">
+<label>Client ID</label>
+<input id="client_id" type="number" value="91">
+</div>
 
-            <p>
-              Download the finished Windows package and install the bot
-              on your own computer.
-            </p>
-          </div>
-        </div>
+</div>
 
 
-        <div class="build-step">
-          <div class="step-number">4</div>
+<h2>RSI ENTRY</h2>
 
-          <div>
-            <h3>Run Locally</h3>
+<div class="grid">
+
+<div class="field">
+<label>RSI Period</label>
+<input id="rsi_period" type="number" min="2" value="14">
+</div>
 
-            <p>
-              The installed bot runs on your PC. Broker connections,
-              credentials and trading execution are configured locally —
-              not entered into the public bot builder.
-            </p>
-          </div>
-        </div>
+<div class="field">
+<label>RSI Timeframe</label>
+<select id="rsi_timeframe">
+<option value="1 min">1 minute</option>
+<option value="5 mins" selected>5 minutes</option>
+<option value="15 mins">15 minutes</option>
+<option value="1 hour">1 hour</option>
+<option value="1 day">Daily</option>
+</select>
+</div>
 
-      </div>
+<div class="field">
+<label>Entry Rule</label>
+<select id="entry">
+<option value="RSI_BELOW">RSI below</option>
+<option value="RSI_ABOVE">RSI above</option>
+</select>
+</div>
 
+<div class="field">
+<label>Entry RSI</label>
+<input id="entry_value" type="number" min="0" max="100" value="30">
+</div>
 
-      <div class="local-first-note">
+</div>
 
-        <span class="local-icon">&lt;/&gt;</span>
 
-        <div>
-          <strong>LOCAL-FIRST</strong>
+<h2>EXIT</h2>
 
-          <p>
-            Your trading bot does not live on BuildATradingBot.com.
-            The website is used to configure and build it. The downloaded
-            application runs on your computer and remains under your control.
-          </p>
-        </div>
+<div class="grid">
 
-      </div>
+<div class="field">
+<label>RSI Exit Rule</label>
+<select id="exit">
+<option value="RSI_ABOVE">RSI above</option>
+<option value="RSI_BELOW">RSI below</option>
+</select>
+</div>
 
-    </section>
+<div class="field">
+<label>Exit RSI</label>
+<input id="exit_value" type="number" min="0" max="100" value="70">
+</div>
 
+<div class="field">
+<label>Initial Stop Loss %</label>
+<input id="stop_loss_pct" type="number" min="0.1" step="0.1" value="3">
+</div>
 
-    <!-- BOT BUILDER -->
-    <div class="card">
+<div class="field">
+<label>Trailing Stop %</label>
+<input id="trailing_stop_pct" type="number" min="0.1" step="0.1" value="2">
+</div>
 
-      <h1>BUILD A TRADING BOT</h1>
+</div>
 
-      <p>
-        Prototype 0.1 — choose a few rules and generate a bot plan.
-      </p>
 
+<h2>EXECUTION</h2>
 
-      <div class="grid">
+<div class="grid">
 
-        <div class="field">
-          <label>Bot name</label>
+<div class="field">
+<label>Trading Mode</label>
+<select id="mode">
+<option>PAPER</option>
+<option>LIVE</option>
+</select>
+</div>
 
-          <input
-            id="bot_name"
-            value="My Trading Bot"
-          >
-        </div>
+<div class="field">
+<label>1 Share Safety Override</label>
+<select id="one_share_override">
+<option value="true" selected>ON</option>
+<option value="false">OFF</option>
+</select>
+</div>
 
+<div class="field full">
+<label>Order Execution</label>
+<select id="execution_enabled">
+<option value="false" selected>DISABLED</option>
+<option value="true">ENABLED</option>
+</select>
+</div>
 
-        <div class="field">
-          <label>Broker</label>
+</div>
 
-          <select id="broker">
-            <option>IBKR</option>
-          </select>
-        </div>
 
+<div class="warning">
+<strong>LIVE TRADING WARNING</strong><br><br>
+This bot can connect to IBKR and may submit real orders when LIVE mode
+and order execution are enabled. Confirm the account, port, symbol,
+quantity and safety settings before enabling execution.
+</div>
 
-        <div class="field">
-          <label>Symbol</label>
 
-          <input
-            id="symbol"
-            value="SPY"
-          >
-        </div>
+<button onclick="buildPlan()">BUILD MY BOT PLAN</button>
 
+<p class="note">
+Broker credentials are not stored in this plan. The bot connects locally
+to your configured IBKR TWS or Gateway API.
+</p>
 
-        <div class="field">
-          <label>Direction</label>
+</div>
+</div>
 
-          <select id="direction">
-            <option>LONG</option>
-            <option>SHORT</option>
-          </select>
-        </div>
 
+<script>
 
-        <div class="field">
-          <label>Entry rule</label>
+function v(id){
+  return document.getElementById(id).value;
+}
 
-          <select id="entry">
-            <option value="RSI_BELOW">RSI below</option>
-            <option value="RSI_ABOVE">RSI above</option>
-          </select>
-        </div>
+function buildPlan(){
 
+  const plan = {
 
-        <div class="field">
-          <label>Entry value</label>
+    schema:"buildatradingbot.plan.v0.2",
 
-          <input
-            id="entry_value"
-            type="number"
-            value="30"
-          >
-        </div>
+    bot_name:v("bot_name"),
 
+    broker:v("broker"),
 
-        <div class="field">
-          <label>Exit rule</label>
+    connection:{
+      host:v("host"),
+      port:Number(v("port")),
+      client_id:Number(v("client_id"))
+    },
 
-          <select id="exit">
-            <option value="RSI_ABOVE">RSI above</option>
-            <option value="RSI_BELOW">RSI below</option>
-          </select>
-        </div>
+    symbol:v("symbol").trim().toUpperCase(),
 
+    direction:v("direction"),
 
-        <div class="field">
-          <label>Exit value</label>
+    quantity:Number(v("quantity")),
 
-          <input
-            id="exit_value"
-            type="number"
-            value="70"
-          >
-        </div>
+    entry:{
+      indicator:"RSI",
+      period:Number(v("rsi_period")),
+      timeframe:v("rsi_timeframe"),
+      operator:v("entry")==="RSI_BELOW" ? "<" : ">",
+      value:Number(v("entry_value"))
+    },
 
+    exit:{
+      indicator:"RSI",
+      operator:v("exit")==="RSI_BELOW" ? "<" : ">",
+      value:Number(v("exit_value"))
+    },
 
-        <div class="field">
-          <label>Quantity</label>
+    risk:{
+      stop_loss_pct:Number(v("stop_loss_pct")),
+      trailing_stop_pct:Number(v("trailing_stop_pct"))
+    },
 
-          <input
-            id="quantity"
-            type="number"
-            min="1"
-            value="1"
-          >
-        </div>
+    mode:v("mode"),
 
+    one_share_override:
+      v("one_share_override")==="true",
 
-        <div class="field">
-          <label>Mode</label>
+    execution_enabled:
+      v("execution_enabled")==="true"
+  };
 
-          <select id="mode">
-            <option>PAPER</option>
-          </select>
-        </div>
+  /*
+     Extra confirmation before creating a LIVE executable plan.
+  */
 
-      </div>
+  if(plan.mode==="LIVE" && plan.execution_enabled){
 
+    const ok = confirm(
+      "LIVE TRADING IS ENABLED.\n\n" +
+      "This configuration may submit REAL broker orders.\n\n" +
+      "Symbol: " + plan.symbol + "\n" +
+      "Quantity: " + plan.quantity + "\n" +
+      "1 Share Override: " +
+      (plan.one_share_override ? "ON" : "OFF") +
+      "\n\nContinue?"
+    );
 
-            <!-- REVIEW + BUILD BUTTONS -->
-      <div class="builder-actions">
+    if(!ok) return;
+  }
 
-        <button
-          type="button"
-          class="review-button"
-          onclick="toggleReview()"
-        >
-          ⓘ REVIEW MY BOT
-        </button>
+  const blob = new Blob(
+    [JSON.stringify(plan,null,2)],
+    {type:"application/json"}
+  );
 
-        <button
-          type="button"
-          class="build-button"
-          onclick="buildPlan()"
-        >
-          BUILD MY BOT PLAN
-        </button>
+  const a=document.createElement("a");
 
-      </div>
+  a.href=URL.createObjectURL(blob);
+  a.download="bot_plan.json";
 
+  a.click();
 
-      <!-- BOT REVIEW PANEL -->
-      <div id="bot_review" class="bot-review" hidden>
+  URL.revokeObjectURL(a.href);
+}
 
-        <div class="bot-review-header">
-          <div>
-            <p class="eyebrow">WHAT WILL BE INSTALLED</p>
-            <h2>Your Bot</h2>
-          </div>
-
-          <span class="review-safe">
-            PAPER / EXECUTION DISABLED
-          </span>
-        </div>
-
-
-        <div class="review-grid">
-
-          <div class="review-item">
-            <span>BOT NAME</span>
-            <strong id="review_bot_name">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>BROKER</span>
-            <strong id="review_broker">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>SYMBOL</span>
-            <strong id="review_symbol">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>DIRECTION</span>
-            <strong id="review_direction">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>ENTRY</span>
-            <strong id="review_entry">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>EXIT</span>
-            <strong id="review_exit">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>QUANTITY</span>
-            <strong id="review_quantity">—</strong>
-          </div>
-
-          <div class="review-item">
-            <span>INITIAL MODE</span>
-            <strong id="review_mode">—</strong>
-          </div>
-
-        </div>
-
-
-        <div class="install-info">
-
-          <h3>Installed on your Windows PC</h3>
-
-          <p>
-            Your download contains a standalone trading-bot application
-            configured using the selections above. The bot runs locally
-            on your computer after installation.
-          </p>
-
-
-          <div class="install-info-grid">
-
-            <div>
-              <strong>INCLUDED</strong>
-
-              <p>
-                Local bot engine, strategy configuration, settings,
-                local storage and required application components.
-              </p>
-            </div>
-
-            <div>
-              <strong>NOT STORED HERE</strong>
-
-              <p>
-                Broker usernames, passwords, API credentials and account
-                information are not entered into the public bot builder.
-              </p>
-            </div>
-
-          </div>
-
-
-          <div class="local-safety">
-            <strong>FIRST-LAUNCH SAFETY</strong>
-
-            <p>
-              Generated bots start in PAPER mode with live order execution
-              disabled. Broker connections and trading controls are
-              configured locally on your computer.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <p class="note">
-        Prototype safety: PAPER only. Order execution is disabled.
-        Broker credentials are never entered here.
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <!-- BOT PLAN GENERATOR -->
-  <script>
-
-    function v(id) {
-      return document.getElementById(id).value;
-    }
-
-
-    function getPlan() {
-
-      return {
-
-        schema: "buildatradingbot.plan.v0.1",
-
-        bot_name: v("bot_name"),
-
-        broker: v("broker"),
-
-        symbol: v("symbol")
-          .trim()
-          .toUpperCase(),
-
-        direction: v("direction"),
-
-        entry: {
-          indicator: "RSI",
-
-          operator:
-            v("entry") === "RSI_BELOW"
-              ? "<"
-              : ">",
-
-          value:
-            Number(v("entry_value"))
-        },
-
-        exit: {
-          indicator: "RSI",
-
-          operator:
-            v("exit") === "RSI_BELOW"
-              ? "<"
-              : ">",
-
-          value:
-            Number(v("exit_value"))
-        },
-
-        quantity:
-          Number(v("quantity")),
-
-        mode:
-          v("mode"),
-
-        execution_enabled:
-          false
-      };
-    }
-
-
-    function updateReview() {
-
-      const plan = getPlan();
-
-      document.getElementById("review_bot_name").textContent =
-        plan.bot_name;
-
-      document.getElementById("review_broker").textContent =
-        plan.broker;
-
-      document.getElementById("review_symbol").textContent =
-        plan.symbol;
-
-      document.getElementById("review_direction").textContent =
-        plan.direction;
-
-      document.getElementById("review_entry").textContent =
-        "RSI " +
-        plan.entry.operator +
-        " " +
-        plan.entry.value;
-
-      document.getElementById("review_exit").textContent =
-        "RSI " +
-        plan.exit.operator +
-        " " +
-        plan.exit.value;
-
-      document.getElementById("review_quantity").textContent =
-        plan.quantity;
-
-      document.getElementById("review_mode").textContent =
-        plan.mode;
-    }
-
-
-    function toggleReview() {
-
-      const review =
-        document.getElementById("bot_review");
-
-      updateReview();
-
-      if (review.hidden) {
-        review.hidden = false;
-        review.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest"
-        });
-      }
-      else {
-        review.hidden = true;
-      }
-    }
-
-
-    function buildPlan() {
-
-      const plan = getPlan();
-
-
-      const blob =
-        new Blob(
-          [JSON.stringify(plan, null, 2)],
-          { type: "application/json" }
-        );
-
-
-      const a =
-        document.createElement("a");
-
-
-      a.href =
-        URL.createObjectURL(blob);
-
-
-      a.download =
-        "bot_plan.json";
-
-
-      a.click();
-
-
-      URL.revokeObjectURL(a.href);
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
