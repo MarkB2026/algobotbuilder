@@ -28,18 +28,75 @@
     @media (max-width:760px) { .build-cta { width:100%; } }
   </style>
 
+
+  <style>
+    .site-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .site-header nav {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-build-major {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      min-height: 52px;
+      padding: 0 22px !important;
+      margin-right: 8px;
+      border: 2px solid #35d5ff !important;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(0,124,184,.34), rgba(0,42,68,.75));
+      color: #ffffff !important;
+      font-size: 1.02rem !important;
+      font-weight: 900 !important;
+      letter-spacing: .055em !important;
+      text-decoration: none !important;
+      box-shadow: 0 0 18px rgba(53,213,255,.22), inset 0 0 14px rgba(53,213,255,.08);
+      white-space: nowrap;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .nav-build-major:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, rgba(0,160,225,.5), rgba(0,57,91,.88));
+      box-shadow: 0 0 28px rgba(53,213,255,.4), inset 0 0 16px rgba(53,213,255,.12);
+    }
+
+    .nav-bot-icon {
+      color: #55dfff;
+      font-weight: 900;
+      font-family: monospace;
+    }
+
+    .nav-arrow {
+      color: #55dfff;
+      font-size: 1.35em;
+      line-height: 1;
+    }
+
+    @media (max-width: 900px) {
+      .site-header nav { gap: 14px; flex-wrap: wrap; }
+      .nav-build-major { min-height: 48px; }
+    }
+  </style>
+
 </head>
 
 <body>
 
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Build A Trading Bot home">
-      <span class="brand-word">BuildA<span>TradingBot.com</span></span>
-      <span class="brand-dot"></span>
-    </a>
 
     <nav>
-      <a class="nav-build" href="build.html">BUILD A BOT</a>
+      <a class="nav-build nav-build-major" href="build.html"><span class="nav-bot-icon">&lt;/&gt;</span> BUILD A BOT <span class="nav-arrow">→</span></a>
       <a href="#beebot">BEEBOT + Hive</a>
       <a href="#tools">Products (beta)</a>
       <a href="#semi-autonomous">Trading Bots</a>
@@ -710,6 +767,11 @@
 
 </body>
 </html>
+
+
+
+
+
 
 
 
