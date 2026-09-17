@@ -336,24 +336,40 @@ and trailing-stop protection.
 
 <div class="field">
 <label>Broker</label>
-<select id="broker">
-<option>IBKR</option>
+<select id="broker" onchange="updateBrokerFields()">
+<option value="IBKR">Interactive Brokers (IBKR)</option>
+<option value="MT5">MetaTrader 5 (MT5) — BETA</option>
 </select>
 </div>
 
-<div class="field">
+<div class="field ibkr-field">
 <label>Host</label>
 <input id="host" value="127.0.0.1">
 </div>
 
-<div class="field">
+<div class="field ibkr-field">
 <label>Port</label>
 <input id="port" type="number" value="7497">
 </div>
 
-<div class="field">
+<div class="field ibkr-field">
 <label>Client ID</label>
 <input id="client_id" type="number" value="91">
+</div>
+
+<div id="mt5_info" class="field full" style="display:none;">
+<label>MT5 CONNECTION</label>
+<div style="
+  background:#071b2b;
+  border:1px solid #28536a;
+  border-radius:8px;
+  padding:14px;
+  color:#9fb4c0;
+  line-height:1.5;
+">
+MetaTrader 5 must be running and logged into your trading account.<br>
+No additional connection settings are required.
+</div>
 </div>
 
 </div>
@@ -738,7 +754,30 @@ function v(id){
   return document.getElementById(id).value;
 }
 
+function updateBrokerFields(){
 
+  const broker = v("broker");
+  const ibkrFields = document.querySelectorAll(".ibkr-field");
+  const mt5Info = document.getElementById("mt5_info");
+
+  if(broker === "MT5"){
+
+    ibkrFields.forEach(field => {
+      field.style.display = "none";
+    });
+
+    mt5Info.style.display = "flex";
+
+  }else{
+
+    ibkrFields.forEach(field => {
+      field.style.display = "flex";
+    });
+
+    mt5Info.style.display = "none";
+
+  }
+}
 /*
   ONE PLAN FUNCTION
 
