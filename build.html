@@ -8,6 +8,178 @@
 
 <style>
 
+/* =========================================================
+   WHY LOCAL-FIRST POPUP
+   ========================================================= */
+
+.local-info-button {
+  background:#071b2b;
+  color:#7ddcff;
+  border:1px solid #28536a;
+  border-radius:8px;
+  padding:11px 18px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.06em;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.local-info-button:hover {
+  background:#0b2a40;
+  border-color:#55d8ff;
+  box-shadow:0 0 18px rgba(85,216,255,.16);
+}
+
+.local-modal {
+  display:none;
+  position:fixed;
+  z-index:9999;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(4px);
+  padding:30px 18px;
+  overflow-y:auto;
+}
+
+.local-modal.open {
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.local-modal-box {
+  position:relative;
+  width:min(900px,100%);
+  margin:auto;
+  background:#071016;
+  border:1px solid #168ee0;
+  border-radius:14px;
+  padding:34px;
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.65),
+    0 0 35px rgba(22,142,224,.10);
+}
+
+.local-modal-close {
+  position:absolute;
+  top:14px;
+  right:18px;
+  width:40px;
+  height:40px;
+  border:0;
+  background:transparent;
+  color:#7ddcff;
+  font-size:32px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.local-modal-close:hover {
+  color:#fff;
+}
+
+.local-modal-eyebrow {
+  margin:0 0 8px;
+  color:#55d8ff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+
+.local-modal-box h2 {
+  margin:0 45px 12px 0;
+  color:#fff;
+  font-size:30px;
+}
+
+.local-modal-intro {
+  max-width:760px;
+  margin:0 0 26px;
+  color:#b7c8d2;
+  line-height:1.65;
+}
+
+.local-benefits {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.local-benefit {
+  background:#071b2b;
+  border:1px solid #1c4f70;
+  border-radius:10px;
+  padding:18px;
+}
+
+.local-benefit strong {
+  display:block;
+  margin-bottom:8px;
+  color:#7ddcff;
+  font-size:13px;
+  letter-spacing:.045em;
+}
+
+.local-benefit p {
+  margin:0;
+  color:#b7c8d2;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.local-benefit p + p {
+  margin-top:10px;
+}
+
+.hive-benefit {
+  grid-column:1 / -1;
+  border-color:#168ee0;
+}
+
+.local-modal-bottom {
+  margin-top:18px;
+  padding:20px;
+  text-align:center;
+  background:#071b2b;
+  border:1px solid #168ee0;
+  border-radius:10px;
+}
+
+.local-modal-bottom strong {
+  display:block;
+  color:#55d8ff;
+  font-size:16px;
+  letter-spacing:.07em;
+  margin-bottom:7px;
+}
+
+.local-modal-bottom span {
+  display:block;
+  color:#c3d3dc;
+  line-height:1.5;
+}
+
+@media (max-width:700px) {
+
+  .local-modal-box {
+    padding:26px 18px;
+  }
+
+  .local-benefits {
+    grid-template-columns:1fr;
+  }
+
+  .hive-benefit {
+    grid-column:auto;
+  }
+
+  .local-modal-box h2 {
+    font-size:25px;
+  }
+}
+  
+
   /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
 body {
   border-top: 10px solid blue !important;
@@ -283,6 +455,109 @@ button:hover{
 
 <body>
 
+<button type="button" class="local-info-button" onclick="openLocalInfo()">
+  WHY LOCAL-FIRST?
+</button>
+
+<div id="localInfoModal" class="local-modal" onclick="closeLocalInfoOutside(event)">
+  <div class="local-modal-box">
+
+    <button
+      type="button"
+      class="local-modal-close"
+      onclick="closeLocalInfo()"
+      aria-label="Close">
+      &times;
+    </button>
+
+    <p class="local-modal-eyebrow">WHY LOCAL-FIRST?</p>
+
+    <h2>Your bot runs on your computer.</h2>
+
+    <p class="local-modal-intro">
+      Instead of running your trading bot on our servers, the bot you build
+      runs locally on your own computer. This gives you direct control over
+      the bot, its data, its broker connection and when it is running.
+    </p>
+
+    <div class="local-benefits">
+
+      <div class="local-benefit">
+        <strong>DIRECT BROKER CONNECTION</strong>
+        <p>
+          Your bot connects directly to your locally configured trading
+          platform, such as IBKR TWS/Gateway or MetaTrader 5.
+          BuildATradingBot.com does not need to sit between your bot
+          and your broker.
+        </p>
+      </div>
+
+      <div class="local-benefit">
+        <strong>INDEPENDENT OPERATION</strong>
+        <p>
+          Your strategy does not depend on BuildATradingBot.com or The Hive
+          being online. Your bot and its local database remain on your computer.
+        </p>
+      </div>
+
+      <div class="local-benefit">
+        <strong>LOCAL TRADING HISTORY</strong>
+        <p>
+          Trades, scans, decisions, settings and other bot data can be stored
+          in your own local database instead of requiring your complete
+          trading history to be stored in the cloud.
+        </p>
+      </div>
+
+      <div class="local-benefit">
+        <strong>YOU CONTROL WHEN IT RUNS</strong>
+        <p>
+          Start it, stop it, configure it and manage its broker connection
+          directly from your computer.
+        </p>
+      </div>
+
+      <div class="local-benefit">
+        <strong>NO BROKER CREDENTIALS STORED BY US</strong>
+        <p>
+          Broker connections are configured locally. Your broker login
+          credentials do not need to be stored on BuildATradingBot.com.
+        </p>
+      </div>
+
+      <div class="local-benefit hive-benefit">
+        <strong>OPTIONAL SHARED INTELLIGENCE — THE HIVE</strong>
+        <p>
+          Local does not mean isolated. Participating bots can optionally
+          connect to The Hive, our shared network database.
+        </p>
+        <p>
+          If you choose to contribute structured trade data, your bot can
+          also benefit from the growing pool of data contributed by other
+          participating bots — including community candidates and historical
+          trades with characteristics similar to your current setup.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="local-modal-bottom">
+      <strong>LOCAL EXECUTION. SHARED INTELLIGENCE.</strong>
+      <span>
+        Your computer runs the bot. The Hive optionally connects it
+        to the knowledge of the network.
+      </span>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+  
 <div class="wrap">
 
 
@@ -1059,6 +1334,28 @@ function buildPlan(){
 
 }
 
+
+  function openLocalInfo(){
+  document.getElementById("localInfoModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeLocalInfo(){
+  document.getElementById("localInfoModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function closeLocalInfoOutside(event){
+  if(event.target.id === "localInfoModal"){
+    closeLocalInfo();
+  }
+}
+
+document.addEventListener("keydown", function(event){
+  if(event.key === "Escape"){
+    closeLocalInfo();
+  }
+});
 </script>
 
 
