@@ -1239,78 +1239,278 @@ body {
 
 
 
-/* Build.html css markup */
-<section class="how-it-works">
-  <div class="how-it-works-heading">
-    <p class="eyebrow">HOW IT WORKS</p>
-    <h2>Configure it here. Run it on your computer.</h2>
+/* =========================================================
+   BUILD A TRADING BOT PAGE
+   ========================================================= */
 
-    <p class="how-intro">
-      Build A Trading Bot does not run your trading bot in the cloud.
-      Use the builder below to choose your strategy, rules and controls.
-      When you're finished, download the bot package, install it on your
-      Windows PC and run it locally.
-    </p>
-  </div>
+.wrap {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 28px;
+}
 
-  <div class="build-steps">
 
-    <div class="build-step">
-      <div class="step-number">1</div>
-      <div>
-        <h3>Configure</h3>
-        <p>
-          Choose your bot's strategy, entry and exit rules, symbols,
-          risk controls and other available settings.
-        </p>
-      </div>
-    </div>
+/* BOT BUILDER CARD */
 
-    <div class="build-step">
-      <div class="step-number">2</div>
-      <div>
-        <h3>Build</h3>
-        <p>
-          Your selections are turned into a configured bot package
-          using the options you selected.
-        </p>
-      </div>
-    </div>
+.card {
+  background: #0c141b;
+  border: 1px solid #1c3b4c;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 18px 60px #0008;
+}
 
-    <div class="build-step">
-      <div class="step-number">3</div>
-      <div>
-        <h3>Download &amp; Install</h3>
-        <p>
-          Download the finished Windows package and install the bot
-          on your own computer.
-        </p>
-      </div>
-    </div>
+.card h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+}
 
-    <div class="build-step">
-      <div class="step-number">4</div>
-      <div>
-        <h3>Run Locally</h3>
-        <p>
-          The installed bot runs on your PC. Broker connections,
-          credentials and trading execution are configured locally —
-          not entered into the public bot builder.
-        </p>
-      </div>
-    </div>
+.card p {
+  color: #9fb4c0;
+}
 
-  </div>
 
-  <div class="local-first-note">
-    <span class="local-icon">&lt;/&gt;</span>
-    <div>
-      <strong>LOCAL-FIRST</strong>
-      <p>
-        Your trading bot does not live on BuildATradingBot.com.
-        The website is used to configure and build it. The downloaded
-        application runs on your computer and remains under your control.
-      </p>
-    </div>
-  </div>
-</section>
+/* BUILDER GRID */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #7ddcff;
+}
+
+.field select,
+.field input {
+  background: #071016;
+  color: #fff;
+  border: 1px solid #28536a;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+}
+
+
+/* BUILD BUTTON */
+
+.card button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #6de4ff;
+  color: #001018;
+
+  font-weight: 800;
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.card button:hover {
+  filter: brightness(1.08);
+}
+
+.note {
+  font-size: 13px;
+  margin-top: 16px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+
+.how-it-works {
+  margin-bottom: 28px;
+  padding: 28px;
+
+  background: #0c141b;
+  border: 1px solid #1c3b4c;
+  border-radius: 16px;
+
+  box-shadow: 0 18px 60px #0008;
+}
+
+.how-it-works-heading {
+  margin-bottom: 24px;
+}
+
+.how-it-works .eyebrow {
+  margin: 0 0 8px;
+
+  color: #6de4ff;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.how-it-works h2 {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: 28px;
+}
+
+.how-intro {
+  max-width: 680px;
+
+  margin: 0;
+
+  color: #9fb4c0;
+
+  line-height: 1.65;
+}
+
+
+/* FOUR STEPS */
+
+.build-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.build-step {
+  display: flex;
+
+  gap: 14px;
+
+  padding: 17px;
+
+  background: #071016;
+
+  border: 1px solid #183747;
+  border-radius: 10px;
+}
+
+.step-number {
+  flex: 0 0 34px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #55dfff;
+  border-radius: 50%;
+
+  color: #6de4ff;
+
+  font-weight: 900;
+
+  box-shadow:
+    0 0 14px
+    rgba(85, 223, 255, .15);
+}
+
+.build-step h3 {
+  margin: 2px 0 6px;
+
+  color: #ffffff;
+
+  font-size: 16px;
+}
+
+.build-step p {
+  margin: 0;
+
+  color: #9fb4c0;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* LOCAL FIRST BOX */
+
+.local-first-note {
+  display: flex;
+
+  gap: 16px;
+
+  margin-top: 18px;
+
+  padding: 18px;
+
+  background:
+    rgba(0, 116, 164, .10);
+
+  border:
+    1px solid
+    rgba(85, 223, 255, .35);
+
+  border-radius: 10px;
+}
+
+.local-icon {
+  color: #6de4ff;
+
+  font-family: monospace;
+
+  font-size: 24px;
+
+  font-weight: 900;
+}
+
+.local-first-note strong {
+  color: #6de4ff;
+
+  font-size: 12px;
+
+  letter-spacing: .14em;
+}
+
+.local-first-note p {
+  margin: 5px 0 0;
+
+  color: #b8cad3;
+
+  font-size: 14px;
+
+  line-height: 1.55;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+  .wrap {
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .grid,
+  .build-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .how-it-works,
+  .card {
+    padding: 20px;
+  }
+}
