@@ -1,7 +1,85 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Build A Trading Bot — Prototype</title>
 <style>body{margin:0;background:#05090d;color:#eef7fb;font:16px Arial,sans-serif}.wrap{max-width:720px;margin:50px auto;padding:28px}.card{background:#0c141b;border:1px solid #1c3b4c;border-radius:16px;padding:28px;box-shadow:0 18px 60px #0008}h1{margin:0 0 8px;font-size:32px}p{color:#9fb4c0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#7ddcff}select,input{background:#071016;color:#fff;border:1px solid #28536a;border-radius:8px;padding:12px;font-size:15px}button{width:100%;margin-top:22px;padding:14px;border:0;border-radius:9px;background:#6de4ff;color:#001018;font-weight:800;font-size:16px;cursor:pointer}.note{font-size:13px;margin-top:16px}.full{grid-column:1/-1}@media(max-width:600px){.grid{grid-template-columns:1fr}}</style></head>
-<body><div class="wrap"><div class="card"><h1>BUILD A TRADING BOT</h1><p>Prototype 0.1 — choose a few rules and generate a bot plan.</p>
+
+ <section class="how-it-works">
+  <div class="how-it-works-heading">
+    <p class="eyebrow">HOW IT WORKS</p>
+    <h2>Configure it here. Run it on your computer.</h2>
+
+    <p class="how-intro">
+      Build A Trading Bot does not run your trading bot in the cloud.
+      Use the builder below to choose your strategy, rules and controls.
+      When you're finished, download the bot package, install it on your
+      Windows PC and run it locally.
+    </p>
+  </div>
+
+  <div class="build-steps">
+
+    <div class="build-step">
+      <div class="step-number">1</div>
+      <div>
+        <h3>Configure</h3>
+        <p>
+          Choose your bot's strategy, entry and exit rules, symbols,
+          risk controls and other available settings.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">2</div>
+      <div>
+        <h3>Build</h3>
+        <p>
+          Your selections are turned into a configured bot package
+          using the options you selected.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">3</div>
+      <div>
+        <h3>Download &amp; Install</h3>
+        <p>
+          Download the finished Windows package and install the bot
+          on your own computer.
+        </p>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="step-number">4</div>
+      <div>
+        <h3>Run Locally</h3>
+        <p>
+          The installed bot runs on your PC. Broker connections,
+          credentials and trading execution are configured locally —
+          not entered into the public bot builder.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="local-first-note">
+    <span class="local-icon">&lt;/&gt;</span>
+    <div>
+      <strong>LOCAL-FIRST</strong>
+      <p>
+        Your trading bot does not live on BuildATradingBot.com.
+        The website is used to configure and build it. The downloaded
+        application runs on your computer and remains under your control.
+      </p>
+    </div>
+  </div>
+</section>
+ 
+ 
+ 
+ <body><div class="wrap"><div class="card"><h1>BUILD A TRADING BOT</h1><p>Prototype 0.1 — choose a few rules and generate a bot plan.</p>
 <div class="grid">
 <div class="field"><label>Bot name</label><input id="bot_name" value="My Trading Bot"></div>
 <div class="field"><label>Broker</label><select id="broker"><option>IBKR</option></select></div>
