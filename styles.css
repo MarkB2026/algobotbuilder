@@ -1290,9 +1290,9 @@ footer {
 
 .field select,
 .field input {
-  background: #071016;
+  background: #071f3d;
   color: #fff;
-  border: 1px solid #28536a;
+  border: 1px solid #168ee0;
   border-radius: 8px;
   padding: 12px;
   font-size: 15px;
@@ -1514,5 +1514,5 @@ footer {
 
 /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
 body {
-  border-top: 10px solid blue !important;
+  border-top: 10px solid yellow !important;
 }
