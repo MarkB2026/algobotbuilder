@@ -934,7 +934,7 @@ No additional connection settings are required.
 <div class="field">
 <label>Trading Mode</label>
 
-<select id="mode">
+<select id="mode" onchange="updateTradingModePort()">
 <option>PAPER</option>
 <option>LIVE</option>
 </select>
@@ -1273,7 +1273,18 @@ trading bot built around your rules.
 function v(id){
   return document.getElementById(id).value;
 }
+function updateTradingModePort(){
 
+  const mode = v("mode");
+  const port = document.getElementById("port");
+
+  if(mode === "LIVE"){
+    port.value = 7496;
+  }else{
+    port.value = 7497;
+  }
+
+}
 function updateBrokerFields(){
 
   const broker = v("broker");
