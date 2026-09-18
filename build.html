@@ -185,7 +185,7 @@
    ============================================================ */
 
 body {
-  border-top:10px solid green !important;
+  border-top:10px solid blue !important;
 }
 
 body{
@@ -1673,11 +1673,14 @@ buildButton.disabled = false;
 
         buildButton.onclick = function(){
 
-          window.location.href =
-            "https://falling-sky-7997.markbrogliatto.workers.dev/download?id=" +
-            encodeURIComponent(buildId);
+  buildButton.classList.remove("download-ready");
+  buildButton.textContent = "✓ DOWNLOAD STARTED";
 
-        };
+  window.location.href =
+    "https://falling-sky-7997.markbrogliatto.workers.dev/download?id=" +
+    encodeURIComponent(buildId);
+
+};
 
 
         return;
