@@ -1440,8 +1440,46 @@ async function buildPlan(){
     'button[onclick="buildPlan()"]'
   );
 
+  const progressPanel =
+    document.getElementById("buildProgress");
+
+  const progressTitle =
+    document.getElementById("buildProgressTitle");
+
+  const progressFill =
+    document.getElementById("buildProgressFill");
+
+  const stepSubmit =
+    document.getElementById("buildStepSubmit");
+
+  const stepStart =
+    document.getElementById("buildStepStart");
+
+  const stepInstaller =
+    document.getElementById("buildStepInstaller");
+
+
+  /* START BUILDING STATE */
+
   buildButton.disabled = true;
-  buildButton.textContent = "SUBMITTING BOT BUILD...";
+  buildButton.classList.add("building");
+  buildButton.textContent = "BUILDING YOUR WINDOWS BOT...";
+
+  progressPanel.style.display = "block";
+
+  progressTitle.textContent =
+    "BUILDING YOUR TRADING BOT";
+
+  progressFill.classList.remove("complete");
+
+  stepSubmit.textContent =
+    "● Submitting configuration...";
+
+  stepStart.textContent =
+    "○ Starting Windows build...";
+
+  stepInstaller.textContent =
+    "○ Building Windows installer...";
 
 
   try{
@@ -1450,12 +1488,15 @@ async function buildPlan(){
       "https://falling-sky-7997.markbrogliatto.workers.dev/",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify(plan)
       }
     );
+
 
     const result = await response.json();
 
@@ -1463,16 +1504,28 @@ async function buildPlan(){
     if(!response.ok || !result.ok){
 
       throw new Error(
-        result.error || "The builder returned an error."
+        result.error ||
+        "The builder returned an error."
       );
     }
 
 
     const buildId = result.build_id;
 
-    buildButton.textContent =
-      "BUILDING YOUR WINDOWS BOT...";
 
+    /* CONFIGURATION ACCEPTED */
+
+    stepSubmit.textContent =
+      "✓ Configuration submitted";
+
+    stepStart.textContent =
+      "✓ Windows build started";
+
+    stepInstaller.textContent =
+      "● Building Windows installer...";
+
+
+    /* POLL FOR THIS EXACT BUILD */
 
     while(true){
 
@@ -1486,39 +1539,55 @@ async function buildPlan(){
         encodeURIComponent(buildId)
       );
 
-      const status = await statusResponse.json();
+
+      const status =
+        await statusResponse.json();
 
 
       if(!statusResponse.ok || !status.ok){
 
         throw new Error(
-          status.error || "Could not check build status."
+          status.error ||
+          "Could not check build status."
         );
       }
 
 
       if(status.ready){
 
+        /* BUILD COMPLETE */
+
+        progressFill.classList.add("complete");
+
+        progressTitle.textContent =
+          "✓ YOUR TRADING BOT IS READY";
+
+        stepSubmit.textContent =
+          "✓ Configuration submitted";
+
+        stepStart.textContent =
+          "✓ Windows build completed";
+
+        stepInstaller.textContent =
+          "✓ Installer ready to download";
+
+
+        buildButton.classList.remove("building");
+
         buildButton.disabled = false;
 
         buildButton.textContent =
           "DOWNLOAD WINDOWS INSTALLER";
+
 
         buildButton.onclick = function(){
 
           window.location.href =
             "https://falling-sky-7997.markbrogliatto.workers.dev/download?id=" +
             encodeURIComponent(buildId);
+
         };
 
-
-        alert(
-          "YOUR BOT IS READY!\n\n" +
-          plan.bot_name +
-          "\n" +
-          plan.symbol + " " + plan.direction +
-          "\n\nClick DOWNLOAD WINDOWS INSTALLER."
-        );
 
         return;
       }
@@ -1529,14 +1598,22 @@ async function buildPlan(){
 
     console.error(error);
 
-    alert(
-      "BOT BUILD FAILED\n\n" +
-      error.message
-    );
+    progressFill.classList.remove("complete");
+
+    progressTitle.textContent =
+      "BOT BUILD FAILED";
+
+    stepInstaller.textContent =
+      "✕ " + error.message;
+
+
+    buildButton.classList.remove("building");
 
     buildButton.disabled = false;
+
     buildButton.textContent =
-      "BUILD MY TRADING BOT";
+      "TRY BUILD AGAIN";
+
   }
 }
 
