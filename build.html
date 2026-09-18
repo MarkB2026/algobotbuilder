@@ -1262,31 +1262,16 @@ async function buildPlan(){
 
   const plan = getPlan();
 
-  /*
-     Extra confirmation before creating a LIVE executable bot.
-  */
-
   if(plan.mode === "LIVE" && plan.execution_enabled){
 
     const ok = confirm(
-
       "LIVE TRADING IS ENABLED.\n\n" +
-
       "This configuration may submit REAL broker orders.\n\n" +
-
-      "Symbol: " +
-      plan.symbol +
-      "\n" +
-
-      "Quantity: " +
-      plan.quantity +
-      "\n" +
-
+      "Symbol: " + plan.symbol + "\n" +
+      "Quantity: " + plan.quantity + "\n" +
       "1 Share Override: " +
       (plan.one_share_override ? "ON" : "OFF") +
-
       "\n\nContinue?"
-
     );
 
     if(!ok) return;
@@ -1296,8 +1281,6 @@ async function buildPlan(){
   const buildButton = document.querySelector(
     'button[onclick="buildPlan()"]'
   );
-
-  const originalText = buildButton.textContent;
 
   buildButton.disabled = true;
   buildButton.textContent = "SUBMITTING BOT BUILD...";
@@ -1309,42 +1292,79 @@ async function buildPlan(){
       "https://falling-sky-7997.markbrogliatto.workers.dev/",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json"
         },
-
         body: JSON.stringify(plan)
       }
     );
-
 
     const result = await response.json();
 
 
     if(!response.ok || !result.ok){
 
-      console.error(result);
-
-      alert(
-        "BOT BUILD FAILED\n\n" +
-        (result.error || "The builder returned an error.")
+      throw new Error(
+        result.error || "The builder returned an error."
       );
-
-      return;
     }
 
 
-    alert(
-      "BOT BUILD STARTED!\n\n" +
-      plan.bot_name +
-      "\n" +
-      plan.symbol +
-      " " +
-      plan.direction +
-      "\n\n" +
-      "Your configuration was successfully sent to the Windows bot builder."
-    );
+    const buildId = result.build_id;
+
+    buildButton.textContent =
+      "BUILDING YOUR WINDOWS BOT...";
+
+
+    while(true){
+
+      await new Promise(resolve =>
+        setTimeout(resolve, 5000)
+      );
+
+
+      const statusResponse = await fetch(
+        "https://falling-sky-7997.markbrogliatto.workers.dev/status?id=" +
+        encodeURIComponent(buildId)
+      );
+
+      const status = await statusResponse.json();
+
+
+      if(!statusResponse.ok || !status.ok){
+
+        throw new Error(
+          status.error || "Could not check build status."
+        );
+      }
+
+
+      if(status.ready){
+
+        buildButton.disabled = false;
+
+        buildButton.textContent =
+          "DOWNLOAD WINDOWS INSTALLER";
+
+        buildButton.onclick = function(){
+
+          window.location.href =
+            "https://falling-sky-7997.markbrogliatto.workers.dev/download?id=" +
+            encodeURIComponent(buildId);
+        };
+
+
+        alert(
+          "YOUR BOT IS READY!\n\n" +
+          plan.bot_name +
+          "\n" +
+          plan.symbol + " " + plan.direction +
+          "\n\nClick DOWNLOAD WINDOWS INSTALLER."
+        );
+
+        return;
+      }
+    }
 
 
   }catch(error){
@@ -1353,19 +1373,14 @@ async function buildPlan(){
 
     alert(
       "BOT BUILD FAILED\n\n" +
-      "Could not connect to the BuildATradingBot builder."
+      error.message
     );
 
-
-  }finally{
-
     buildButton.disabled = false;
-    buildButton.textContent = originalText;
-
+    buildButton.textContent =
+      "BUILD MY TRADING BOT";
   }
-
 }
-
 
   function openLocalInfo(){
   document.getElementById("localInfoModal").classList.add("open");
