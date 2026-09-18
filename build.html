@@ -1522,6 +1522,16 @@ async function buildPlan(){
 
   const plan = getPlan();
 
+  const turnstileToken =
+  document.querySelector('[name="cf-turnstile-response"]')?.value;
+
+if(!turnstileToken){
+  alert("Please complete the security check before building your bot.");
+  return;
+}
+
+plan.turnstile_token = turnstileToken;
+
   if(plan.mode === "LIVE" && plan.execution_enabled){
 
     const ok = confirm(
