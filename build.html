@@ -178,11 +178,11 @@
     font-size:25px;
   }
 }
-  
 
-  /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
+
+/* Manually change to display a colored bar at the top of the page to know when css has taken effect. */
 body {
-  border-top: 10px solid blue !important;
+  border-top:10px solid blue !important;
 }
 
 body{
@@ -252,27 +252,69 @@ input{
   font-size:15px
 }
 
+
+/* ============================================================
+   PRIMARY BUTTON
+   ============================================================ */
+
 button{
   width:100%;
   margin-top:28px;
   padding:15px;
-  border:0;
-  border-radius:9px;
-  background:#6de4ff;
-  color:#001018;
-  font-weight:800;
+  border:1px solid #21c8ff;
+  border-radius:10px;
+  background:#0787bd;
+  color:#ffffff;
+  font-weight:900;
   font-size:16px;
-  cursor:pointer
+  letter-spacing:.03em;
+  cursor:pointer;
+  box-shadow:
+    0 0 20px rgba(0,174,239,.20),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  transition:.2s ease;
 }
 
 button:hover{
-  filter:brightness(1.08)
+  background:#0999d4;
+  border-color:#63ddff;
+  box-shadow:
+    0 0 26px rgba(0,174,239,.32),
+    inset 0 1px 0 rgba(255,255,255,.10);
 }
+
+
+/* GREEN WHILE BOT IS BUILDING */
+
+button.building{
+  background:#168a45;
+  border-color:#3ee47d;
+  color:#ffffff;
+  box-shadow:
+    0 0 22px rgba(62,228,125,.25),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  cursor:wait;
+}
+
+button.building:hover{
+  background:#168a45;
+  border-color:#3ee47d;
+}
+
+
+/* REVIEW BUTTON STAYS DARK */
 
 .review-button{
   background:#0d2531;
   color:#7ddcff;
-  border:1px solid #28536a
+  border:1px solid #28536a;
+  box-shadow:none;
+}
+
+.review-button:hover{
+  background:#123545;
+  border-color:#55d8ff;
+  box-shadow:none;
 }
 
 .note{
@@ -448,66 +490,91 @@ button:hover{
   }
 
 }
+
+
 /* ============================================================
    BOT BUILD PROGRESS
    ============================================================ */
 
-.build-progress {
-  display: none;
-  margin-top: 18px;
-  padding: 20px;
-  border: 1px solid #23506a;
-  border-radius: 10px;
-  background: #07141d;
+.build-progress{
+  display:none;
+  margin-top:18px;
+  padding:20px;
+  border:1px solid #28734a;
+  border-radius:10px;
+  background:#07140e;
+  box-shadow:0 0 20px rgba(62,228,125,.08);
 }
 
-.build-progress-title {
-  margin-bottom: 14px;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #68dcff;
+.build-progress-title{
+  margin-bottom:14px;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:#55e98d;
 }
 
-.build-progress-bar {
-  width: 100%;
-  height: 12px;
-  overflow: hidden;
-  border: 1px solid #23506a;
-  border-radius: 20px;
-  background: #02090e;
+
+/* PROGRESS BAR TRACK */
+
+.build-progress-bar{
+  position:relative;
+  width:100%;
+  height:14px;
+  overflow:hidden;
+  border:1px solid #28734a;
+  border-radius:20px;
+  background:#020a06;
 }
 
-.build-progress-fill {
-  width: 35%;
-  height: 100%;
-  border-radius: 20px;
-  background: #68dcff;
-  animation: buildProgressMove 1.4s ease-in-out infinite alternate;
+
+/* MOVING GREEN BAR */
+
+.build-progress-fill{
+  width:35%;
+  height:100%;
+  border-radius:20px;
+  background:#35d873;
+  box-shadow:0 0 14px rgba(53,216,115,.45);
+  animation:buildProgressMove 1.25s ease-in-out infinite alternate;
 }
 
-@keyframes buildProgressMove {
-  from {
-    margin-left: 0;
+@keyframes buildProgressMove{
+
+  from{
+    margin-left:0;
   }
 
-  to {
-    margin-left: 65%;
+  to{
+    margin-left:65%;
   }
+
 }
 
-.build-progress-steps {
-  margin-top: 16px;
-  line-height: 1.9;
-  font-size: 13px;
-  color: #c8dce7;
+
+/* COMPLETED BAR */
+
+.build-progress-fill.complete{
+  width:100%;
+  margin-left:0;
+  animation:none;
+  background:#35d873;
 }
 
-.build-progress-note {
-  margin-top: 10px;
-  font-size: 12px;
-  color: #7895a5;
+
+.build-progress-steps{
+  margin-top:16px;
+  line-height:1.9;
+  font-size:13px;
+  color:#c8dce7;
 }
+
+.build-progress-note{
+  margin-top:10px;
+  font-size:12px;
+  color:#7895a5;
+}
+
 </style>
 
 <body>
