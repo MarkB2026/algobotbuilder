@@ -1258,16 +1258,15 @@ function reviewBot(){
    BUILD / DOWNLOAD PLAN
    ============================================================ */
 
-function buildPlan(){
+async function buildPlan(){
 
-  const plan=getPlan();
-
+  const plan = getPlan();
 
   /*
-     Extra confirmation before creating a LIVE executable plan.
+     Extra confirmation before creating a LIVE executable bot.
   */
 
-  if(plan.mode==="LIVE" && plan.execution_enabled){
+  if(plan.mode === "LIVE" && plan.execution_enabled){
 
     const ok = confirm(
 
@@ -1290,35 +1289,80 @@ function buildPlan(){
 
     );
 
-
     if(!ok) return;
-
   }
 
 
-  const blob = new Blob(
-
-    [JSON.stringify(plan,null,2)],
-
-    {
-      type:"application/json"
-    }
-
+  const buildButton = document.querySelector(
+    'button[onclick="buildPlan()"]'
   );
 
+  const originalText = buildButton.textContent;
 
-  const a=document.createElement("a");
-
-
-  a.href=URL.createObjectURL(blob);
-
-  a.download="bot_plan.json";
+  buildButton.disabled = true;
+  buildButton.textContent = "SUBMITTING BOT BUILD...";
 
 
-  a.click();
+  try{
+
+    const response = await fetch(
+      "https://falling-sky-7997.markbrogliatto.workers.dev/",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(plan)
+      }
+    );
 
 
-  URL.revokeObjectURL(a.href);
+    const result = await response.json();
+
+
+    if(!response.ok || !result.ok){
+
+      console.error(result);
+
+      alert(
+        "BOT BUILD FAILED\n\n" +
+        (result.error || "The builder returned an error.")
+      );
+
+      return;
+    }
+
+
+    alert(
+      "BOT BUILD STARTED!\n\n" +
+      plan.bot_name +
+      "\n" +
+      plan.symbol +
+      " " +
+      plan.direction +
+      "\n\n" +
+      "Your configuration was successfully sent to the Windows bot builder."
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "BOT BUILD FAILED\n\n" +
+      "Could not connect to the BuildATradingBot builder."
+    );
+
+
+  }finally{
+
+    buildButton.disabled = false;
+    buildButton.textContent = originalText;
+
+  }
 
 }
 
