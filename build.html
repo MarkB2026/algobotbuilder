@@ -185,7 +185,7 @@
    ============================================================ */
 
 body {
-  border-top:10px solid red !important;
+  border-top:10px solid green !important;
 }
 
 body{
@@ -1663,8 +1663,9 @@ document.title =
 
 
         buildButton.classList.remove("building");
+buildButton.classList.add("download-ready");
 
-        buildButton.disabled = false;
+buildButton.disabled = false;
 
         buildButton.textContent =
           "DOWNLOAD WINDOWS INSTALLER";
@@ -1698,7 +1699,7 @@ document.title =
 
 
     buildButton.classList.remove("building");
-     buildButton.classList.add("download-ready");
+buildButton.classList.remove("download-ready");
 
     buildButton.disabled = false;
 
