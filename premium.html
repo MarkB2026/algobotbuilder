@@ -1,0 +1,1673 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BuildTradingBots — Custom Bot Builder</title>
+<style>
+:root{
+  --bg:#11151b;--panel:#181e26;--panel2:#202833;--line:#35404d;
+  --text:#edf2f7;--muted:#9eabb9;--accent:#4e8cff;--good:#42c77a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Arial,sans-serif;font-size:14px}
+button,input,select{font:inherit}
+button,select,input[type=text],input[type=number]{height:38px;background:#121820;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:7px 9px}
+button{cursor:pointer}
+button:hover{border-color:#708093}
+input[type=checkbox]{accent-color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:100vh}
+.sidebar{background:#141a21;border-right:1px solid var(--line);padding:14px}
+.brand{font-size:22px;font-weight:800;letter-spacing:1.5px}
+.connected{margin-top:8px;font-size:12px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--good);margin-right:6px}
+.nav{display:grid;gap:7px;margin-top:18px}.nav button{text-align:left}
+.nav button.active{border-color:var(--accent);background:#1d2b40}
+.sidebox{border-top:1px solid var(--line);margin-top:18px;padding-top:12px;font-size:12px}
+.row{display:flex;justify-content:space-between;gap:12px;margin:6px 0}
+.main{padding:14px;min-width:0}
+.top{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;margin-bottom:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:12px}
+.label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.6px}
+.modes{display:flex;gap:6px;margin-top:8px}.modes button{flex:1}.modes .active{border-color:var(--accent);background:#1d2b40}
+.page-title{font-size:17px;font-weight:800;margin-bottom:2px}.sub{color:var(--muted);font-size:12px;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.field{display:grid;grid-template-rows:16px 38px;gap:4px;font-size:12px;align-content:start}.section{margin-bottom:10px}
+.section-head{display:flex;justify-content:flex-start;align-items:center;margin-bottom:10px;font-weight:800}
+.legrow{display:grid;grid-template-columns:65px 1fr 85px;gap:7px;align-items:start;margin:7px 0}
+.stageflow{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr 22px 1fr;align-items:center;gap:5px}
+.arrow{text-align:center;color:var(--muted);font-size:20px}
+.stage{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:9px}
+.checks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px}
+.check{display:flex;align-items:center;gap:7px;min-height:36px}
+.plan{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12px;line-height:1.7}
+.footer{display:flex;gap:7px;border-top:1px solid var(--line);padding-top:11px;margin-top:10px}.spacer{flex:1}
+.start{background:#245fbd;border-color:#4e8cff;font-weight:800;padding-left:22px;padding-right:22px}
+.hidden{display:none!important}
+.placeholder{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:6px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.nav{grid-template-columns:repeat(5,1fr)}.top,.grid2,.grid3{grid-template-columns:1fr}.grid4,.checks{grid-template-columns:1fr 1fr}.stageflow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
+select{
+  background:#162536;
+  color:#edf5ff;
+  border-color:#3c536b;
+}
+select:hover,select:focus{
+  background:#1a2d42;
+  border-color:#5c7fa3;
+  outline:none;
+}
+
+/* === v0.5 POPUP SYSTEM — additive only === */
+.popup-backdrop{
+  position:fixed; inset:0; background:rgba(2,7,13,.72);
+  display:none; align-items:center; justify-content:center; z-index:9999;
+  backdrop-filter:blur(2px);
+}
+.popup-backdrop.show{display:flex}
+.allbot-popup{
+  width:min(520px,calc(100vw - 36px));
+  background:#0d151f; border:1px solid #38536d; border-radius:14px;
+  box-shadow:0 24px 80px rgba(0,0,0,.58); overflow:hidden;
+}
+.popup-top{
+  padding:15px 17px 12px; background:#132335; border-bottom:1px solid #2c4257;
+  display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+}
+.popup-kicker{font-size:11px;letter-spacing:.12em;color:#86b7e4;font-weight:800}
+.popup-title{font-size:20px;font-weight:850;margin-top:3px;color:#f1f7ff}
+.popup-symbol{font-size:14px;font-weight:800;text-align:right;color:#dcecff}
+.popup-side{font-size:11px;color:#8fb7d8;text-align:right;margin-top:3px}
+.popup-body{padding:15px 17px 17px}
+.popup-section{padding:10px 0;border-bottom:1px solid #202d3a}
+.popup-section:last-of-type{border-bottom:0}
+.popup-section-title{font-size:10px;letter-spacing:.12em;color:#71879b;font-weight:800;margin-bottom:7px}
+.popup-line{display:grid;grid-template-columns:20px 1fr auto;gap:7px;align-items:center;padding:3px 0;font-size:12px}
+.popup-ok{color:#72d7a5;font-weight:900}
+.popup-bad{color:#ff8585;font-weight:900}
+.popup-neutral{color:#8fb7d8;font-weight:900}
+.popup-value{color:#d9e9f7;font-weight:700}
+.popup-state{
+  margin-top:10px;padding:9px 11px;border-radius:8px;background:#162536;
+  border:1px solid #324d66;font-size:12px;color:#dcecff
+}
+.popup-actions{display:flex;justify-content:flex-end;gap:8px;padding-top:14px}
+.popup-actions button{min-width:105px}
+.popup-danger{border-color:#75434a!important;color:#ff9da5!important}
+.popup-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 17px;background:#0a1119;border-bottom:1px solid #202d3a}
+.popup-tabs button{height:30px;padding:0 10px;font-size:10px}
+.popup-tabs button.active{background:#1b3349;border-color:#557da2}
+
+
+/* === v0.6 CONTEXT HELP — additive only === */
+.info-btn{
+  width:22px!important;height:22px!important;min-width:22px!important;padding:0!important;
+  border-radius:50%!important;border:1px solid #4b6a87!important;
+  background:#162536!important;color:#9dccf4!important;font-size:12px!important;
+  font-weight:900!important;line-height:20px!important;display:inline-flex!important;
+  align-items:center!important;justify-content:center!important;cursor:pointer!important;
+  margin-left:6px!important;margin-right:8px!important;vertical-align:middle!important;
+}
+.info-btn:hover{background:#1d344b!important;border-color:#76a8d2!important;color:#e4f3ff!important}
+.help-backdrop{
+  position:fixed;inset:0;background:rgba(2,7,13,.72);display:none;
+  align-items:center;justify-content:center;z-index:10050;backdrop-filter:blur(2px);
+}
+.help-backdrop.show{display:flex}
+.help-modal{
+  width:min(650px,calc(100vw - 36px));max-height:min(760px,calc(100vh - 48px));
+  overflow:hidden;background:#0d151f;border:1px solid #3d5a75;border-radius:14px;
+  box-shadow:0 24px 90px rgba(0,0,0,.62);display:flex;flex-direction:column;
+}
+.help-top{
+  background:#132335;border-bottom:1px solid #2d4358;padding:14px 17px;
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+}
+.help-title{font-size:17px;font-weight:850;color:#f0f7ff}
+.help-close{width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;font-size:18px!important}
+.help-body{padding:16px 18px 18px;overflow:auto;color:#c9d8e6;font-size:12px;line-height:1.55}
+.help-body p{margin:0 0 12px}
+.help-body .help-intro{color:#e2eef9;font-size:13px}
+.help-row{padding:9px 0;border-top:1px solid #202e3b}
+.help-row:first-of-type{border-top:0}
+.help-term{display:block;color:#91c2eb;font-weight:800;margin-bottom:2px}
+.help-note{margin-top:12px;padding:10px 11px;background:#162536;border:1px solid #304b64;border-radius:8px;color:#d9e8f5}
+
+
+/* === v1.0 FULL SETTINGS / LIVE PLAN PANEL === */
+.plan-drawer{position:fixed;top:0;right:0;width:min(520px,46vw);height:100vh;background:#09121c;
+ border-left:1px solid #38536d;z-index:12000;box-shadow:-20px 0 60px rgba(0,0,0,.45);
+ transform:translateX(100%);transition:transform .18s ease;display:flex;flex-direction:column}
+.plan-drawer.open{transform:translateX(0)}
+.plan-head{padding:14px 16px;background:#112235;border-bottom:1px solid #2c4257;display:flex;align-items:center;gap:8px}
+.plan-head b{font-size:15px}.plan-head .spacer{flex:1}
+.plan-tabs{display:flex;gap:6px;padding:9px 12px;border-bottom:1px solid #243646;background:#0b1723}
+.plan-tabs button{height:32px;font-size:11px}.plan-tabs button.active{background:#1d3a54;border-color:#5d8bb2}
+.plan-body{padding:12px;overflow:auto;flex:1}
+.plan-summary{white-space:pre-wrap;line-height:1.55;font-size:12px;color:#d8e7f4}
+.plan-json{width:100%;min-height:calc(100vh - 180px);resize:none;background:#050c13;color:#bfe0f5;
+ border:1px solid #29465d;border-radius:6px;padding:11px;font:11px Consolas,monospace;line-height:1.45}
+.plan-actions{padding:10px 12px;border-top:1px solid #243646;display:flex;gap:7px;background:#0b1723}
+.plan-actions button{height:34px;font-size:11px}
+.plan-float{position:fixed;right:18px;bottom:18px;z-index:11000;background:#174c76;border-color:#4c87b3;font-weight:800}
+.plan-section{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #20313f}
+.plan-section h3{font-size:11px;color:#8ec1ea;letter-spacing:.08em;margin:0 0 7px}
+.plan-line{margin:3px 0}.plan-muted{color:#8297aa}.plan-warn{color:#ffd48a}
+body.plan-open .main{padding-right:14px}
+@media(max-width:900px){.plan-drawer{width:100vw}.plan-float{right:10px;bottom:10px}}
+</style>
+
+
+<style>
+/* v0.9.3: preserve original navigation grid; only allow long button labels to wrap cleanly */
+.sidebar .nav button {
+  white-space: normal;
+  line-height: 1.15;
+  min-height: 34px;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+</style>
+
+
+<style>
+/* === v1.1.1 COMPACT STRATEGY LAYOUT === */
+
+/* Primary Strategy: Strategy + Direction side-by-side */
+#strategyLibraryCard .grid-2{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:10px 14px !important;
+    align-items:end;
+}
+
+/* Optional Strategy Filters: compact parameter controls side-by-side */
+#strategyFiltersCard #filterSettings{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px 14px !important;
+}
+
+/* Bollinger core settings: 3 across */
+#bollingerCoreCard .grid-3{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px 14px !important;
+}
+
+/* Keep checkbox rows compact instead of stretching vertically */
+#strategyFiltersCard .check-grid,
+#tradeQualityCard .check-grid,
+#bollingerCoreCard .check-grid{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px 16px !important;
+    align-items:center;
+}
+
+#strategyFiltersCard .check-grid label,
+#tradeQualityCard .check-grid label,
+#bollingerCoreCard .check-grid label{
+    width:auto !important;
+    margin:0 !important;
+}
+
+/* Slightly reduce vertical padding on these cards */
+#strategyLibraryCard,
+#strategyFiltersCard,
+#tradeQualityCard,
+#bollingerCoreCard{
+    padding-top:12px !important;
+    padding-bottom:12px !important;
+}
+
+#strategyLibraryCard .muted{
+    margin-top:8px !important;
+}
+
+/* Responsive fallback */
+@media(max-width:900px){
+    #strategyLibraryCard .grid-2,
+    #strategyFiltersCard #filterSettings,
+    #bollingerCoreCard .grid-3{
+        grid-template-columns:1fr !important;
+    }
+}
+</style>
+
+
+<style>
+/* v1.1.3 — keep Settings / JSON clear of bottom-right Launch Bot */
+.plan-float{
+    right:18px !important;
+    bottom:78px !important;
+}
+@media(max-width:900px){
+    .plan-float{
+        right:10px !important;
+        bottom:78px !important;
+    }
+}
+</style>
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand">BuildTradingBots</div><div style="font-size:10px;color:var(--muted);margin-top:2px">CUSTOM BOT BUILDER • ADVANCED</div>
+  <div class="connected"><span class="dot"></span>IBKR CONNECTED</div>
+  <div class="nav">
+    <button data-page="strategy">Strategy</button>
+    <button class="active" data-page="behaviour">Behaviour</button>
+    <button data-page="execution">Execution</button>
+<button data-page="scanner" onclick="showPage('scanner', this)">SCANNER</button>
+<button data-page="brokers" onclick="showPage('brokers', this)">BROKER CONNECTIONS</button>
+    <button data-page="decisions" onclick="showPage('decisions', this)">DECISION REPORT</button>
+<button data-page="positions">Positions</button>
+    <button data-page="review">Review</button>
+  </div>
+  <div class="sidebox"><div class="label">ACCOUNT</div><div class="row"><span>Net Liq</span><b>$42,650</b></div><div class="row"><span>Available</span><b>$18,400</b></div></div>
+  <div class="sidebox"><div class="label">TODAY</div><div class="row"><span>Realized</span><b>+$184</b></div><div class="row"><span>Open P&amp;L</span><b>+$71</b></div><div class="row"><span>Trades</span><b>6</b></div></div>
+</aside>
+
+<main class="main"><div class="card" style="border-color:#4e8cff;background:#102238;margin-bottom:10px"><div class="page-title">BUILD YOUR CUSTOM TRADING BOT</div><div class="sub" style="margin:0">Choose the strategy, entry evidence, sizing, leg-in/out, Sink or Swim, stop progression, trailing/ratcheting, cooldown, session rules, scanner, broker and safety controls. Review the complete plan before building.</div></div>
+<div class="top">
+ <div class="card"><div class="label">MODE <button type="button" class="info-btn" data-help="MODE" aria-label="Explain MODE">i</button></div><div class="modes"><button>OBSERVE</button><button class="active">PAPER</button><button>LIVE</button></div></div>
+ <div class="card"><div class="row"><span class="label">SENTIENCE</span><b id="sentLabel">2 — ASSISTED</b></div><input id="sentience" type="range" min="0" max="4" value="2"><div class="row" style="font-size:10px;color:var(--muted)"><span>STRICT</span><span>AUTONOMOUS</span></div></div>
+</div>
+
+<section id="behaviour" class="page">
+<div class="page-title">BEHAVIOUR</div><div class="sub">Choose exactly how your custom bot manages the trade after entry.</div>
+
+<div class="grid2 section">
+ <div class="card">
+  <div class="section-head"><span>LEG IN</span><button type="button" class="info-btn" data-help="LEG IN" aria-label="Explain LEG IN">i</button><label><input type="checkbox" checked> Enabled</label></div>
+  <div class="grid2">
+   <label class="field">Total Position<select><option>$2,500</option><option>$5,000</option><option>$7,500</option><option selected>$10,000</option><option>$12,500</option><option>$15,000</option><option>$20,000</option></select></label>
+   <label class="field">Max Trade Risk<select><option>$25</option><option>$50</option><option selected>$60</option><option>$75</option><option>$100</option><option>$150</option><option>$250</option></select></label>
+   <label class="field">Initial Entry<select><option>25%</option><option selected>50%</option><option>75%</option><option>100%</option></select></label>
+   <label class="field">Maximum Legs<select><option>1</option><option>2</option><option selected>3</option><option>4</option></select></label>
+  </div>
+  <div class="legrow"><b>LEG 1</b><label class="field">Trigger<select disabled><option selected>Initial Signal</option></select></label><label class="field">Size<select><option>10%</option><option>25%</option><option>33%</option><option selected>50%</option><option>75%</option><option>100%</option></select></label></div>
+  <div class="legrow"><b>LEG 2</b><label class="field">Trigger<select><option selected>Confirmation</option><option>Retest</option><option>Price + X</option><option>Price - X</option><option>Structure</option></select></label><label class="field">Size<select><option>10%</option><option selected>25%</option><option>33%</option><option>50%</option><option>75%</option><option>100%</option></select></label></div>
+  <div class="legrow"><b>LEG 3</b><label class="field">Trigger<select><option>Confirmation</option><option>Retest</option><option selected>Higher Low / Lower High</option><option>Price + X</option><option>Price - X</option></select></label><label class="field">Size<select><option>10%</option><option selected>25%</option><option>33%</option><option>50%</option><option>75%</option><option>100%</option></select></label></div>
+  <div class="checks" style="grid-template-columns:1fr 1fr"><label class="check"><input type="checkbox" checked>Add on strength</label><label class="check"><input type="checkbox">Add on retest</label></div>
+ </div>
+
+ <div class="card">
+  <div class="section-head"><span>LEG OUT</span><button type="button" class="info-btn" data-help="LEG OUT" aria-label="Explain LEG OUT">i</button><label><input type="checkbox" checked> Enabled</label></div>
+  <div class="legrow"><b>EXIT 1</b><label class="field">Trigger<select><option selected>Profit $</option><option>Profit %</option><option>Price</option><option>ATR</option><option>Structure</option></select></label><label class="field">Amount<select><option>10%</option><option selected>25%</option><option>33%</option><option>50%</option><option>75%</option><option>100%</option></select></label></div>
+  <label class="field" style="margin-left:72px">Trigger Value<select><option>+$25</option><option selected>+$50</option><option>+$75</option><option>+$100</option><option>+$150</option><option>+$200</option></select></label>
+  <div class="legrow"><b>EXIT 2</b><label class="field">Trigger<select><option selected>Profit $</option><option>Profit %</option><option>Price</option><option>ATR</option><option>Structure</option></select></label><label class="field">Amount<select><option>10%</option><option selected>25%</option><option>33%</option><option>50%</option><option>75%</option><option>100%</option></select></label></div>
+  <label class="field" style="margin-left:72px">Trigger Value<select><option>+$25</option><option>+$50</option><option>+$75</option><option selected>+$100</option><option>+$150</option><option>+$200</option><option>+$300</option></select></label>
+  <div class="legrow"><b>RUNNER</b><label class="field">Management<select><option selected>Trailing Stop</option><option>Fixed Target</option><option>Structure Exit</option><option>Hold</option></select></label><label class="field">Size<select><option>10%</option><option>25%</option><option>33%</option><option selected>50%</option><option>75%</option><option>100%</option></select></label></div>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>SINK OR SWIM</span><button type="button" class="info-btn" data-help="SINK OR SWIM" aria-label="Explain SINK OR SWIM">i</button><label><input type="checkbox" checked> Enabled</label></div>
+ <div class="grid4">
+  <label class="field">Grace Period<select><option>Off</option><option>1 min</option><option selected>3 min</option><option>5 min</option><option>10 min</option></select></label>
+  <label class="field">Swim Test<select><option selected>Time + Price Confirmation</option><option>Profit $</option><option>ATR Move</option><option>Structure Confirmation</option></select></label>
+  <label class="field">If Flat<select><option selected>Continue Normal Rules</option><option>Tighten</option><option>Exit</option><option>Sentience Decision</option></select></label>
+  <label class="field">If Losing<select><option selected>Keep Technical Stop</option><option>Exit</option><option>Sentience Decision</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Keep original technical stop</label>
+  <label class="check"><input type="checkbox" checked>No trail during grace period</label>
+  <label class="check"><input type="checkbox" checked>No premature stop tightening</label>
+  <label class="check"><input type="checkbox">Allow leg-in during grace period</label>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>STOP PROGRESSION</span><button type="button" class="info-btn" data-help="STOP PROGRESSION" aria-label="Explain STOP PROGRESSION">i</button><span class="sub" style="margin:0">Technical → Breakeven → Profit Trail → Tight Trail</span></div>
+ <div class="stageflow">
+  <div class="stage"><b>1 · TECHNICAL STOP</b><label class="field" style="margin-top:7px">Type<select><option selected>Structure</option><option>ATR</option><option>Dollar</option><option>Percent</option><option>Fixed Price</option></select></label><label class="field" style="margin-top:6px">Buffer<select><option>$0.01</option><option>$0.02</option><option selected>$0.03</option><option>$0.05</option><option>$0.10</option><option>0.10 ATR</option><option>0.25 ATR</option></select></label></div>
+  <div class="arrow">→</div>
+  <div class="stage"><b>2 · BREAKEVEN</b><label class="field" style="margin-top:7px">Activate<select><option>+$25</option><option selected>+$50</option><option>+$75</option><option>+$100</option><option>+$150</option><option>+$200</option></select></label><label class="field" style="margin-top:6px">Lock<select><option selected>$0</option><option>+$5</option><option>+$10</option><option>+$25</option><option>0.05%</option><option>0.10%</option></select></label></div>
+  <div class="arrow">→</div>
+  <div class="stage"><b>3 · PROFIT TRAIL</b><label class="field" style="margin-top:7px">Activate<select><option>+$25</option><option>+$50</option><option>+$75</option><option selected>+$100</option><option>+$150</option><option>+$200</option><option>+$300</option></select></label><label class="field" style="margin-top:6px">Trail<select><option>0.25 ATR</option><option>0.50 ATR</option><option>0.75 ATR</option><option selected>1.0 ATR</option><option>1.25 ATR</option><option>1.5 ATR</option><option>2.0 ATR</option></select></label></div>
+  <div class="arrow">→</div>
+  <div class="stage"><b>4 · TIGHT TRAIL</b><label class="field" style="margin-top:7px">Activate<select><option selected>+$200</option><option>Off</option><option>$25</option><option>$50</option><option>$75</option><option>$100</option><option>$150</option><option>$200</option><option>$250</option><option>$500</option><option>$1,000</option></select></label><label class="field" style="margin-top:6px">Trail<select><option>0.25 ATR</option><option selected>0.50 ATR</option><option>0.75 ATR</option><option>1.0 ATR</option></select></label></div>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>TRAILING STOPS</span><button type="button" class="info-btn" data-help="TRAILING STOPS" aria-label="Explain TRAILING STOPS">i</button><label><input type="checkbox" checked> Enabled</label></div>
+ <div class="grid4">
+  <label class="field">Trail Type<select><option>Dollar</option><option>Percentage</option><option selected>ATR</option><option>Structure</option><option>Fixed Price Distance</option></select></label>
+  <label class="field">Activation<select><option>Immediately</option><option>Profit $</option><option>Profit %</option><option>ATR Move</option><option selected>After Leg-Out #1</option><option>After Breakeven</option></select></label>
+  <label class="field">Trail Distance<select><option>0.25 ATR</option><option>0.50 ATR</option><option>0.75 ATR</option><option selected>1.0 ATR</option><option>1.25 ATR</option><option>1.5 ATR</option><option>2.0 ATR</option></select></label>
+  <label class="field">Applies To<select><option>Entire Position</option><option selected>Remaining Position</option><option>Custom %</option></select></label>
+  <label class="field">High-Water Source<select><option selected>Highest Price Since Entry</option><option>Highest Close</option><option>Structure High</option></select></label>
+  <label class="field">When Trail Hits<select><option selected>Exit Remaining</option><option>Exit 50%</option><option>Tighten & Continue</option></select></label>
+  <label class="field">Update Frequency<select><option>Every Tick</option><option selected>Every Bar</option><option>On New High / Low</option></select></label>
+  <label class="field">Sentience Authority<select><option>None — Fixed</option><option selected>May Tighten</option><option>May Tighten / Delay</option><option>Adaptive Within Limits</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Never loosen trail</label>
+  <label class="check"><input type="checkbox" checked>Profit direction only</label>
+  <label class="check"><input type="checkbox" checked>Never fall below protected profit</label>
+  <label class="check"><input id="progressive" type="checkbox" checked>Progressive tightening</label>
+ </div>
+ <div id="progressiveBox" class="stage" style="margin-top:8px">
+  <div class="label">PROGRESSIVE TRAIL</div>
+  <div class="grid4" style="grid-template-columns:repeat(3,1fr);margin-top:7px">
+   <label class="field">Profit +$100<select><option>0.25 ATR</option><option>0.50 ATR</option><option>0.75 ATR</option><option selected>1.0 ATR</option><option>1.25 ATR</option><option>1.5 ATR</option><option>2.0 ATR</option></select></label>
+   <label class="field">Profit +$200<select><option>0.25 ATR</option><option>0.50 ATR</option><option selected>0.75 ATR</option><option>1.0 ATR</option><option>1.25 ATR</option></select></label>
+   <label class="field">Profit +$300<select><option>0.25 ATR</option><option selected>0.50 ATR</option><option>0.75 ATR</option><option>1.0 ATR</option></select></label>
+  </div>
+ </div>
+</div>
+
+
+<div class="grid2 section">
+ <div class="card">
+  <div class="section-head"><span>COOLDOWN / RE-ENTRY</span><button type="button" class="info-btn" data-help="COOLDOWN / RE-ENTRY" aria-label="Explain COOLDOWN / RE-ENTRY">i</button><label><input type="checkbox" checked> Enabled</label></div>
+  <div class="grid2">
+   <label class="field">After Stop Loss<select><option>Off</option><option>2 min</option><option>5 min</option><option selected>10 min</option><option>15 min</option><option>30 min</option><option>60 min</option></select></label>
+   <label class="field">After Profit Exit<select><option>Off</option><option selected>5 min</option><option>10 min</option><option>Until New Setup</option></select></label>
+   <label class="field">After Trail Exit<select><option>Off</option><option selected>5 min</option><option>10 min</option><option>Until New Setup</option></select></label>
+   <label class="field">Same Symbol Re-entry<select><option>Never</option><option selected>New Setup Required</option><option>After Cooldown</option><option>Unlimited</option></select></label>
+   <label class="field">Max Re-entries / Symbol<select><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
+   <label class="field">Sentience Authority<select><option>None</option><option selected>May Extend Cooldown</option></select></label>
+  </div>
+  <div class="checks" style="grid-template-columns:1fr 1fr">
+   <label class="check"><input type="checkbox" checked>Divergence must reset</label>
+   <label class="check"><input type="checkbox" checked>Require new confirmed pivot</label>
+   <label class="check"><input type="checkbox">Allow opposite-direction reversal</label>
+   <label class="check"><input type="checkbox" checked>Never shorten minimum cooldown</label>
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="section-head"><span>INTRADAY / SESSION EXIT</span><button type="button" class="info-btn" data-help="INTRADAY / SESSION EXIT" aria-label="Explain INTRADAY / SESSION EXIT">i</button><label><input type="checkbox" checked> Intraday Only</label></div>
+  <div class="grid2">
+   <label class="field">Stop New Entries<select><option>3:00 PM</option><option>3:15 PM</option><option selected>3:30 PM</option><option>3:45 PM</option></select></label>
+   <label class="field">EOD Management Begins<select><option>3:30 PM</option><option>3:40 PM</option><option selected>3:45 PM</option><option>3:50 PM</option></select></label>
+   <label class="field">Hard Exit<select><option>3:45 PM</option><option>3:50 PM</option><option selected>3:55 PM</option><option>3:58 PM</option><option>4:00 PM</option></select></label>
+   <label class="field">At EOD<select><option selected>Close Entire Position</option><option>Close Losing Only</option><option>Keep Profitable Runner</option><option>Sentience Decision</option></select></label>
+  </div>
+  <div class="checks" style="grid-template-columns:1fr 1fr">
+   <label class="check"><input type="checkbox" checked>Cancel outstanding entries</label>
+   <label class="check"><input type="checkbox" checked>No new legs after cutoff</label>
+   <label class="check"><input type="checkbox">Allow profitable runner overnight</label>
+   <label class="check"><input type="checkbox">Overnight management enabled</label>
+  </div>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>DAILY / TRADE LIMITS & KILL SWITCHES</span><button type="button" class="info-btn" data-help="DAILY / TRADE LIMITS & KILL SWITCHES" aria-label="Explain DAILY / TRADE LIMITS & KILL SWITCHES">i</button></div>
+ <div class="grid4">
+  <label class="field">Max Open Trades<select><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>8</option><option>10</option></select></label>
+  <label class="field">Max Daily Trades<select><option>1</option><option>2</option><option>3</option><option>5</option><option selected>10</option><option>15</option><option>20</option><option>Unlimited</option></select></label>
+  <label class="field">Max Daily Loss<select><option>$100</option><option>$250</option><option selected>$500</option><option>$750</option><option>$1,000</option><option>$1,500</option><option>$2,000</option></select></label>
+  <label class="field">Daily Profit Stop<select><option>Off</option><option>$250</option><option>$500</option><option>$750</option><option selected>$1,000</option><option>$1,500</option><option>$2,000</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>New Entries</label>
+  <label class="check"><input type="checkbox" checked>Leg In</label>
+  <label class="check"><input type="checkbox" checked>Leg Out</label>
+  <label class="check"><input type="checkbox" checked>Hard Stops</label>
+  <label class="check"><input type="checkbox" checked>Breakeven</label>
+  <label class="check"><input type="checkbox" checked>Trailing Stops</label>
+  <label class="check"><input type="checkbox" checked>Profit Targets</label>
+  <label class="check"><input type="checkbox" checked>Position Management</label>
+ </div>
+</div>
+
+<div class="plan"><span class="label">CURRENT MANAGEMENT PLAN</span><br><b>ENTRY 50%</b> → SINK/SWIM → <b>ADD 25%</b> → <b>ADD 25%</b> → TECH STOP → EXIT 25% +$50 → BREAKEVEN → EXIT 25% +$100 → ATR TRAIL 50% → TIGHT TRAIL → INTRADAY EXIT → COOLDOWN</div>
+</section>
+
+<section id="strategy" class="page hidden">
+
+      <div class="card" id="strategyLibraryCard">
+        <div class="section-head"><span>PRIMARY STRATEGY</span><button class="info-btn" data-help="primary_strategy_library">i</button></div>
+        <div class="grid-2">
+          <label class="field">Strategy
+            <select id="primaryStrategy">
+              <option value="RSI_DIVERGENCE_REVERSAL">RSI Divergence — Reversal</option>
+              <option value="BOLLINGER_MEAN_REVERSION">Bollinger Bands — Mean Reversion</option>
+              <option value="VWAP_REVERSAL" disabled>VWAP — Reversal (Coming Later)</option>
+              <option value="EMA_PULLBACK_CONTINUATION" disabled>EMA — Pullback / Trend Continuation (Coming Later)</option>
+              <option value="PRICE_BREAKOUT" disabled>Price — Breakout (Coming Later)</option>
+              <option value="OPENING_RANGE_BREAKOUT" disabled>Opening Range — Breakout (Coming Later)</option>
+              <option value="MOMENTUM_CONTINUATION" disabled>Momentum — Continuation (Coming Later)</option>
+            </select>
+          </label>
+          <label class="field">Direction
+            <select id="strategyDirectionV11">
+              <option>Long + Short</option><option>Long Only</option><option>Short Only</option>
+            </select>
+          </label>
+        </div>
+        <div class="muted" id="strategyPlainEnglish" style="margin-top:8px">
+          Finds momentum divergence at confirmed price pivots, then waits for reversal structure before entry.
+        </div>
+      </div>
+
+      <div class="card" id="bollingerCoreCard" style="display:none">
+        <div class="section-head"><span>BOLLINGER CORE SETUP</span><button class="info-btn" data-help="bollinger_core">i</button></div>
+        <div class="grid-3">
+          <label class="field">Band Period
+            <select id="bbPeriod"><option>10</option><option selected>20</option><option>30</option><option>50</option></select>
+          </label>
+          <label class="field">Standard Deviations
+            <select id="bbStd"><option>1.5</option><option selected>2.0</option><option>2.5</option><option>3.0</option></select>
+          </label>
+          <label class="field">Mean Target
+            <select id="bbMeanTarget"><option selected>Middle Band</option><option>VWAP</option><option>Opposite Band</option></select>
+          </label>
+          <label class="field">Setup Trigger
+            <select id="bbTrigger">
+              <option selected>Outside Band → Close Back Inside</option>
+              <option>Band Touch → Rejection Candle</option>
+              <option>Outside Band → Price Turn</option>
+            </select>
+          </label>
+          <label class="field">Reversal Confirmation
+            <select id="bbConfirmation">
+              <option selected>Price Turn → HL/LH → Structure Break</option>
+              <option>Price Turn</option>
+              <option>HL/LH Confirmation</option>
+              <option>Structure Break</option>
+            </select>
+          </label>
+          <label class="field">Band Basis
+            <select id="bbBasis"><option selected>SMA</option><option>EMA</option></select>
+          </label>
+        </div>
+        <div class="check-grid" style="margin-top:10px">
+          <label><input id="bbRequireTurn" type="checkbox" checked> Price Turn</label>
+          <label><input id="bbRequireStructure" type="checkbox" checked> Higher Low / Lower High</label>
+          <label><input id="bbRequireBreak" type="checkbox" checked> Structure Break</label>
+        </div>
+      </div>
+
+      <div class="card" id="strategyFiltersCard">
+        <div class="section-head"><span>OPTIONAL STRATEGY FILTERS</span><button class="info-btn" data-help="strategy_filters">i</button></div>
+        <div class="muted" style="margin-bottom:8px">Only checked filters participate. The primary strategy creates the setup; filters accept or reject that setup.</div>
+        <div class="check-grid">
+          <label id="filterBollingerRow"><input id="filterBollinger" type="checkbox"> Bollinger Bands</label>
+          <label id="filterRsiRow" style="display:none"><input id="filterRsi" type="checkbox"> RSI Level</label>
+          <label id="filterRsiDivRow" style="display:none"><input id="filterRsiDivergence" type="checkbox"> RSI Divergence</label>
+          <label><input id="filterRvol" type="checkbox"> RVOL</label>
+          <label><input id="filterVolume" type="checkbox"> Volume</label>
+          <label><input id="filterVwap" type="checkbox"> VWAP</label>
+          <label><input id="filterTime" type="checkbox"> Time of Day</label>
+        </div>
+        <div id="filterSettings" class="grid-3" style="margin-top:10px">
+          <label class="field" id="filterRsiPeriodWrap" style="display:none">RSI Period
+            <select id="filterRsiPeriod"><option>7</option><option>9</option><option selected>14</option><option>21</option></select>
+          </label>
+          <label class="field" id="filterRsiOBWrap" style="display:none">RSI Overbought
+            <select id="filterRsiOB"><option>65</option><option selected>70</option><option>75</option><option>80</option></select>
+          </label>
+          <label class="field" id="filterRsiOSWrap" style="display:none">RSI Oversold
+            <select id="filterRsiOS"><option>20</option><option selected>30</option><option>35</option></select>
+          </label>
+          <label class="field">Minimum RVOL
+            <select id="filterRvolMin"><option>1.0x</option><option selected>1.5x</option><option>2.0x</option><option>3.0x</option></select>
+          </label>
+          <label class="field">VWAP Context
+            <select id="filterVwapMode"><option selected>Directionally Confirm</option><option>Require Reclaim / Reject</option><option>Maximum Distance</option></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="card" id="tradeQualityCard">
+        <div class="section-head"><span>TRADE QUALITY / EXECUTION FILTERS</span><button class="info-btn" data-help="trade_quality_filters">i</button></div>
+        <div class="muted" style="margin-bottom:8px">These measure whether the trade is worth taking; they are separate from the TA setup itself.</div>
+        <div class="check-grid">
+          <label><input id="qualityRemainingAtr" type="checkbox" checked> Remaining ATR</label>
+          <label><input id="qualitySpread" type="checkbox" checked> Spread / Liquidity</label>
+          <label><input id="qualityMarketData" type="checkbox" checked> Valid Market Data</label>
+          <label><input id="qualityHalt" type="checkbox" checked> Reject Halted Symbols</label>
+          <label><input id="qualityOwnership" type="checkbox" checked disabled> Ownership Safety</label>
+        </div>
+      </div>
+
+<div class="page-title">STRATEGY</div><div class="sub">Define the setup, entry confirmation and filters that constitute a trade.</div>
+<div class="grid2 section">
+ <div class="card">
+  <div class="section-head"><span>RSI DIVERGENCE REVERSAL</span><button type="button" class="info-btn" data-help="RSI DIVERGENCE REVERSAL" aria-label="Explain RSI DIVERGENCE REVERSAL">i</button><label><input type="checkbox" checked> Enabled</label></div>
+  <div class="grid2">
+   <label class="field">Direction<select><option selected>Long + Short</option><option>Long Only</option><option>Short Only</option></select></label>
+   <label class="field">Timeframe<select><option>1 Minute</option><option selected>5 Minute</option><option>15 Minute</option></select></label>
+   <label class="field">RSI Period<select><option>7</option><option>9</option><option>10</option><option>12</option><option selected>14</option><option>21</option></select></label>
+   <label class="field">Pivot Sensitivity<select><option>Fast</option><option selected>Normal</option><option>Strict</option></select></label>
+  </div>
+  <div class="checks" style="grid-template-columns:1fr 1fr">
+   <label class="check"><input type="checkbox" checked>Established trend required</label>
+   <label class="check"><input type="checkbox" checked>Confirmed price pivots</label>
+   <label class="check"><input type="checkbox" checked>Price LL / HH</label>
+   <label class="check"><input type="checkbox" checked>RSI HL / LH</label>
+  </div>
+ </div>
+ <div class="card">
+  <div class="section-head"><span>ENTRY CONFIRMATION</span><button type="button" class="info-btn" data-help="ENTRY CONFIRMATION" aria-label="Explain ENTRY CONFIRMATION">i</button></div>
+  <div class="grid2">
+   <label class="field">Entry Method<select><option>Immediate</option><option selected>Wait for Price Turn</option><option>Higher Low / Lower High</option><option>Break Previous Candle</option><option>Custom Trigger</option></select></label>
+   <label class="field">Reversal Confirmation<select><option selected>Micro Price Turn</option><option>Structure</option><option>Candle Close</option><option>Sentience Within Rules</option></select></label>
+  </div>
+  <div class="checks" style="grid-template-columns:1fr 1fr">
+   <label class="check"><input type="checkbox">Volume filter</label>
+   <label class="check"><input type="checkbox">VWAP filter</label>
+   <label class="check"><input type="checkbox">Bollinger filter</label>
+   <label class="check"><input type="checkbox">MACD filter</label>
+  </div>
+ </div>
+</div>
+<div class="card section">
+ <div class="section-head"><span>REMAINING ATR / RUN ROOM</span><button type="button" class="info-btn" data-help="REMAINING ATR / RUN ROOM" aria-label="Explain REMAINING ATR / RUN ROOM">i</button><label><input type="checkbox" checked> Required</label></div>
+ <div class="grid4">
+  <label class="field">ATR Period<select><option>7</option><option>9</option><option>10</option><option>12</option><option selected>14</option><option>21</option></select></label>
+  <label class="field">Minimum Remaining ATR<select><option>0.25 ATR</option><option>0.50 ATR</option><option selected>0.75 ATR</option><option>1.0 ATR</option><option>1.25 ATR</option></select></label>
+  <label class="field">Preferred Remaining ATR<select><option selected>1.00 ATR</option><option>0.25 ATR</option><option>0.50 ATR</option><option>0.75 ATR</option><option>1.0 ATR</option><option>1.25 ATR</option><option>1.5 ATR</option><option>2.0 ATR</option></select></label>
+  <label class="field">Below Minimum<select><option selected>Reject Entry</option><option>Reduce Size</option><option>Sentience Decision</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Show Remaining ATR in decisions</label>
+  <label class="check"><input type="checkbox" checked>Show during position management</label>
+  <label class="check"><input type="checkbox">Use to tighten trail</label>
+  <label class="check"><input type="checkbox">Use to reduce runner</label>
+ </div>
+</div>
+</section>
+<section id="execution" class="page hidden">
+<div class="page-title">EXECUTION</div><div class="sub">Define what AllBot is allowed to trade and how orders are handled.</div>
+<div class="grid2 section">
+ <div class="card"><div class="section-head"><span>TRADE UNIVERSE</span><button type="button" class="info-btn" data-help="TRADE UNIVERSE" aria-label="Explain TRADE UNIVERSE">i</button></div><div class="grid2"><label class="field">Source<select><option selected>My Symbol List</option><option>Scanner Results</option><option>Single Symbol</option></select></label><label class="field">Symbols<select><option>My Saved Universe</option><option selected>SPY / IWM / TSLA / MSTR</option><option>Mega Cap Liquid</option><option>Custom Saved List</option></select></label></div></div>
+ <div class="card"><div class="section-head"><span>ORDER HANDLING</span><button type="button" class="info-btn" data-help="ORDER HANDLING" aria-label="Explain ORDER HANDLING">i</button></div><div class="grid2"><label class="field">Entry Order<select><option>Market</option><option selected>Limit / Midpoint</option></select></label><label class="field">Maximum Spread<select><option>$0.02</option><option>$0.05</option><option selected>$0.10</option><option>$0.15</option><option>$0.20</option><option>0.25%</option></select></label><label class="field">Stale Entry Cancel<select><option>5 sec</option><option>10 sec</option><option>15 sec</option><option selected>30 sec</option><option>60 sec</option><option>120 sec</option></select></label><label class="field">Retry<select><option>None</option><option selected>1 Retry</option><option>2 Retries</option></select></label></div></div>
+</div>
+<div class="card section"><div class="section-head"><span>SAFETY / OWNERSHIP</span><button type="button" class="info-btn" data-help="SAFETY / OWNERSHIP" aria-label="Explain SAFETY / OWNERSHIP">i</button></div><div class="checks"><label class="check"><input type="checkbox" checked>Never interfere with externally owned positions</label><label class="check"><input type="checkbox" checked>Verify position before SELL</label><label class="check"><input type="checkbox" checked>Verify buying power before BUY</label><label class="check"><input type="checkbox" checked>Stop new trading after connection loss</label><label class="check"><input type="checkbox" checked>Restore management state after restart</label><label class="check"><input type="checkbox" checked>Cancel stale entry orders</label><label class="check"><input type="checkbox" checked>Persist ownership state</label><label class="check"><input type="checkbox" checked>Require explicit handoff from other bots</label></div></div>
+</section>
+
+
+<section id="scanner" class="page hidden">
+<div class="page-title">SCANNER</div>
+<div class="sub">Find candidates and feed them into the loaded strategy. The scanner discovers opportunities; the strategy still decides whether a trade is valid.</div>
+
+<div class="grid2 section">
+ <div class="card">
+  <div class="section-head"><span>SCAN SOURCE</span><button type="button" class="info-btn" data-help="SCAN SOURCE" aria-label="Explain Scan Source">i</button><label><input type="checkbox" checked> Scanner Enabled</label></div>
+  <div class="grid2">
+   <label class="field">Universe<select><option selected>My Saved Universe</option><option>IBKR Scanner</option><option>MT5 Market Watch</option><option>Current Watchlist</option><option>Custom Saved List</option></select></label>
+   <label class="field">Direction<select><option selected>Long + Short</option><option>Long Only</option><option>Short Only</option></select></label>
+   <label class="field">Timeframe<select><option>1 Minute</option><option selected>5 Minute</option><option>15 Minute</option><option>30 Minute</option><option>1 Hour</option></select></label>
+   <label class="field">Scan Interval<select><option>5 sec</option><option>10 sec</option><option selected>30 sec</option><option>60 sec</option><option>5 min</option></select></label>
+   <label class="field">Maximum Candidates<select><option>5</option><option selected>10</option><option>20</option><option>30</option><option>50</option></select></label>
+   <label class="field">Qualifying Candidate<select><option>Observe Only</option><option selected>Send to Strategy</option><option>Allow Entry</option></select></label>
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="section-head"><span>SCANNER FILTERS</span><button type="button" class="info-btn" data-help="SCANNER FILTERS" aria-label="Explain Scanner Filters">i</button></div>
+  <div class="grid2">
+   <label class="field">Price Range<select><option>Any</option><option>$1 – $10</option><option selected>$5 – $100</option><option>$10 – $250</option><option>$25+</option></select></label>
+   <label class="field">Minimum Volume<select><option>Any</option><option>250K</option><option>500K</option><option selected>1M</option><option>5M</option><option>10M</option></select></label>
+   <label class="field">Minimum RVOL<select><option>Off</option><option>0.75x</option><option selected>1.0x</option><option>1.5x</option><option>2.0x</option></select></label>
+   <label class="field">Maximum Spread<select><option>$0.02</option><option>$0.05</option><option selected>$0.10</option><option>$0.20</option><option>Strategy Default</option></select></label>
+  </div>
+  <div class="checks" style="grid-template-columns:1fr 1fr">
+   <label class="check"><input type="checkbox" checked>Require tradable market data</label>
+   <label class="check"><input type="checkbox" checked>Exclude halted symbols</label>
+   <label class="check"><input type="checkbox" checked>Exclude existing owned positions</label>
+   <label class="check"><input type="checkbox">Only scan high relative volume</label>
+  </div>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>LIVE CANDIDATES</span><button type="button" class="info-btn" data-help="LIVE CANDIDATES" aria-label="Explain Live Candidates">i</button>
+ <div style="margin-left:auto;display:flex;gap:7px"><button id="scannerRunBtn" type="button">RUN SCAN</button><button id="scannerPauseBtn" type="button">PAUSE</button></div></div>
+ <div style="overflow:auto">
+ <table style="width:100%;border-collapse:collapse;font-size:11px">
+  <thead><tr style="color:#7790a7;text-align:left;border-bottom:1px solid #2a3b4b">
+   <th style="padding:9px">SYMBOL</th><th>DIR</th><th>SETUP STATE</th><th>RSI</th><th>RVOL</th><th>REM ATR</th><th>VWAP</th><th>SPREAD</th><th>STRATEGY DECISION</th>
+  </tr></thead>
+  <tbody id="scannerRows">
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">IREN</td><td>SHORT</td><td><span class="pill">WAIT LOWER HIGH</span></td><td>61.4</td><td>1.72x</td><td>1.18</td><td>BELOW</td><td>$0.04</td><td style="color:#8fc8f4">WATCHING</td></tr>
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">MSTR</td><td>LONG</td><td><span class="pill">DIVERGENCE ARMED</span></td><td>38.7</td><td>1.34x</td><td>0.94</td><td>ABOVE</td><td>$0.08</td><td style="color:#8fc8f4">WAIT PRICE TURN</td></tr>
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">TSLA</td><td>SHORT</td><td><span class="pill">ENTRY READY</span></td><td>67.2</td><td>2.08x</td><td>1.31</td><td>BELOW</td><td>$0.03</td><td style="color:#72d7a5">QUALIFIED</td></tr>
+   <tr><td style="padding:10px;font-weight:800">WULF</td><td>LONG</td><td><span class="pill">REJECTED</span></td><td>42.1</td><td>0.81x</td><td>0.38</td><td>ABOVE</td><td>$0.05</td><td style="color:#ff8585">REM ATR &lt; 0.75</td></tr>
+  </tbody>
+ </table>
+ </div>
+ <div class="plan" style="margin-top:12px"><span class="label">SCANNER PIPELINE</span><b>DISCOVER</b> → FILTER → STRATEGY WATCH → DIVERGENCE ARMED → CONFIRMATION → ENTRY READY → EXECUTION</div>
+</div>
+</section>
+
+<section id="brokers" class="page hidden">
+<div class="page-title">BROKER CONNECTIONS</div>
+<div class="sub">Choose the execution broker and configure its connection. Strategy and Behaviour remain broker-independent.</div>
+
+<div class="card section">
+ <div class="section-head"><span>ACTIVE BROKER</span><button type="button" class="info-btn" data-help="ACTIVE BROKER" aria-label="Explain Active Broker">i</button></div>
+ <div class="grid4">
+  <label class="field">Execution Broker
+   <select id="brokerSelect">
+    <option value="ibkr" selected>Interactive Brokers (IBKR)</option>
+    <option value="mt5">MetaTrader 5 (MT5)</option>
+   </select>
+  </label>
+  <label class="field">Connection Profile
+   <select><option selected>Default</option><option>Paper</option><option>Live</option><option>Secondary</option></select>
+  </label>
+  <label class="field">Auto Connect
+   <select><option selected>On Startup</option><option>Manual</option></select>
+  </label>
+  <label class="field">On Disconnect
+   <select><option selected>Stop New Entries</option><option>Pause All Trading</option><option>Retry Connection</option></select>
+  </label>
+ </div>
+</div>
+
+<div id="ibkrBrokerPanel" class="card section">
+ <div class="section-head"><span>INTERACTIVE BROKERS</span><button type="button" class="info-btn" data-help="INTERACTIVE BROKERS" aria-label="Explain Interactive Brokers">i</button><label><input type="checkbox" checked> Enabled</label></div>
+ <div class="grid4">
+  <label class="field">Connection Type
+   <select><option selected>TWS</option><option>IB Gateway</option></select>
+  </label>
+  <label class="field">Host
+   <select><option selected>127.0.0.1 / Local</option><option>localhost</option><option>Saved Remote Host</option></select>
+  </label>
+  <label class="field">Socket Port
+   <select><option>7495 — TWS Paper</option><option selected>7496 — TWS Live</option><option>4001 — Gateway Live</option><option>4002 — Gateway Paper</option><option>Custom Saved Port</option></select>
+  </label>
+  <label class="field">Client ID
+   <select><option>0</option><option>1</option><option>22</option><option>31</option><option>41</option><option selected>71</option><option>75</option><option>Custom Saved ID</option></select>
+  </label>
+  <label class="field">Account
+   <select><option selected>Auto Detect</option><option>Primary Saved Account</option><option>Secondary Saved Account</option></select>
+  </label>
+  <label class="field">API Permission
+   <select><option>Read Only</option><option selected>Trading Enabled</option></select>
+  </label>
+  <label class="field">Market Data
+   <select><option selected>Live if Available</option><option>Frozen</option><option>Delayed</option><option>Delayed Frozen</option></select>
+  </label>
+  <label class="field">Connection Timeout
+   <select><option>5 sec</option><option selected>10 sec</option><option>15 sec</option><option>30 sec</option></select>
+  </label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Verify account before trading</label>
+  <label class="check"><input type="checkbox" checked>Verify API trading permission</label>
+  <label class="check"><input type="checkbox" checked>Stop new entries if TWS / Gateway disconnects</label>
+  <label class="check"><input type="checkbox" checked>Restore managed positions after reconnect</label>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+   <button type="button" class="broker-test" data-broker="IBKR">TEST CONNECTION</button>
+   <span class="broker-status muted">NOT TESTED</span>
+ </div>
+</div>
+
+<div id="mt5BrokerPanel" class="card section hidden">
+ <div class="section-head"><span>METATRADER 5</span><button type="button" class="info-btn" data-help="METATRADER 5" aria-label="Explain MetaTrader 5">i</button><label><input type="checkbox" checked> Enabled</label></div>
+ <div class="grid4">
+  <label class="field">Terminal
+   <select><option selected>Auto Detect MT5</option><option>Default Saved Terminal</option><option>Secondary Saved Terminal</option></select>
+  </label>
+  <label class="field">Account
+   <select><option selected>Use Terminal Login</option><option>Primary Saved Account</option><option>Secondary Saved Account</option></select>
+  </label>
+  <label class="field">Server
+   <select><option selected>Use Terminal Server</option><option>Saved Live Server</option><option>Saved Demo Server</option></select>
+  </label>
+  <label class="field">Authorization
+   <select><option selected>Use Saved Terminal Credentials</option><option>Saved AllBot Profile</option></select>
+  </label>
+  <label class="field">Trading Mode
+   <select><option selected>Use Account Mode</option><option>Live Only</option><option>Demo Only</option></select>
+  </label>
+  <label class="field">Order Filling
+   <select><option selected>Symbol Default</option><option>FOK</option><option>IOC</option><option>Return</option></select>
+  </label>
+  <label class="field">Deviation
+   <select><option>5 points</option><option selected>10 points</option><option>20 points</option><option>50 points</option></select>
+  </label>
+  <label class="field">Connection Timeout
+   <select><option>5 sec</option><option selected>10 sec</option><option>15 sec</option><option>30 sec</option></select>
+  </label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Verify account before trading</label>
+  <label class="check"><input type="checkbox" checked>Verify AutoTrading permission</label>
+  <label class="check"><input type="checkbox" checked>Stop new entries if terminal disconnects</label>
+  <label class="check"><input type="checkbox" checked>Restore managed positions after reconnect</label>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+   <button type="button" class="broker-test" data-broker="MT5">TEST CONNECTION</button>
+   <span class="broker-status muted">NOT TESTED</span>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>BROKER SAFETY</span><button type="button" class="info-btn" data-help="BROKER SAFETY" aria-label="Explain Broker Safety">i</button></div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Never route an order to an unverified broker connection</label>
+  <label class="check"><input type="checkbox" checked>Match configured account before enabling Live</label>
+  <label class="check"><input type="checkbox" checked>Reconcile broker positions before management starts</label>
+  <label class="check"><input type="checkbox" checked>Block duplicate orders during reconnect</label>
+  <label class="check"><input type="checkbox" checked>Keep strategy logic independent of broker adapter</label>
+  <label class="check"><input type="checkbox" checked>Record broker + account on every trade lifecycle</label>
+ </div>
+</div>
+</section>
+
+
+
+<section id="decisions" class="page hidden">
+<div class="page-title">DECISION REPORT</div>
+<div class="sub">A chronological audit trail of what AllBot saw, decided, ordered, filled, managed and exited — including decisions where no trade was placed.</div>
+
+<div class="card section">
+ <div class="section-head"><span>REPORT CONTROLS</span><button type="button" class="info-btn" data-help="DECISION REPORT CONTROLS">i</button></div>
+ <div class="grid4">
+  <label class="field">Show<select><option selected>Everything</option><option>Decisions Only</option><option>Orders + Fills</option><option>Entries Only</option><option>Management Only</option><option>Exits / Sales Only</option><option>Rejected Setups</option></select></label>
+  <label class="field">Symbol<select><option selected>All Symbols</option><option>IREN</option><option>TSLA</option><option>MSTR</option><option>WULF</option></select></label>
+  <label class="field">Strategy<select><option selected>All Strategies</option><option>RSI Divergence Reversal</option><option>Existing Position Management</option></select></label>
+  <label class="field">Period<select><option selected>Today</option><option>Current Session</option><option>Yesterday</option><option>Last 7 Days</option><option>All</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Show rule evidence</label>
+  <label class="check"><input type="checkbox" checked>Show rejected decisions</label>
+  <label class="check"><input type="checkbox" checked>Show broker order / fill events</label>
+  <label class="check"><input type="checkbox" checked>Show ownership / recovery events</label>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>LIVE DECISION STREAM</span><button type="button" class="info-btn" data-help="LIVE DECISION STREAM">i</button><div style="margin-left:auto"><button type="button">EXPORT REPORT</button></div></div>
+ <div style="overflow:auto">
+ <table style="width:100%;border-collapse:collapse;font-size:11px">
+ <thead><tr style="color:#7790a7;text-align:left;border-bottom:1px solid #2a3b4b">
+ <th style="padding:9px">TIME</th><th>SYMBOL</th><th>EVENT</th><th>STATE / RULE</th><th>DECISION / ACTION</th><th>QTY</th><th>PRICE</th><th>P&amp;L</th><th>BROKER</th>
+ </tr></thead>
+ <tbody>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:14:02</td><td><b>IREN</b></td><td>SETUP</td><td>Bearish divergence confirmed</td><td style="color:#8fc8f4">ARM SHORT SETUP</td><td>—</td><td>$18.52</td><td>—</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:16:31</td><td><b>IREN</b></td><td>DECISION</td><td>Lower High confirmed · RVOL 1.72x · Rem ATR 1.18</td><td style="color:#72d7a5">SHORT READY</td><td>—</td><td>$18.47</td><td>—</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:16:32</td><td><b>IREN</b></td><td>ORDER</td><td>Entry Rule satisfied</td><td>SELL SHORT SUBMITTED</td><td>500</td><td>LIMIT $18.46</td><td>—</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:16:33</td><td><b>IREN</b></td><td>FILL</td><td>Broker execution</td><td style="color:#72d7a5">SHORT FILLED</td><td>500</td><td>$18.46</td><td>—</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:19:33</td><td><b>IREN</b></td><td>MANAGEMENT</td><td>Sink or Swim passed</td><td>BEGIN NORMAL PROGRESSION</td><td>500</td><td>$18.37</td><td style="color:#72d7a5">+$45</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:22:08</td><td><b>IREN</b></td><td>SALE / LEG-OUT</td><td>Open P&amp;L ≥ $50</td><td style="color:#72d7a5">BUY TO COVER 25%</td><td>125</td><td>$18.34</td><td style="color:#72d7a5">+$15 realized</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:24:51</td><td><b>IREN</b></td><td>STOP</td><td>Profit activation threshold reached</td><td>TECHNICAL STOP → PROFIT TRAIL</td><td>375</td><td>Trail $18.51</td><td style="color:#72d7a5">+$104 open</td><td>IBKR</td></tr>
+ <tr style="border-bottom:1px solid #1c2935"><td style="padding:9px">10:31:17</td><td><b>IREN</b></td><td>EXIT</td><td>Trailing stop hit</td><td style="color:#72d7a5">BUY TO COVER REMAINDER</td><td>375</td><td>$18.19</td><td style="color:#72d7a5">+$101 realized</td><td>IBKR</td></tr>
+ <tr><td style="padding:9px">10:34:05</td><td><b>WULF</b></td><td>REJECTED</td><td>Rem ATR 0.38 &lt; minimum 0.75</td><td style="color:#ff8585">NO ORDER — ENTRY REJECTED</td><td>—</td><td>$4.92</td><td>—</td><td>IBKR</td></tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>SELECTED EVENT DETAIL</span><button type="button" class="info-btn" data-help="DECISION EVENT DETAIL">i</button></div>
+ <div class="plan"><span class="label">10:22:08 · IREN · SALE / LEG-OUT</span>
+ <b>RULE:</b> Leg-Out #1 — Open P&amp;L ≥ $50<br>
+ <b>EVIDENCE:</b> 500 shares short · Entry $18.46 · Current $18.34 · Open P&amp;L threshold satisfied<br>
+ <b>DECISION:</b> Reduce position by 25%<br>
+ <b>ORDER:</b> BUY TO COVER 125 @ marketable limit<br>
+ <b>FILL:</b> 125 @ $18.34 · Realized +$15<br>
+ <b>REMAINING:</b> 375 shares short<br>
+ <b>NEXT STATE:</b> Continue management → Profit Trail eligibility
+ </div>
+</div>
+</section>
+
+<section id="positions" class="page hidden">
+<div class="page-title">POSITIONS / EXISTING MANAGEMENT</div>
+<div class="sub">Recover bot positions, identify ownership, and explicitly adopt eligible manual positions into AllBot management.</div>
+
+<div class="card section">
+ <div class="section-head"><span>STARTUP POSITION MODE</span><button type="button" class="info-btn" data-help="STARTUP POSITION MODE" aria-label="Explain Startup Position Mode">i</button></div>
+ <div class="grid4">
+  <label class="field">On Start<select><option>New Trades Only</option><option>Existing Positions Only</option><option selected>New Trades + Manage Bot Positions</option><option>New Trades + Eligible Existing Positions</option></select></label>
+  <label class="field">Unclaimed Positions<select><option selected>Show for Review</option><option>Ignore</option><option>Prompt for Adoption</option></select></label>
+  <label class="field">Recovered Bot Positions<select><option selected>Resume Automatically</option><option>Require Confirmation</option><option>Observe Only</option></select></label>
+  <label class="field">Other-Bot Positions<select><option selected>Block Adoption</option><option>Require Explicit Handoff</option></select></label>
+ </div>
+</div>
+
+
+<div class="card section">
+ <div class="section-head"><span>MANAGEMENT SUMMARY</span><button type="button" class="info-btn" data-help="MANAGEMENT SUMMARY">i</button></div>
+ <div class="plan">
+  <span class="label">EXISTING POSITION MANAGEMENT FLOW</span>
+  <b>MANUAL / UNCLAIMED POSITION</b> → VERIFY BROKER POSITION → VERIFY OWNERSHIP → ADOPT WITH ALLBOT<br><br>
+  <b>ENTRY ORIGIN:</b> Manual Entry / AllBot Management<br>
+  <b>ENTRY BASIS:</b> Broker Average Cost<br>
+  <b>SINK OR SWIM:</b> Skip for existing position<br>
+  <b>LEG-IN:</b> Disabled until a new qualifying setup<br>
+  <b>TECHNICAL STOP:</b> Apply selected Behaviour rule<br>
+  <b>LEG-OUT:</b> Apply selected Behaviour progression<br>
+  <b>BREAKEVEN:</b> Apply when configured trigger is reached<br>
+  <b>TRAILING:</b> Manage remaining position using selected trail<br>
+  <b>SESSION EXIT:</b> Follow Behaviour / intraday settings<br>
+  <b>RECOVERY:</b> Persist ownership + exact management state
+ </div>
+ <div class="plan" style="margin-top:10px">
+  <span class="label">LIVE MANAGEMENT STATE</span>
+  ADOPTED → TECHNICAL STOP → BREAKEVEN → LEG-OUT → PROFIT TRAIL → TIGHT TRAIL → EXIT
+ </div>
+</div>
+
+<div class="card section">
+ <div class="section-head"><span>BROKER POSITIONS</span><button type="button" class="info-btn" data-help="BROKER POSITIONS" aria-label="Explain Broker Positions">i</button><button id="refreshPositionsBtn" style="margin-left:auto" type="button">REFRESH POSITIONS</button></div>
+ <div style="overflow:auto">
+ <table style="width:100%;border-collapse:collapse;font-size:11px">
+  <thead><tr style="color:#7790a7;text-align:left;border-bottom:1px solid #2a3b4b">
+   <th style="padding:9px">SYMBOL</th><th>POSITION</th><th>AVG COST</th><th>OPEN P&amp;L</th><th>ORIGIN</th><th>OWNER</th><th>STATE</th><th>ACTION</th>
+  </tr></thead>
+  <tbody>
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">IREN</td><td>500 LONG</td><td>$18.46</td><td style="color:#72d7a5">+$104</td><td>MANUAL</td><td>UNCLAIMED</td><td>ELIGIBLE</td><td><button class="adoptBtn" data-symbol="IREN">MANAGE WITH ALLBOT</button></td></tr>
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">MARA</td><td>300 LONG</td><td>$15.11</td><td>+$22</td><td>OMNI</td><td>OMNI</td><td style="color:#ff8585">ADOPTION BLOCKED</td><td><button disabled>OWNED BY OMNI</button></td></tr>
+   <tr style="border-bottom:1px solid #1c2935"><td style="padding:10px;font-weight:800">WULF</td><td>200 SHORT</td><td>$20.85</td><td>-$16</td><td>ALLBOT</td><td>ALLBOT</td><td style="color:#72d7a5">PROFIT TRAIL</td><td><button class="viewManagedBtn" data-symbol="WULF">VIEW TRADE</button></td></tr>
+   <tr><td style="padding:10px;font-weight:800">CONY</td><td>1,000 LONG</td><td>$8.24</td><td>+$31</td><td>DIVIDEND</td><td>DIVIDEND</td><td>EXTERNAL / IGNORE</td><td><button disabled>PROTECTED</button></td></tr>
+  </tbody>
+ </table>
+ </div>
+</div>
+
+<div id="adoptionPanel" class="card section">
+ <div class="section-head"><span>ADOPT EXISTING POSITION</span><button type="button" class="info-btn" data-help="ADOPT EXISTING POSITION" aria-label="Explain Adopt Existing Position">i</button></div>
+ <div class="grid4">
+  <label class="field">Selected Position<select id="adoptSymbol"><option selected>IREN — 500 LONG</option><option>Eligible Unclaimed Position</option></select></label>
+  <label class="field">Entry Origin<select><option selected>Manual Entry / AllBot Management</option></select></label>
+  <label class="field">Entry Basis<select><option selected>Broker Average Cost</option><option>Current Price</option><option>Management Reference Only</option></select></label>
+  <label class="field">Management Plan<select><option selected>Current Behaviour Settings</option><option>Saved Runner Plan</option><option>Saved Intraday Plan</option><option>Manage Stops Only</option></select></label>
+ </div>
+ <div class="grid4 section">
+  <label class="field">Sink or Swim<select><option selected>Skip — Existing Position</option><option>Start Grace Period Now</option></select></label>
+  <label class="field">Technical Stop<select><option selected>Structure</option><option>ATR</option><option>Off</option></select></label>
+  <label class="field">Leg-Out<select><option selected>Enabled</option><option>Disabled</option></select></label>
+  <label class="field">Breakeven<select><option selected>Enabled</option><option>Disabled</option></select></label>
+  <label class="field">Trailing Stop<select><option selected>1.0 ATR</option><option>0.75 ATR</option><option>0.50 ATR</option><option>Structure</option><option>Off</option></select></label>
+  <label class="field">Intraday Exit<select><option selected>Use Behaviour Plan</option><option>3:55 PM</option><option>Hold Overnight</option></select></label>
+  <label class="field">Leg-In<select><option selected>Disabled Until New Setup</option><option>Allow Behaviour Plan</option><option>Disabled</option></select></label>
+  <label class="field">Remaining ATR<select><option selected>Display + Management</option><option>Display Only</option><option>Ignore for Existing Position</option></select></label>
+ </div>
+ <div class="checks">
+  <label class="check"><input type="checkbox" checked>Verify position with broker before adoption</label>
+  <label class="check"><input type="checkbox" checked>Verify position is unclaimed</label>
+  <label class="check"><input type="checkbox" checked>Persist BOT ownership after adoption</label>
+  <label class="check"><input type="checkbox" checked>Recover exact management state after restart</label>
+ </div>
+ <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button type="button">IGNORE POSITION</button><button id="adoptPositionBtn" type="button">ADOPT POSITION</button></div>
+ <div id="adoptStatus" class="plan" style="margin-top:10px"><span class="label">OWNERSHIP CHECK</span>IREN — <b>UNCLAIMED / ELIGIBLE</b> → MANUAL ENTRY / ALLBOT MANAGEMENT</div>
+</div>
+</section>
+
+<section id="review" class="page hidden"><div class="card"><div class="page-title">REVIEW & START</div><div class="sub">Readable summary of exactly what your custom bot will be built to do.</div><div class="placeholder">Trading plan review.</div></div></section>
+
+<div class="footer"><button>SAVE PLAN</button><button>DASHBOARD</button><button>DECISIONS</button>
+<button id="popupTestBtn">SETTINGS SUMMARY</button><div class="spacer"></div><button id="start" class="start">BUILD CUSTOM BOT</button></div>
+</main>
+</div>
+<script>
+const names=['STRICT','CAUTIOUS','ASSISTED','ADAPTIVE','AUTONOMOUS'];
+document.getElementById('sentience').addEventListener('input',e=>document.getElementById('sentLabel').textContent=e.target.value+' — '+names[+e.target.value]);
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+ document.getElementById(b.dataset.page).classList.remove('hidden');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+}));
+document.querySelectorAll('.modes button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.modes button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}));
+document.getElementById('progressive').addEventListener('change',e=>document.getElementById('progressiveBox').classList.toggle('hidden',!e.target.checked));
+document.getElementById('start').addEventListener('click',e=>{let on=e.target.dataset.on==='1';e.target.dataset.on=on?'0':'1';e.target.textContent=on?'BUILD CUSTOM BOT':'BUILD CUSTOM BOT'});
+</script>
+
+<div id="popupBackdrop" class="popup-backdrop" aria-hidden="true">
+  <div class="allbot-popup">
+    <div class="popup-top">
+      <div>
+        <div class="popup-kicker" id="popupKicker">CUSTOM BOT — TRADE ENTRY</div>
+        <div class="popup-title" id="popupTitle">SHORT ENTRY</div>
+      </div>
+      <div>
+        <div class="popup-symbol" id="popupSymbol">IREN</div>
+        <div class="popup-side" id="popupSide">SHORT</div>
+      </div>
+    </div>
+    <div class="popup-tabs" id="popupTabs">
+      <button data-popup="entry" class="active">ENTRY</button>
+      <button data-popup="rejected">REJECTED</button>
+      <button data-popup="legin">LEG-IN</button>
+      <button data-popup="sink">SINK/SWIM</button>
+      <button data-popup="legout">LEG-OUT</button>
+      <button data-popup="stop">STOP</button>
+      <button data-popup="trail">TRAIL</button>
+      <button data-popup="sentience">SENTIENCE</button>
+      <button data-popup="exit">EXIT</button>
+      <button data-popup="cooldown">COOLDOWN</button>
+      <button data-popup="recovery">RECOVERY</button>
+    </div>
+    <div class="popup-body" id="popupBody"></div>
+  </div>
+</div>
+
+
+<script>
+const popupData = {
+ entry:{
+  kicker:"CUSTOM BOT — TRADE ENTRY", title:"SHORT ENTRY", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">STRATEGY — RSI DIVERGENCE REVERSAL</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Established Uptrend</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Price Higher High</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>RSI Lower High</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Bearish Divergence</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Lower High Confirmed</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Remaining ATR</span><span class="popup-value">1.18</span></div></div>
+  <div class="popup-section"><div class="popup-section-title">ENTRY / MANAGEMENT</div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Entry</span><span class="popup-value">542 @ $18.46</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Technical Stop</span><span class="popup-value">$18.61</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Sink or Swim</span><span class="popup-value">3 min</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>First Leg-Out</span><span class="popup-value">+$50</span></div></div>
+  <div class="popup-state"><b>STATE:</b> ENTRY → SINK OR SWIM</div>`
+ },
+ rejected:{
+  kicker:"CUSTOM BOT — ENTRY REJECTED", title:"NO ORDER SUBMITTED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">CORE SETUP</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Bearish Divergence</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Lower High Confirmed</span><span></span></div>
+  <div class="popup-line"><span class="popup-bad">✕</span><span>Remaining ATR</span><span class="popup-value">0.41 / 0.75</span></div></div>
+  <div class="popup-state"><b>REJECTED:</b> Insufficient remaining intraday range.</div>`
+ },
+ legin:{
+  kicker:"CUSTOM BOT — POSITION ADD", title:"LEG-IN EXECUTED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">LEG-IN RULE</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Confirmation condition satisfied</span><span></span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Added</span><span class="popup-value">135 shares</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Total Position</span><span class="popup-value">407 shares</span></div></div>
+  <div class="popup-state"><b>STATE:</b> CONFIRMED → LEG-IN</div>`
+ },
+ sink:{
+  kicker:"CUSTOM BOT — SINK OR SWIM", title:"TRADE PROVED ITSELF", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">GRACE PERIOD COMPLETE</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>3 minute grace period complete</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Price confirmation maintained</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Technical stop intact</span><span></span></div></div>
+  <div class="popup-state"><b>SWIM:</b> Begin normal stop progression.</div>`
+ },
+ legout:{
+  kicker:"CUSTOM BOT — PROFIT MANAGEMENT", title:"LEG-OUT EXECUTED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">LEG-OUT RULE #1</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Open P&amp;L threshold</span><span class="popup-value">+$53 / +$50</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Sold / Covered</span><span class="popup-value">25%</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Remaining</span><span class="popup-value">407 shares</span></div></div>
+  <div class="popup-state"><b>STATE:</b> LEG-OUT #1 → BREAKEVEN PROTECTION</div>`
+ },
+ stop:{
+  kicker:"CUSTOM BOT — STOP PROGRESSION", title:"STOP ADVANCED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">PROGRESSION</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Profit activation reached</span><span class="popup-value">+$104</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Old Stop</span><span class="popup-value">$18.61</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>New Protection</span><span class="popup-value">1.0 ATR Trail</span></div></div>
+  <div class="popup-state"><b>STATE:</b> TECHNICAL STOP → PROFIT TRAIL</div>`
+ },
+ trail:{
+  kicker:"CUSTOM BOT — TRAILING STOP", title:"TRAIL TIGHTENED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">PROGRESSIVE TRAIL</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Profit tier reached</span><span class="popup-value">+$203</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Old Trail</span><span class="popup-value">1.0 ATR</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>New Trail</span><span class="popup-value">0.75 ATR</span></div></div>
+  <div class="popup-state"><b>RULE:</b> Trail may tighten, never loosen.</div>`
+ },
+ sentience:{
+  kicker:"CUSTOM BOT — SENTIENCE DECISION", title:"RULE OVERRIDE WITHIN AUTHORITY", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">CONFIGURED ACTION</div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Leg Out 25%</span><span class="popup-value">@$50</span></div></div>
+  <div class="popup-section"><div class="popup-section-title">DECISION — HOLD</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Lower-high structure intact</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>RSI weakening</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Remaining ATR</span><span class="popup-value">1.18</span></div></div>
+  <div class="popup-state"><b>AUTHORITY:</b> SENTIENCE LEVEL 2 — ASSISTED</div>`
+ },
+ exit:{
+  kicker:"CUSTOM BOT — TRADE EXIT", title:"POSITION CLOSED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">EXIT</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Exit reason</span><span class="popup-value">Trailing Stop</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Realized P&amp;L</span><span class="popup-value">+$286</span></div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Position</span><span class="popup-value">FLAT</span></div></div>
+  <div class="popup-state"><b>STATE:</b> EXIT → COOLDOWN</div>`
+ },
+ cooldown:{
+  kicker:"CUSTOM BOT — COOLDOWN", title:"RE-ENTRY LOCKED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">RE-ENTRY RULES</div>
+  <div class="popup-line"><span class="popup-neutral">›</span><span>Cooldown</span><span class="popup-value">5 min</span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>New setup required</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Divergence must reset</span><span></span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>New confirmed pivot required</span><span></span></div></div>
+  <div class="popup-state"><b>STATUS:</b> SAME-SYMBOL ENTRY BLOCKED</div>`
+ },
+ recovery:{
+  kicker:"CUSTOM BOT — RECOVERY", title:"POSITION RESTORED", symbol:"IREN", side:"SHORT",
+  body:`<div class="popup-section"><div class="popup-section-title">RECOVERED STATE</div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Ownership</span><span class="popup-value">ALLBOT</span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Position verified with broker</span><span class="popup-value">407 shares</span></div>
+  <div class="popup-line"><span class="popup-ok">✓</span><span>Management state restored</span><span class="popup-value">PROFIT TRAIL</span></div></div>
+  <div class="popup-state"><b>RECOVERY:</b> Management resumed without creating a new entry.</div>`
+ }
+};
+
+const backdrop=document.getElementById("popupBackdrop");
+const bodyEl=document.getElementById("popupBody");
+function showPopup(type){
+ const d=popupData[type]||popupData.entry;
+ document.getElementById("popupKicker").textContent=d.kicker;
+ document.getElementById("popupTitle").textContent=d.title;
+ document.getElementById("popupSymbol").textContent=d.symbol;
+ document.getElementById("popupSide").textContent=d.side;
+ bodyEl.innerHTML=d.body+`<div class="popup-actions"><button id="viewTradePopup">VIEW TRADE</button><button id="closePopup">CLOSE</button></div>`;
+ backdrop.classList.add("show"); backdrop.setAttribute("aria-hidden","false");
+ document.querySelectorAll("#popupTabs button").forEach(b=>b.classList.toggle("active",b.dataset.popup===type));
+ document.getElementById("closePopup").onclick=closePopup;
+ document.getElementById("viewTradePopup").onclick=()=>{closePopup(); const p=document.querySelector('[data-page="positions"]'); if(p)p.click();};
+}
+function closePopup(){backdrop.classList.remove("show");backdrop.setAttribute("aria-hidden","true");}
+document.getElementById("popupTestBtn")?.addEventListener("click",()=>showPopup("entry"));
+document.querySelectorAll("#popupTabs button").forEach(b=>b.addEventListener("click",()=>showPopup(b.dataset.popup)));
+backdrop.addEventListener("click",e=>{if(e.target===backdrop)closePopup();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePopup();});
+</script>
+
+
+<div id="helpBackdrop" class="help-backdrop" aria-hidden="true">
+  <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-top">
+      <div>
+        <div style="font-size:10px;letter-spacing:.12em;color:#7faed4;font-weight:800">ALLBOT HELP</div>
+        <div id="helpTitle" class="help-title">Help</div>
+      </div>
+      <button id="helpClose" class="help-close" aria-label="Close help">×</button>
+    </div>
+    <div id="helpBody" class="help-body"></div>
+  </div>
+</div>
+
+
+<script>
+const allbotHelp = {
+'RSI DIVERGENCE REVERSAL': {title:'RSI Divergence Reversal', body:`<p class="help-intro">The built-in reversal setup. Divergence identifies a possible loss of momentum; the configured confirmation determines when AllBot is actually allowed to enter.</p>
+<div class="help-row"><span class="help-term">Direction</span>Long + Short watches for both bullish and bearish divergence. Long Only or Short Only restricts entries to that side.</div>
+<div class="help-row"><span class="help-term">Timeframe</span>The candle interval used to detect pivots, price structure and RSI divergence.</div>
+<div class="help-row"><span class="help-term">RSI Period</span>The lookback used for RSI. The default 14 is the baseline configuration.</div>
+<div class="help-row"><span class="help-term">Pivot Sensitivity</span>Controls how quickly a swing high/low is considered a confirmed pivot. Faster settings react sooner; stricter settings demand clearer structure.</div>
+<div class="help-row"><span class="help-term">Established Trend Required</span>Requires the divergence to occur against an existing move rather than treating every RSI disagreement as a reversal setup.</div>
+<div class="help-row"><span class="help-term">Confirmed Price Pivots</span>Uses actual swing pivots and the RSI values at those same pivots.</div>
+<div class="help-row"><span class="help-term">Price LL / HH + RSI HL / LH</span>For longs: price Lower Low + RSI Higher Low. For shorts: price Higher High + RSI Lower High.</div>`},
+'ENTRY CONFIRMATION': {title:'Entry Confirmation', body:`<p class="help-intro">Controls what must happen after divergence is detected before an order can be submitted.</p>
+<div class="help-row"><span class="help-term">Entry Method</span>Immediate enters from the divergence signal. Wait for Price Turn requires reversal evidence. Higher Low / Lower High waits for structural confirmation. Break Previous Candle waits for a price break. Custom Trigger is reserved for a defined custom rule.</div>
+<div class="help-row"><span class="help-term">Reversal Confirmation</span>Defines the specific evidence AllBot uses to decide the turn is real, such as a micro price turn, structure, or candle close.</div>
+<div class="help-row"><span class="help-term">Volume Filter</span>When checked, volume becomes a required context rule for entry.</div>
+<div class="help-row"><span class="help-term">VWAP Filter</span>Uses price relative to VWAP or VWAP rejection as an additional intraday confirmation.</div>
+<div class="help-row"><span class="help-term">Bollinger Filter</span>Uses extension/re-entry around the Bollinger Bands as reversal context.</div>
+<div class="help-row"><span class="help-term">MACD Filter</span>Requires configured MACD momentum confirmation. When unchecked, MACD does not participate in the decision.</div>
+<div class="help-note">Unchecked filters are ignored. In Strict mode they do not secretly affect a score.</div>`},
+'REMAINING ATR / RUN ROOM': {title:'Remaining ATR / Run Room', body:`<p class="help-intro">Estimates how much normal intraday movement remains before entering or continuing a trade.</p>
+<div class="help-row"><span class="help-term">ATR Period</span>The lookback used for the ATR calculation.</div>
+<div class="help-row"><span class="help-term">Minimum Remaining ATR</span>The minimum run room required for an entry.</div>
+<div class="help-row"><span class="help-term">Preferred Remaining ATR</span>The amount of remaining range considered desirable rather than merely acceptable.</div>
+<div class="help-row"><span class="help-term">Below Minimum</span>Choose whether AllBot rejects the entry, reduces size, or lets authorized Sentience decide.</div>
+<div class="help-row"><span class="help-term">Management Options</span>Remaining ATR can also be displayed during management and, if enabled, used to tighten a trail or reduce a runner.</div>`},
+'LEG IN': {title:'Leg In', body:`<p class="help-intro">Controls how AllBot builds a position rather than entering the full intended size at once.</p>
+<div class="help-row"><span class="help-term">Total Position</span>The intended maximum position allocation for the trade.</div>
+<div class="help-row"><span class="help-term">Max Trade Risk</span>The maximum permitted loss/risk budget for the trade.</div>
+<div class="help-row"><span class="help-term">Initial Entry</span>The percentage opened when the first valid entry fires.</div>
+<div class="help-row"><span class="help-term">Max Legs</span>The maximum number of entry tranches.</div>
+<div class="help-row"><span class="help-term">Confirmation / Retest Adds</span>Allows later tranches only when the selected confirmation or retest condition occurs.</div>
+<div class="help-note">Legging in can never expand the trade beyond its configured maximum risk boundary.</div>`},
+'LEG OUT': {title:'Leg Out', body:`<p class="help-intro">Defines how profit is realized in stages while allowing part of a winning position to continue.</p>
+<div class="help-row"><span class="help-term">Exit Tranches</span>Each row defines the trigger and percentage removed when that trigger is reached.</div>
+<div class="help-row"><span class="help-term">Profit $</span>Triggers the tranche from open trade profit.</div>
+<div class="help-row"><span class="help-term">Runner</span>The portion deliberately left open for trailing-stop management after earlier profit has been realized.</div>`},
+'SINK OR SWIM': {title:'Sink or Swim', body:`<p class="help-intro">Gives a newly entered trade a defined grace period to prove or disprove the setup before aggressive management begins.</p>
+<div class="help-row"><span class="help-term">Grace Period</span>How long the initial trade is allowed to develop.</div>
+<div class="help-row"><span class="help-term">Swim Test</span>The evidence used to determine that the trade is behaving correctly.</div>
+<div class="help-row"><span class="help-term">If Flat</span>What happens if the trade has neither meaningfully worked nor failed by the end of the grace period.</div>
+<div class="help-row"><span class="help-term">If Losing</span>Whether to exit, retain the original technical stop, or permit Sentience to choose among authorized actions.</div>
+<div class="help-row"><span class="help-term">Protection During Grace</span>Options prevent premature trail activation or stop tightening while preserving the original technical stop.</div>`},
+'STOP PROGRESSION': {title:'Stop Progression', body:`<p class="help-intro">Moves protection through defined stages as a trade proves itself and becomes profitable.</p>
+<div class="help-row"><span class="help-term">Technical Stop</span>The original thesis-invalidating stop. This answers “where am I wrong?” rather than “how much noise can I tolerate?”</div>
+<div class="help-row"><span class="help-term">Buffer</span>Adds room beyond the selected technical structure.</div>
+<div class="help-row"><span class="help-term">Breakeven</span>Moves protection toward the entry once the configured profit threshold is reached.</div>
+<div class="help-row"><span class="help-term">Profit Trail</span>Activates trailing protection after sufficient profit develops.</div>
+<div class="help-row"><span class="help-term">Tight Trail</span>Further reduces permitted giveback at a later profit stage.</div>`},
+'TRAILING STOPS': {title:'Trailing Stops', body:`<p class="help-intro">Controls how AllBot follows a winning position while allowing it room to continue.</p>
+<div class="help-row"><span class="help-term">Trail Type</span>Dollar, Percentage, ATR, Structure or Fixed Price Distance determines how the trailing distance is measured.</div>
+<div class="help-row"><span class="help-term">Activation</span>Determines when trailing begins: immediately, after profit, after an ATR move, after leg-out, or after breakeven.</div>
+<div class="help-row"><span class="help-term">Applies To</span>Controls whether the trail protects the whole remaining position or only a designated runner.</div>
+<div class="help-row"><span class="help-term">High-Water Source</span>The reference from which the trail advances.</div>
+<div class="help-row"><span class="help-term">Progressive Tightening</span>Allows the trail to become tighter at higher profit levels.</div>
+<div class="help-note">A trail can tighten but, when “Never Loosen” is enabled, cannot move backward and give the trade more risk.</div>`},
+'COOLDOWN / RE-ENTRY': {title:'Cooldown / Re-entry', body:`<p class="help-intro">Prevents AllBot from repeatedly jumping back into the same symbol or stale setup immediately after an exit.</p>
+<div class="help-row"><span class="help-term">After Stop / Profit / Trail Exit</span>Sets the minimum wait appropriate to each exit type.</div>
+<div class="help-row"><span class="help-term">Same Symbol Re-entry</span>Controls whether a new setup is required or whether elapsed time alone can permit another entry.</div>
+<div class="help-row"><span class="help-term">Divergence Must Reset</span>Prevents the same old divergence signal from being reused as a fresh setup.</div>
+<div class="help-row"><span class="help-term">New Confirmed Pivot</span>Requires fresh market structure before re-entry.</div>
+<div class="help-row"><span class="help-term">Sentience Authority</span>Sentience may extend a mandatory cooldown when authorized, but cannot shorten the configured minimum.</div>`},
+'INTRADAY / SESSION EXIT': {title:'Intraday / Session Exit', body:`<p class="help-intro">Controls what happens as the trading session approaches the close.</p>
+<div class="help-row"><span class="help-term">Stop New Entries</span>After this time AllBot may manage existing positions but cannot initiate new trades.</div>
+<div class="help-row"><span class="help-term">EOD Management Begins</span>Starts end-of-day reduction or protection logic.</div>
+<div class="help-row"><span class="help-term">Hard Exit</span>The final time by which positions selected for intraday-only treatment must be closed.</div>
+<div class="help-row"><span class="help-term">At EOD</span>Choose full close, losing-only close, profitable runner, or an authorized Sentience decision.</div>
+<div class="help-row"><span class="help-term">Outstanding Orders / New Legs</span>Can cancel stale entry orders and prevent late-session adds.</div>`},
+'DAILY / TRADE LIMITS & KILL SWITCHES': {title:'Daily / Trade Limits & Kill Switches', body:`<p class="help-intro">Hard boundaries that limit trading activity and let individual management functions be disabled without shutting down everything.</p>
+<div class="help-row"><span class="help-term">Max Open Trades</span>Maximum simultaneous AllBot-managed trades.</div>
+<div class="help-row"><span class="help-term">Max Daily Trades</span>Stops additional entries after the configured count.</div>
+<div class="help-row"><span class="help-term">Max Daily Loss</span>Hard daily loss boundary for new trading.</div>
+<div class="help-row"><span class="help-term">Daily Profit Stop</span>Can stop new entries after the day's target has been reached.</div>
+<div class="help-row"><span class="help-term">Function Switches</span>New Entries, Leg In, Leg Out, Stops, Breakeven, Trailing and other functions can be independently enabled or disabled.</div>
+<div class="help-note">Turning New Entries off should not disable protection and management of positions already open.</div>`},
+'TRADE UNIVERSE': {title:'Trade Universe', body:`<p class="help-intro">Defines which symbols AllBot is allowed to consider for new entries.</p>
+<div class="help-row"><span class="help-term">My Symbol List</span>Uses a saved user-defined universe.</div>
+<div class="help-row"><span class="help-term">Scanner Results</span>Uses qualifying symbols supplied by the scanner.</div>
+<div class="help-row"><span class="help-term">Single Symbol</span>Restricts AllBot to one selected instrument.</div>`},
+'ORDER HANDLING': {title:'Order Handling', body:`<p class="help-intro">Defines how AllBot submits and manages entry orders.</p>
+<div class="help-row"><span class="help-term">Entry Order</span>Market prioritizes execution; Limit / Midpoint prioritizes price control.</div>
+<div class="help-row"><span class="help-term">Maximum Spread</span>Rejects or avoids entries when the bid/ask spread is wider than permitted.</div>
+<div class="help-row"><span class="help-term">Stale Entry Cancel</span>Cancels an unfilled entry after the selected time.</div>
+<div class="help-row"><span class="help-term">Retry</span>Controls whether an eligible unfilled entry can be resubmitted.</div>`},
+'SAFETY / OWNERSHIP': {title:'Safety / Ownership', body:`<p class="help-intro">Protects the account from cross-bot interference, invalid orders and lost management state.</p>
+<div class="help-row"><span class="help-term">External Ownership</span>AllBot must not manage positions belonging to Omni, Wheel, ZeroDTE, dividend systems or other owners without an explicit handoff/adoption.</div>
+<div class="help-row"><span class="help-term">Verify Position Before SELL</span>Checks actual broker position before submitting an order that reduces/closes it.</div>
+<div class="help-row"><span class="help-term">Verify Buying Power Before BUY</span>Prevents entries that exceed available account capacity.</div>
+<div class="help-row"><span class="help-term">Connection Loss</span>Stops new trading if broker connectivity is lost.</div>
+<div class="help-row"><span class="help-term">Recovery / Persistence</span>Restores ownership and the exact management stage after a restart rather than treating an existing position as a new trade.</div>`},
+'MODE': {title:'Mode', body:`<p class="help-intro">Controls whether AllBot observes, simulates, or is authorized to submit live orders.</p>
+<div class="help-row"><span class="help-term">Observe</span>Detects setups and produces decisions without submitting orders.</div>
+<div class="help-row"><span class="help-term">Paper</span>Runs the strategy against the paper-trading environment.</div>
+<div class="help-row"><span class="help-term">Live</span>Allows real orders, subject to every configured safety and permission rule.</div>`},
+'SENTIENCE': {title:'Sentience', body:`<p class="help-intro">Controls how much discretion AllBot has inside the strategy and risk framework you defined.</p>
+<div class="help-row"><span class="help-term">0 — Strict</span>Literal deterministic rule execution.</div>
+<div class="help-row"><span class="help-term">1 — Cautious</span>May decline otherwise valid entries for clearly poor execution conditions.</div>
+<div class="help-row"><span class="help-term">2 — Assisted</span>Allows limited management discretion among authorized choices.</div>
+<div class="help-row"><span class="help-term">3 — Adaptive</span>May adjust parameters inside user-authorized ranges.</div>
+<div class="help-row"><span class="help-term">4 — Autonomous Within Framework</span>Maximum discretion while remaining inside the selected strategy sandbox and hard boundaries.</div>
+<div class="help-note">Sentience can never override ownership, maximum risk, hard stops, daily loss limits or other hard permissions.</div>`}
+,
+'ACTIVE BROKER': {title:'Active Broker', body:`<p class="help-intro">Selects the broker adapter AllBot will use for order execution. Strategy, signals and Behaviour rules remain the same regardless of broker.</p><div class="help-row"><span class="help-term">Execution Broker</span>Switches the connection panel between Interactive Brokers and MetaTrader 5.</div><div class="help-row"><span class="help-term">Connection Profile</span>Lets AllBot maintain separate saved connection configurations such as Paper, Live or Secondary.</div><div class="help-row"><span class="help-term">Auto Connect</span>Choose whether the broker connection is attempted automatically when AllBot starts.</div><div class="help-row"><span class="help-term">On Disconnect</span>Defines the safe response when the execution connection is lost.</div>`},
+'INTERACTIVE BROKERS': {title:'Interactive Brokers Connection', body:`<p class="help-intro">Configures AllBot's IBKR API connection through Trader Workstation or IB Gateway.</p><div class="help-row"><span class="help-term">Connection Type</span>Select TWS or IB Gateway.</div><div class="help-row"><span class="help-term">Host</span>Normally the local machine when AllBot and TWS/Gateway run together.</div><div class="help-row"><span class="help-term">Socket Port</span>Select the configured API socket port. Common defaults are presented, but the actual TWS/Gateway setting is authoritative.</div><div class="help-row"><span class="help-term">Client ID</span>Identifies this API client connection and should avoid collisions with other running bots.</div><div class="help-row"><span class="help-term">Account</span>Auto-detect or select a saved account when more than one account is available.</div><div class="help-row"><span class="help-term">API Permission</span>Read Only prevents trade submission. Trading Enabled is required before Live execution.</div><div class="help-note">TEST CONNECTION is a console prototype in this HTML version. The Python broker adapter will perform the real connection test later.</div>`},
+'METATRADER 5': {title:'MetaTrader 5 Connection', body:`<p class="help-intro">Configures AllBot's MT5 adapter. The Python engine will connect through an installed MetaTrader 5 terminal.</p><div class="help-row"><span class="help-term">Terminal</span>Auto-detect the terminal or choose a saved terminal installation/profile.</div><div class="help-row"><span class="help-term">Account / Server</span>Use the account and server already selected in MT5 or a saved AllBot profile.</div><div class="help-row"><span class="help-term">Authorization</span>Determines whether AllBot relies on credentials already stored by the MT5 terminal or a separately saved profile.</div><div class="help-row"><span class="help-term">Order Filling</span>Uses the symbol default or an explicitly permitted filling policy.</div><div class="help-row"><span class="help-term">Deviation</span>Maximum permitted price deviation in points for applicable MT5 orders.</div><div class="help-note">TEST CONNECTION is a console prototype in this HTML version. Real account_info, terminal status and trading permissions will be checked by the Python adapter.</div>`},
+'BROKER SAFETY': {title:'Broker Safety', body:`<p class="help-intro">Hard execution safeguards shared by every broker adapter.</p><div class="help-row"><span class="help-term">Verified Connection</span>No order may be routed until the selected broker and account have been positively verified.</div><div class="help-row"><span class="help-term">Position Reconciliation</span>Broker positions are compared with AllBot ownership/state before management begins or resumes.</div><div class="help-row"><span class="help-term">Reconnect Protection</span>Prevents a reconnect/recovery cycle from accidentally duplicating an entry or exit order.</div><div class="help-row"><span class="help-term">Broker-Independent Strategy</span>Trading logic produces normalized intentions; only the broker adapter translates those intentions into IBKR or MT5 orders.</div>`},
+
+'SCAN SOURCE': {title:'Scan Source', body:`<p class="help-intro">Defines where AllBot looks for candidates. The scanner discovers symbols; it does not bypass the loaded strategy.</p><div class="help-row"><span class="help-term">Universe</span>Choose a saved list, broker scanner, MT5 Market Watch or another supported source.</div><div class="help-row"><span class="help-term">Direction</span>Restricts candidate discovery to long, short or both.</div><div class="help-row"><span class="help-term">Scan Interval</span>How frequently the candidate universe is refreshed.</div><div class="help-row"><span class="help-term">Qualifying Candidate</span>Observe Only reports it, Send to Strategy lets the strategy evaluate it, and Allow Entry permits execution only after every strategy/execution rule passes.</div>`},
+'SCANNER FILTERS': {title:'Scanner Filters', body:`<p class="help-intro">Fast pre-filters used to avoid wasting strategy evaluation on unsuitable symbols.</p><div class="help-row"><span class="help-term">Price / Volume / RVOL</span>Basic liquidity and activity boundaries. RVOL compares current trading volume with the symbol's normal volume for the comparable period; values above 1.0x indicate above-normal activity.</div><div class="help-row"><span class="help-term">Maximum Spread</span>Removes candidates whose bid/ask spread is too wide.</div><div class="help-row"><span class="help-term">Existing Owned Positions</span>Can keep the scanner from creating a second independent setup in a symbol already controlled by a bot.</div>`},
+'LIVE CANDIDATES': {title:'Live Candidates', body:`<p class="help-intro">Shows exactly where each candidate is in the setup pipeline.</p><div class="help-row"><span class="help-term">Setup State</span>Examples include Watching, Divergence Armed, Wait Lower High, Entry Ready and Rejected.</div><div class="help-row"><span class="help-term">Remaining ATR / VWAP / Spread</span>Displays useful live context without hiding why a candidate is accepted or rejected.</div><div class="help-row"><span class="help-term">Strategy Decision</span>The explicit current reason AllBot is waiting, qualifying or rejecting the candidate.</div>`},
+'STARTUP POSITION MODE': {title:'Startup Position Mode', body:`<p class="help-intro">Controls whether AllBot searches for new trades, manages existing positions, or both when it starts.</p><div class="help-row"><span class="help-term">Recovered Bot Positions</span>Positions already owned by AllBot can resume their persisted management state automatically.</div><div class="help-row"><span class="help-term">Unclaimed Positions</span>Manual/unclaimed broker positions can be shown for review without being touched.</div><div class="help-row"><span class="help-term">Other-Bot Positions</span>Positions owned by another bot remain blocked unless the ownership system records an explicit safe handoff.</div>`},
+'BROKER POSITIONS': {title:'Broker Positions', body:`<p class="help-intro">A reconciled view of positions actually held at the selected broker and their AllBot ownership status.</p><div class="help-row"><span class="help-term">Origin</span>Where the position came from: AllBot, another bot, manual trading, dividend system or external source.</div><div class="help-row"><span class="help-term">Owner</span>The system currently authorized to manage the position.</div><div class="help-row"><span class="help-term">Action</span>Eligible manual positions may be adopted. Other-bot positions are protected.</div>`},
+'ADOPT EXISTING POSITION': {title:'Adopt Existing Position', body:`<p class="help-intro">Assigns AllBot management to an eligible position that AllBot did not originally enter.</p><div class="help-row"><span class="help-term">Manual Entry / AllBot Management</span>AllBot records that the entry was external and only assumes responsibility from the point of adoption forward.</div><div class="help-row"><span class="help-term">Management Plan</span>Applies stops, leg-outs, trailing, session rules and other Behaviour settings without inventing an entry strategy.</div><div class="help-row"><span class="help-term">Sink or Swim</span>Normally skipped because the position already existed before AllBot assumed control.</div><div class="help-row"><span class="help-term">Leg-In</span>Defaults to disabled until a new setup so adoption does not accidentally increase an old position.</div><div class="help-note">Adoption must verify the broker position and ownership record first. A position owned by Omni, Wheel, ZeroDTE or another protected system cannot be silently taken over.</div>`},
+
+'DECISION REPORT CONTROLS': {title:'Decision Report Controls', body:`<p class="help-intro">Filters the audit trail without changing trading behaviour.</p><div class="help-row"><span class="help-term">Everything</span>Shows setup observations, decisions, rejections, orders, fills, management changes, partial sales, exits, ownership and recovery.</div><div class="help-row"><span class="help-term">Rule Evidence</span>Shows the actual configured condition that caused each decision rather than a generic confidence score.</div><div class="help-row"><span class="help-term">Orders + Fills</span>Separates AllBot's decision from what was actually submitted and what the broker actually filled.</div>`},
+'LIVE DECISION STREAM': {title:'Live Decision Stream', body:`<p class="help-intro">Chronological record of every material trading event. A trade should be reconstructable from this report from first setup through final exit.</p><div class="help-row"><span class="help-term">Decision</span>What AllBot concluded from the configured rules.</div><div class="help-row"><span class="help-term">Order</span>What AllBot asked the broker to do.</div><div class="help-row"><span class="help-term">Fill</span>What the broker actually executed.</div><div class="help-row"><span class="help-term">Rejected</span>Records valid-looking opportunities that were deliberately not traded and why.</div>`},
+'DECISION EVENT DETAIL': {title:'Selected Event Detail', body:`<p class="help-intro">Expands one event into the evidence → decision → order → fill → resulting state chain.</p><div class="help-note">This is intended to make AllBot auditable: you should be able to answer exactly why it bought, sold, added, reduced, moved a stop, rejected a trade or exited.</div>`},
+
+'MANAGEMENT SUMMARY': {title:'Management Summary', body:`<p class="help-intro">Shows how AllBot takes responsibility for a position it did not originally enter.</p><div class="help-row"><span class="help-term">Adoption</span>AllBot first verifies the live broker position and confirms that no other bot owns it.</div><div class="help-row"><span class="help-term">Manual Entry / AllBot Management</span>The original entry remains external; AllBot only owns management from the adoption point forward.</div><div class="help-row"><span class="help-term">Management State</span>The position then progresses through the enabled Behaviour stages such as technical stop, breakeven, leg-out and trailing.</div><div class="help-row"><span class="help-term">Recovery</span>The current ownership and exact management state are persisted so a restart does not reset the trade lifecycle.</div>`},
+};
+const helpBackdrop=document.getElementById("helpBackdrop");
+const helpTitle=document.getElementById("helpTitle");
+const helpBody=document.getElementById("helpBody");
+function openHelp(key){
+  const h=allbotHelp[key];
+  if(!h)return;
+  helpTitle.textContent=h.title;
+  helpBody.innerHTML=h.body;
+  helpBackdrop.classList.add("show");
+  helpBackdrop.setAttribute("aria-hidden","false");
+}
+function closeHelp(){
+  helpBackdrop.classList.remove("show");
+  helpBackdrop.setAttribute("aria-hidden","true");
+}
+document.querySelectorAll(".info-btn").forEach(btn=>{
+  btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openHelp(btn.dataset.help);});
+});
+document.getElementById("helpClose").addEventListener("click",closeHelp);
+helpBackdrop.addEventListener("click",e=>{if(e.target===helpBackdrop)closeHelp();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&helpBackdrop.classList.contains("show"))closeHelp();});
+</script>
+
+
+<script>
+(function(){
+ const brokerSelect=document.getElementById("brokerSelect");
+ const ibkr=document.getElementById("ibkrBrokerPanel");
+ const mt5=document.getElementById("mt5BrokerPanel");
+ function updateBrokerPanel(){
+   if(!brokerSelect||!ibkr||!mt5)return;
+   const useMT5=brokerSelect.value==="mt5";
+   ibkr.classList.toggle("hidden",useMT5);
+   mt5.classList.toggle("hidden",!useMT5);
+ }
+ brokerSelect?.addEventListener("change",updateBrokerPanel);
+ updateBrokerPanel();
+
+ document.querySelectorAll(".broker-test").forEach(btn=>{
+   btn.addEventListener("click",()=>{
+     const status=btn.parentElement.querySelector(".broker-status");
+     status.textContent="CONSOLE READY — PYTHON TEST NOT WIRED";
+     status.style.color="#8fc8f4";
+   });
+ });
+})();
+</script>
+
+
+<script>
+document.querySelectorAll('.info-btn[data-help="ACTIVE BROKER"],.info-btn[data-help="INTERACTIVE BROKERS"],.info-btn[data-help="METATRADER 5"],.info-btn[data-help="BROKER SAFETY"]').forEach(btn=>{
+ btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openHelp(btn.dataset.help);});
+});
+</script>
+
+
+<script>
+document.querySelectorAll('[data-page="brokers"]').forEach(el=>{
+ el.addEventListener("click", function(){
+   document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+   document.getElementById("brokers")?.classList.remove("hidden");
+   document.querySelectorAll(".nav,.nav-item").forEach(n=>n.classList.remove("active"));
+   this.classList.add("active");
+ });
+});
+</script>
+
+
+<script>
+(function(){
+ // Scanner nav robust fallback.
+ document.querySelectorAll('[data-page="scanner"]').forEach(el=>{
+  el.addEventListener("click",function(){
+   document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+   document.getElementById("scanner")?.classList.remove("hidden");
+   document.querySelectorAll(".nav,.nav-item").forEach(n=>n.classList.remove("active"));
+   this.classList.add("active");
+  });
+ });
+
+ // Scanner prototype controls.
+ document.getElementById("scannerRunBtn")?.addEventListener("click",function(){
+   this.textContent="SCANNING...";
+   setTimeout(()=>this.textContent="RUN SCAN",700);
+ });
+ document.getElementById("scannerPauseBtn")?.addEventListener("click",function(){
+   this.textContent=this.textContent==="PAUSED"?"PAUSE":"PAUSED";
+ });
+
+ // Existing position prototype actions.
+ document.querySelectorAll(".adoptBtn").forEach(btn=>btn.addEventListener("click",()=>{
+   document.getElementById("adoptionPanel")?.scrollIntoView({behavior:"smooth",block:"start"});
+ }));
+ document.getElementById("adoptPositionBtn")?.addEventListener("click",()=>{
+   const s=document.getElementById("adoptStatus");
+   if(s)s.innerHTML='<span class="label">PROTOTYPE ADOPTION</span>IREN — <b>READY FOR OWNERSHIP HANDOFF</b> · Real broker/JSON adoption will be wired in Python.';
+ });
+
+ // New info buttons were added after original binding.
+ const keys=["SCAN SOURCE","SCANNER FILTERS","LIVE CANDIDATES","STARTUP POSITION MODE","BROKER POSITIONS","ADOPT EXISTING POSITION"];
+ document.querySelectorAll(".info-btn").forEach(btn=>{
+   if(keys.includes(btn.dataset.help) && !btn.dataset.helpBound){
+     btn.dataset.helpBound="1";
+     btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openHelp(btn.dataset.help);});
+   }
+ });
+})();
+</script>
+
+
+<script>
+document.querySelectorAll('[data-page="decisions"]').forEach(el=>{
+ el.addEventListener("click",function(){
+  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+  document.getElementById("decisions")?.classList.remove("hidden");
+  document.querySelectorAll(".nav,.nav-item").forEach(n=>n.classList.remove("active"));
+  this.classList.add("active");
+ });
+});
+document.querySelectorAll("button").forEach(b=>{
+ if(b.textContent.trim()==="DECISIONS"){
+  b.addEventListener("click",()=>{
+   document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+   document.getElementById("decisions")?.classList.remove("hidden");
+  });
+ }
+});
+</script>
+
+
+<script>
+["DECISION REPORT CONTROLS","LIVE DECISION STREAM","DECISION EVENT DETAIL"].forEach(key=>{
+ document.querySelectorAll('.info-btn[data-help="'+key+'"]').forEach(btn=>{
+  btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openHelp(key);});
+ });
+});
+</script>
+
+
+<script>
+document.querySelectorAll('.info-btn[data-help="MANAGEMENT SUMMARY"]').forEach(btn=>{
+ btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openHelp("MANAGEMENT SUMMARY");});
+});
+</script>
+
+
+<button id="planFloat" class="plan-float">SETTINGS / JSON</button>
+<div id="planDrawer" class="plan-drawer" aria-label="AllBot Settings Summary and Plan JSON">
+ <div class="plan-head"><b>ALLBOT PLAN REVIEW</b><span class="plan-muted" id="planDirty">LIVE</span><span class="spacer"></span><button id="planClose">×</button></div>
+ <div class="plan-tabs"><button class="active" data-plan-tab="summary">SETTINGS SUMMARY</button><button data-plan-tab="json">PLAN JSON</button></div>
+ <div class="plan-body">
+   <div id="planSummary" class="plan-summary"></div>
+   <textarea id="planJson" class="plan-json hidden" spellcheck="false"></textarea>
+ </div>
+ <div class="plan-actions">
+   <button id="planRefresh">REFRESH</button>
+   <button id="planSave">SAVE PLAN JSON</button>
+   <button id="planCopy">COPY JSON</button>
+ </div>
+</div>
+
+<script>
+/* === v1.0 FULL SETTINGS → SUMMARY → JSON === */
+(function(){
+ const drawer=document.getElementById('planDrawer'), summaryEl=document.getElementById('planSummary'),
+       jsonEl=document.getElementById('planJson'), dirty=document.getElementById('planDirty');
+ const clean=s=>(s||'').replace(/\s+/g,' ').trim();
+ const slug=s=>clean(s).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+ function selectedMode(){
+   const b=[...document.querySelectorAll('.modes button')].find(x=>x.classList.contains('active'));
+   return clean(b?.textContent)||'UNKNOWN';
+ }
+ function sectionTitle(card){
+   return clean(card.querySelector('.section-head span')?.textContent ||
+                card.querySelector('.page-title')?.textContent || 'GENERAL');
+ }
+ function controlLabel(el){
+   const lab=el.closest('label');
+   if(lab){
+     let txt=[...lab.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join(' ');
+     txt=clean(txt);
+     if(txt) return txt;
+   }
+   if(el.type==='checkbox'){
+     const l=el.closest('label'); if(l) return clean(l.textContent.replace('i',''));
+   }
+   return el.name||el.id||el.type||'control';
+ }
+ function pageSnapshot(page){
+   const result={};
+   const cards=[...page.querySelectorAll('.card')];
+   cards.forEach((card,ci)=>{
+     const sec=slug(sectionTitle(card))||('section_'+(ci+1)), obj={};
+     card.querySelectorAll('select,input[type="text"],input[type="number"],input[type="checkbox"],input[type="range"]').forEach((el,i)=>{
+       if(el.classList.contains('info-btn')) return;
+       let key=slug(controlLabel(el))||('control_'+(i+1));
+       if(obj[key]!==undefined) key=key+'_'+(i+1);
+       obj[key]=el.type==='checkbox'?el.checked:(el.type==='range'?Number(el.value):el.value);
+     });
+     if(Object.keys(obj).length) result[sec]=obj;
+   });
+   return result;
+ }
+ function buildPlan(){
+   const pages={};
+   document.querySelectorAll('section.page').forEach(p=>{pages[p.id]=pageSnapshot(p)});
+   return {
+     schema_version:'allbot.full_console.v1.1',
+     generated_at:new Date().toISOString(),
+     mode:selectedMode(),
+     sentience:Number(document.getElementById('sentience')?.value||0),
+     configuration:pages,
+     safety_contract:{
+       gui_is_configuration_only:true,
+       external_ownership_protection:'REQUIRED',
+       engine_must_validate_plan_before_start:true,
+       live_requires_separate_engine_authorization:true
+     }
+   };
+ }
+ function findSelect(pageId,labelText){
+   const page=document.getElementById(pageId); if(!page)return '';
+   for(const lab of page.querySelectorAll('label.field')){
+     if(clean(lab.childNodes[0]?.textContent).toLowerCase()===labelText.toLowerCase())
+       return clean(lab.querySelector('select')?.value);
+   } return '';
+ }
+ function checkedText(pageId,text){
+   const p=document.getElementById(pageId); if(!p)return false;
+   return [...p.querySelectorAll('label')].some(l=>clean(l.textContent).includes(text)&&l.querySelector('input[type=checkbox]')?.checked);
+ }
+ function summary(){
+   const direction=findSelect('strategy','Direction'), tf=findSelect('strategy','Timeframe'),
+    rsi=findSelect('strategy','RSI Period'), piv=findSelect('strategy','Pivot Sensitivity'),
+    entry=findSelect('strategy','Entry Method'), rev=findSelect('strategy','Reversal Confirmation'),
+    atr=findSelect('strategy','ATR Period'), minAtr=findSelect('strategy','Minimum Remaining ATR'),
+    prefAtr=findSelect('strategy','Preferred Remaining ATR'), below=findSelect('strategy','Below Minimum');
+   const total=findSelect('behaviour','Total Position'), risk=findSelect('behaviour','Max Trade Risk'),
+    grace=findSelect('behaviour','Grace Period'), swim=findSelect('behaviour','Swim Test'),
+    stop=findSelect('behaviour','Stop Type')||findSelect('behaviour','Initial Stop'),
+    cutoff=findSelect('behaviour','Stop New Entries'), hard=findSelect('behaviour','Hard Exit');
+   const execOrder=findSelect('execution','Entry Order'), execSpread=findSelect('execution','Maximum Spread');
+   const scanUni=findSelect('scanner','Universe'), scanRvol=findSelect('scanner','Minimum RVOL'),
+    scanInt=findSelect('scanner','Scan Interval');
+   const trend=checkedText('strategy','Established trend required');
+   const pivots=checkedText('strategy','Confirmed price pivots');
+   let s=`CUSTOM BOT FULL SETTINGS REVIEW
+MODE: ${selectedMode()}
+SENTIENCE: ${document.getElementById('sentience')?.value||0}
+
+TRADE SETUP
+Strategy: ${document.getElementById('primaryStrategy')?.selectedOptions[0]?.textContent || 'RSI Divergence — Reversal'}
+Direction: ${direction}
+Timeframe: ${tf}
+RSI Period: ${rsi}
+Pivot Sensitivity: ${piv}
+Established trend required: ${trend?'YES':'NO'}
+Confirmed price pivots: ${pivots?'YES':'NO'}
+Entry Method: ${entry}
+Reversal Confirmation: ${rev}
+
+PRIMARY SETUP
+${document.getElementById('primaryStrategy')?.value==='BOLLINGER_MEAN_REVERSION'
+? 'SHORT: Upper-band extension → rejection / close back inside → price reversal structure → mean reversion\nLONG:  Lower-band extension → rejection / close back inside → price reversal structure → mean reversion'
+: 'SHORT: Established uptrend → Price Higher High → RSI Lower High → Bearish Divergence → '+entry+(entry.includes('Price Turn')?' → '+rev:'')+'\nLONG:  Established downtrend → Price Lower Low → RSI Higher Low → Bullish Divergence → '+entry+(entry.includes('Price Turn')?' → '+rev:'')}
+
+RUN ROOM / FILTERS
+ATR Period: ${atr}
+Minimum Remaining ATR: ${minAtr}
+Preferred Remaining ATR: ${prefAtr}
+Below Minimum: ${below}
+Scanner RVOL: ${scanRvol}
+Scanner Universe: ${scanUni}
+Scan Interval: ${scanInt}
+
+POSITION / MANAGEMENT
+Total Position: ${total}
+Max Trade Risk: ${risk}
+Sink or Swim Grace: ${grace}
+Swim Test: ${swim}
+${stop?'Stop: '+stop+'\n':''}
+${cutoff?'Stop New Entries: '+cutoff+'\n':''}${hard?'Hard Exit: '+hard+'\n':''}
+EXECUTION
+Entry Order: ${execOrder}
+Maximum Spread: ${execSpread}
+
+SAFETY
+External ownership protection: ${checkedText('execution','Never interfere with externally owned positions')?'ON':'OFF'}
+Verify before SELL: ${checkedText('execution','Verify position before SELL')?'ON':'OFF'}
+Verify buying power before BUY: ${checkedText('execution','Verify buying power before BUY')?'ON':'OFF'}
+Recovery state persistence: ${checkedText('execution','Restore management state after restart')?'ON':'OFF'}
+
+REVIEW NOTE
+The JSON tab contains every selectable control in the full console, grouped by page and section.
+This is the configuration contract for review; engine support for each field must be validated separately before Live.`;
+   return s;
+ }
+ function refresh(){
+   const p=buildPlan(); summaryEl.textContent=summary(); jsonEl.value=JSON.stringify(p,null,2);
+   dirty.textContent='LIVE • '+new Date().toLocaleTimeString();
+ }
+ function open(){drawer.classList.add('open');refresh()}
+ function close(){drawer.classList.remove('open')}
+ document.getElementById('planFloat').onclick=open; document.getElementById('planClose').onclick=close;
+ document.getElementById('planRefresh').onclick=refresh;
+ document.querySelectorAll('[data-plan-tab]').forEach(b=>b.onclick=()=>{
+   document.querySelectorAll('[data-plan-tab]').forEach(x=>x.classList.toggle('active',x===b));
+   const j=b.dataset.planTab==='json'; jsonEl.classList.toggle('hidden',!j);summaryEl.classList.toggle('hidden',j);refresh();
+ });
+ document.getElementById('planSave').onclick=()=>{
+   refresh(); const p=buildPlan(), blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});
+   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+   a.download='AllBot_Full_Plan_'+new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')+'.json';a.click();
+   setTimeout(()=>URL.revokeObjectURL(a.href),500);
+ };
+ document.getElementById('planCopy').onclick=async()=>{refresh();try{await navigator.clipboard.writeText(jsonEl.value);dirty.textContent='JSON COPIED'}catch(e){jsonEl.select();document.execCommand('copy')}};
+ // Existing SETTINGS SUMMARY footer button now opens the real full-plan drawer.
+ const old=document.getElementById('popupTestBtn');
+ if(old) old.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();open()},true);
+ // Live update whenever any full-console setting changes.
+ document.addEventListener('change',e=>{if(e.target.matches('select,input'))refresh()});
+ document.getElementById('sentience')?.addEventListener('input',refresh);
+ // Mode buttons need live plan refresh too.
+ document.querySelectorAll('.modes button').forEach(b=>b.addEventListener('click',()=>setTimeout(refresh,0)));
+ refresh();
+})();
+</script>
+
+<script>
+(function(){
+ const primary=document.getElementById('primaryStrategy');
+ const bb=document.getElementById('bollingerCoreCard');
+ const plain=document.getElementById('strategyPlainEnglish');
+ const bollRow=document.getElementById('filterBollingerRow');
+ const rsiRow=document.getElementById('filterRsiRow');
+ const divRow=document.getElementById('filterRsiDivRow');
+ const rsiWraps=['filterRsiPeriodWrap','filterRsiOBWrap','filterRsiOSWrap'].map(id=>document.getElementById(id));
+ function applyStrategy(){
+   const isBB=primary.value==='BOLLINGER_MEAN_REVERSION';
+   bb.style.display=isBB?'block':'none';
+   bollRow.style.display=isBB?'none':'';
+   rsiRow.style.display=isBB?'':'none';
+   divRow.style.display=isBB?'':'none';
+   rsiWraps.forEach(x=>x.style.display=isBB?'':'none');
+   plain.textContent=isBB
+     ? 'Trades extensions outside a Bollinger Band and looks for confirmed price reversal back toward the mean.'
+     : 'Finds momentum divergence at confirmed price pivots, then waits for reversal structure before entry.';
+   document.getElementById('filterBollinger').checked = isBB ? false : document.getElementById('filterBollinger').checked;
+   // Update the live plan panel after strategy switch.
+   document.getElementById('planRefresh')?.click();
+ }
+ primary.addEventListener('change',applyStrategy);
+ document.getElementById('filterRsi')?.addEventListener('change',e=>{
+   rsiWraps.forEach(x=>x.style.display=e.target.checked?'':'none');
+ });
+ // Give the new info buttons useful lightweight explanations even if old help registry doesn't know them.
+ const help={
+  primary_strategy_library:'The primary strategy creates the trade candidate. Optional filters only accept or reject candidates; they do not replace the primary setup.',
+  bollinger_core:'Bollinger Bands — Mean Reversion looks for price extension beyond a band, rejection/return, and optional price-structure confirmation before entry.',
+  strategy_filters:'Only checked filters participate. RSI, Bollinger, RVOL, Volume and VWAP are optional context depending on the selected primary strategy.',
+  trade_quality_filters:'Remaining ATR, spread/liquidity, market-data validity, halt checks and ownership safety evaluate whether a technically valid setup is safe/worth executing.'
+ };
+ document.querySelectorAll('[data-help]').forEach(b=>{
+   if(help[b.dataset.help]){
+     b.title=help[b.dataset.help];
+     b.addEventListener('click',e=>{
+       // If the old popup system does not already supply content, show a compact native explanation.
+       setTimeout(()=>{ if(!document.querySelector('.modal.show,.popup.show')) b.title=help[b.dataset.help]; },0);
+     });
+   }
+ });
+ applyStrategy();
+})();
+</script>
+
+
+<style>
+#v112HelpModal{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:30000;display:none;align-items:center;justify-content:center;padding:20px}
+#v112HelpModal.show{display:flex}
+#v112HelpBox{width:min(620px,92vw);background:#101c28;border:1px solid #4c7191;border-radius:8px;box-shadow:0 20px 70px rgba(0,0,0,.6);overflow:hidden}
+#v112HelpHead{display:flex;align-items:center;padding:12px 14px;background:#172b3e;border-bottom:1px solid #34516a}
+#v112HelpTitle{font-weight:800;letter-spacing:.04em}
+#v112HelpClose{margin-left:auto;width:32px;height:30px}
+#v112HelpBody{padding:16px;line-height:1.55;color:#dce8f2;font-size:13px}
+</style>
+<div id="v112HelpModal">
+ <div id="v112HelpBox">
+  <div id="v112HelpHead"><span id="v112HelpTitle">INFO</span><button id="v112HelpClose">×</button></div>
+  <div id="v112HelpBody"></div>
+ </div>
+</div>
+<script>
+(function(){
+ const HELP={
+  primary_strategy_library:{
+   title:'PRIMARY STRATEGY',
+   body:'Selects the market pattern AllBot is trying to capitalize on. The primary strategy creates the candidate setup. Optional filters can accept or reject that setup, but do not replace its core logic.'
+  },
+  bollinger_core:{
+   title:'BOLLINGER BANDS — MEAN REVERSION',
+   body:'Looks for price becoming extended relative to its Bollinger Bands, then rejecting that extension and beginning a move back toward the mean. Band period, deviation, trigger and reversal confirmation define the setup.'
+  },
+  strategy_filters:{
+   title:'OPTIONAL STRATEGY FILTERS',
+   body:'Only checked filters participate. These provide additional technical evidence around the primary pattern. For RSI Divergence, Bollinger can be optional context. For Bollinger Mean Reversion, RSI or RSI Divergence can be optional context. RVOL, Volume and VWAP can also be used without becoming the primary strategy.'
+  },
+  trade_quality_filters:{
+   title:'TRADE QUALITY / EXECUTION FILTERS',
+   body:'These are deliberately separate from technical-analysis filters. Remaining ATR asks whether enough expected movement remains. Spread and liquidity protect execution quality. Market-data and halt checks prevent decisions from bad inputs. Ownership safety prevents AllBot from interfering with positions owned by another bot.'
+  }
+ };
+ const modal=document.getElementById('v112HelpModal'), title=document.getElementById('v112HelpTitle'), body=document.getElementById('v112HelpBody');
+ function close(){modal.classList.remove('show')}
+ document.getElementById('v112HelpClose').onclick=close;
+ modal.addEventListener('click',e=>{if(e.target===modal)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ document.querySelectorAll('.info-btn[data-help]').forEach(btn=>{
+   const h=HELP[btn.dataset.help];
+   if(!h) return; // old v0.9.4 info buttons remain handled by the original popup system
+   btn.addEventListener('click',function(e){
+     e.preventDefault(); e.stopImmediatePropagation();
+     title.textContent=h.title; body.textContent=h.body; modal.classList.add('show');
+   },true);
+ });
+})();
+</script>
+
+
+<script>
+(function(){
+ const val=(id,d=null)=>{const e=document.getElementById(id);return !e?d:(e.type==='checkbox'?e.checked:e.value)};
+ function enginePlan(){
+  const pid=val('primaryStrategy','RSI_DIVERGENCE_REVERSAL'), bb=pid==='BOLLINGER_MEAN_REVERSION';
+  return {
+   schema_version:"allbot.engine.plan.v1.2",
+   mode:(document.querySelector('.modes button.active')?.textContent||'OBSERVE').trim().toUpperCase(),
+   expected_move:bb?"MEAN_REVERSION":"TREND_CHANGE_REVERSAL",
+   pattern:{id:pid,direction:val('strategyDirectionV11','Long + Short'),
+    core:bb?{bollinger:{period:+val('bbPeriod',20),stddev:+val('bbStd',2),basis:val('bbBasis','SMA'),
+      trigger:val('bbTrigger'),mean_target:val('bbMeanTarget')},
+      confirmation:{method:val('bbConfirmation'),price_turn:!!val('bbRequireTurn',true),
+      hl_lh:!!val('bbRequireStructure',true),structure_break:!!val('bbRequireBreak',true)}}:
+     {rsi_divergence:{period:14,confirmed_price_pivots:true,established_trend_required:true,
+      sequence:"DIVERGENCE → PRICE TURN → HL/LH → STRUCTURE BREAK"}}},
+   filters:{strategy:{bollinger:!!val('filterBollinger',false),rsi_level:!!val('filterRsi',false),
+      rsi_divergence:!!val('filterRsiDivergence',false),rvol:!!val('filterRvol',false),
+      volume:!!val('filterVolume',false),vwap:!!val('filterVwap',false),time_of_day:!!val('filterTime',false)},
+    trade_quality:{remaining_atr:!!val('qualityRemainingAtr',true),spread_liquidity:!!val('qualitySpread',true),
+      valid_market_data:!!val('qualityMarketData',true),reject_halted:!!val('qualityHalt',true),ownership_safety:true}},
+   sentience:{level:+val('sentience',0),hard_boundaries_cannot_be_overridden:true},
+   safety:{external_ownership_protection:true,validate_before_start:true,live_requires_explicit_authorization:true}
+  };
+ }
+ window.AllBotEnginePlan=enginePlan;
+ const a=document.querySelector('.plan-actions');
+ if(a&&!document.getElementById('saveEnginePlan')){
+  const b=document.createElement('button');b.id='saveEnginePlan';b.textContent='SAVE ENGINE PLAN';
+  b.onclick=()=>{const blob=new Blob([JSON.stringify(enginePlan(),null,2)],{type:'application/json'});
+   const x=document.createElement('a');x.href=URL.createObjectURL(blob);x.download='AllBot_Engine_Plan.json';x.click();
+   setTimeout(()=>URL.revokeObjectURL(x.href),500)};
+  a.insertBefore(b,a.firstChild);
+ }
+})();
+</script>
+</body>
+</html>
