@@ -50,12 +50,121 @@
 
 <div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium intelligence visible but locked</div></div><button class="buildbtn" id="buildBtn">BUILD MY TRADING BOT</button></div>
 </div>
+
 <script>
 const tabs=[...document.querySelectorAll('.tab')];
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===id));if(id==='review') renderReview();window.scrollTo({top:0,behavior:'smooth'})}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===id));
+  if(id==='review') renderReview();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 tabs.forEach(t=>t.onclick=()=>showPage(t.dataset.page));
-document.getElementById('addRule').onclick=()=>{const d=document.createElement('div');d.className='rule';d.innerHTML=`<select name="indicator"><option>RSI</option><option>MACD</option><option>EMA</option><option>SMA</option><option>VWAP</option><option>Price</option><option>ATR</option><option>Volume</option><option>RVOL</option><option>Bollinger Bands</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="50" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button>`;document.getElementById('rules').appendChild(d)};
-function plan(){const one=n=>document.querySelector(`[name="${n}"]`);const val=n=>one(n)?.value;const checked=n=>!!one(n)?.checked;const rules=[...document.querySelectorAll('#rules .rule')].map(r=>({indicator:r.querySelector('[name=indicator]').value,condition:r.querySelector('[name=operator]').value,period:Number(r.querySelector('[name=period]').value),value:Number(r.querySelector('[name=value]').value)}));return {schema:'buildatradingbot.plan.v1.simple',bot_name:val('bot_name'),symbol:val('symbol').toUpperCase(),direction:val('direction'),timeframe:val('timeframe'),entry:{rules,require_all:checked('all_rules'),confirmed_bar:checked('confirmed_bar'),trend_filter:checked('trend_filter'),rvol_filter:checked('rvol_filter'),min_price:Number(val('min_price')),min_volume:Number(val('min_volume')),min_rvol:Number(val('min_rvol'))},risk:{quantity:Number(val('qty')),max_position:Number(val('max_position')),max_trade_risk:Number(val('max_trade_risk')),one_share_override:val('one_share'),initial_stop:{type:val('stop_type'),value:Number(val('stop_value')),atr_period:Number(val('atr_period'))},trailing:{enabled:val('trail_enabled'),type:val('trail_type'),distance:Number(val('trail_distance')),activate:val('trail_activate'),activation_value:Number(val('trail_activate_value'))}},exit:{indicator:val('exit_indicator'),condition:val('exit_operator'),period:Number(val('exit_period')),value:Number(val('exit_value'))},broker:{name:val('broker'),mode:val('mode'),host:val('host'),port:Number(val('port')),client_id:Number(val('client_id'))},safety:{max_daily_trades:Number(val('max_daily_trades')),max_daily_loss:Number(val('max_daily_loss')),daily_profit_stop:Number(val('daily_profit_stop')),hard_exit:val('hard_exit'),intraday_only:checked('intraday_only'),cancel_orders:checked('cancel_orders'),decisions_csv:checked('decisions_csv')},hive:{share_anonymized_data:checked('hive_optin')},premium:{enabled:false}}}
-function renderReview(){document.getElementById('reviewText').textContent=JSON.stringify(plan(),null,2)}
-document.getElementById('buildBtn').onclick=()=>{showPage('review');renderReview();alert('Builder preview ready. Connect this button to the proven BuildATradingBot cloud build endpoint when the v1 plan mapping is finalized.')};
-</script></body></html>
+
+document.getElementById('addRule').onclick=()=>{
+  const d=document.createElement('div');
+  d.className='rule';
+  d.innerHTML=`<select name="indicator"><option>RSI</option><option>MACD</option><option>EMA</option><option>SMA</option><option>VWAP</option><option>Price</option><option>ATR</option><option>Volume</option><option>RVOL</option><option>Bollinger Bands</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="50" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById('rules').appendChild(d);
+};
+
+function plan(){
+  const one=n=>document.querySelector(`[name="${n}"]`);
+  const val=n=>one(n)?.value;
+  const checked=n=>!!one(n)?.checked;
+
+  const rules=[...document.querySelectorAll('#rules .rule')].map(r=>({
+    indicator:r.querySelector('[name=indicator]').value,
+    condition:r.querySelector('[name=operator]').value,
+    period:Number(r.querySelector('[name=period]').value),
+    value:Number(r.querySelector('[name=value]').value)
+  }));
+
+  return {
+    schema:'algobotbuilder.plan.v1.simple',
+    bot_name:val('bot_name'),
+    symbol:val('symbol').toUpperCase(),
+    direction:val('direction'),
+    timeframe:val('timeframe'),
+
+    entry:{
+      rules,
+      require_all:checked('all_rules'),
+      confirmed_bar:checked('confirmed_bar'),
+      trend_filter:checked('trend_filter'),
+      rvol_filter:checked('rvol_filter'),
+      min_price:Number(val('min_price')),
+      min_volume:Number(val('min_volume')),
+      min_rvol:Number(val('min_rvol'))
+    },
+
+    risk:{
+      quantity:Number(val('qty')),
+      max_position:Number(val('max_position')),
+      max_trade_risk:Number(val('max_trade_risk')),
+      one_share_override:val('one_share'),
+
+      initial_stop:{
+        type:val('stop_type'),
+        value:Number(val('stop_value')),
+        atr_period:Number(val('atr_period'))
+      },
+
+      trailing:{
+        enabled:val('trail_enabled'),
+        type:val('trail_type'),
+        distance:Number(val('trail_distance')),
+        activate:val('trail_activate'),
+        activation_value:Number(val('trail_activate_value'))
+      }
+    },
+
+    exit:{
+      indicator:val('exit_indicator'),
+      condition:val('exit_operator'),
+      period:Number(val('exit_period')),
+      value:Number(val('exit_value'))
+    },
+
+    broker:{
+      name:val('broker'),
+      mode:val('mode'),
+      host:val('host'),
+      port:Number(val('port')),
+      client_id:Number(val('client_id'))
+    },
+
+    safety:{
+      max_daily_trades:Number(val('max_daily_trades')),
+      max_daily_loss:Number(val('max_daily_loss')),
+      daily_profit_stop:Number(val('daily_profit_stop')),
+      hard_exit:val('hard_exit'),
+      intraday_only:checked('intraday_only'),
+      cancel_orders:checked('cancel_orders'),
+      decisions_csv:checked('decisions_csv')
+    },
+
+    hive:{
+      share_anonymized_data:checked('hive_optin')
+    },
+
+    premium:{
+      enabled:false
+    }
+  };
+}
+
+function renderReview(){
+  document.getElementById('reviewText').textContent=JSON.stringify(plan(),null,2);
+}
+
+document.getElementById('buildBtn').onclick=()=>{
+  showPage('review');
+  renderReview();
+  alert('Builder preview ready. Connect this button to the proven BuildATradingBot cloud build endpoint when the v1 plan mapping is finalized.');
+};
+</script>
+</body>
+</html>
