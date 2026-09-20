@@ -101,7 +101,9 @@
       <div id="buildStatus" class="build-status">
         <div id="buildSpinner" class="build-spinner"></div>
         <div id="buildStatusTitle" class="build-status-title">BUILDING YOUR ALGOBOT</div>
-        <div id="buildStatusText" class="build-status-text">Submitting configuration...</div>
+        <div id="buildStatusText" class="build-status-text">
+  Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
+</div>
       </div>
     </div>
   </div>
@@ -242,6 +244,48 @@ function setBuildState(kind,title,message){
   textEl.textContent=message;
 }
 
+  let buildProgressTimer = null;
+
+function startBuildProgressMessages(){
+  const textEl = document.getElementById('buildStatusText');
+
+  const messages = [
+    'Preparing your AlgoBot configuration...',
+    'Building your trading engine...',
+    'Adding your strategy rules and risk controls...',
+    'Building your local AlgoBot dashboard...',
+    'Packaging the AlgoBot application...',
+    'Creating your Windows installer...',
+    'Finishing up — your download should be ready shortly...'
+  ];
+
+  let index = 0;
+
+  textEl.textContent =
+    'Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
+
+  if(buildProgressTimer){
+    clearInterval(buildProgressTimer);
+  }
+
+  buildProgressTimer = setInterval(() => {
+    if(index < messages.length){
+      textEl.textContent = messages[index];
+      index++;
+    } else {
+      textEl.textContent =
+        'Still working — larger builds can take a little longer. Please keep this page open.';
+    }
+  }, 30000);
+}
+
+function stopBuildProgressMessages(){
+  if(buildProgressTimer){
+    clearInterval(buildProgressTimer);
+    buildProgressTimer = null;
+  }
+}
+  
 async function buildPlan(){
   const buildButton=document.getElementById('buildBtn');
 
@@ -289,7 +333,8 @@ async function buildPlan(){
     }
 
     const buildId=result.build_id;
-    setBuildState('building','BUILDING YOUR ALGOBOT','Windows build started. Building installer...');
+   setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+startBuildProgressMessages();
 
     while(true){
       await new Promise(resolve=>setTimeout(resolve,5000));
