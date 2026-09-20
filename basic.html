@@ -94,7 +94,7 @@
 
       <div class="note">The installer contains the trading application and required runtime components. You do not need the Python source code to run your bot.</div>
 
-      <div style="display:flex;justify-content:center;margin-top:22px;">
+      <div id="turnstileWrap" style="display:flex;justify-content:center;margin-top:22px;">
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx"></div>
       </div>
 
@@ -285,6 +285,16 @@ function stopBuildProgressMessages(){
     buildProgressTimer = null;
   }
 }
+
+function hideTurnstile(){
+  const wrap=document.getElementById('turnstileWrap');
+  if(wrap) wrap.style.display='none';
+}
+
+function showTurnstile(){
+  const wrap=document.getElementById('turnstileWrap');
+  if(wrap) wrap.style.display='flex';
+}
   
 async function buildPlan(){
   const buildButton=document.getElementById('buildBtn');
@@ -333,8 +343,9 @@ async function buildPlan(){
     }
 
     const buildId=result.build_id;
-   setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
-startBuildProgressMessages();
+   hideTurnstile();
+    setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+    startBuildProgressMessages();
 
     while(true){
       await new Promise(resolve=>setTimeout(resolve,5000));
@@ -350,6 +361,7 @@ startBuildProgressMessages();
       }
 
       if(status.ready){
+        stopBuildProgressMessages();
         setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
         document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
 
@@ -365,6 +377,8 @@ startBuildProgressMessages();
     }
   }catch(error){
     console.error(error);
+    stopBuildProgressMessages();
+    showTurnstile();
     setBuildState('failed','BOT BUILD FAILED',error.message);
 
     buildButton.disabled=false;
