@@ -2303,7 +2303,7 @@ plan.turnstile_token=turnstileToken;
 
        statusEl.innerHTML=
          '<b>BUILD STARTED</b><br>' +
-         'Submitting your Premium AlgoBot configuration...';
+         'Submitting your Premium BuildTradingBots configuration...';
 
        try{
 
@@ -2333,12 +2333,91 @@ plan.turnstile_token=turnstileToken;
            );
          }
 
+         const buildId=data.build_id;
+         const commitSha=data.commit_sha;
+
+         if(!buildId || !commitSha){
+           throw new Error(
+             'Build started but build tracking information was not returned.'
+           );
+         }
+
          statusEl.innerHTML=
            '<b>✓ BUILD STARTED</b><br>' +
-           'Your Premium AlgoBot is being built.';
+           'Your Premium BuildTradingBots bot is being built.';
 
          buildBtn.textContent=
-           'BUILD STARTED';
+           'BUILDING...';
+
+         while(true){
+
+           await new Promise(
+             resolve=>setTimeout(resolve,5000)
+           );
+
+           const statusResponse=
+             await fetch(
+               PREMIUM_WORKER +
+               '/build/status?id=' +
+               encodeURIComponent(buildId) +
+               '&sha=' +
+               encodeURIComponent(commitSha)
+             );
+
+           const status=
+             await statusResponse.json();
+
+           if(
+             !statusResponse.ok ||
+             !status.ok
+           ){
+             throw new Error(
+               status.error ||
+               'Could not check build status.'
+             );
+           }
+
+           if(status.ready){
+
+             statusEl.classList.remove(
+               'payment-fail',
+               'payment-pending'
+             );
+
+             statusEl.classList.add(
+               'payment-success'
+             );
+
+             statusEl.innerHTML=
+               '<b>✓ YOUR PREMIUM BOT IS READY</b><br>' +
+               'Installer ready to download.';
+
+             buildBtn.disabled=false;
+
+             buildBtn.textContent=
+               'DOWNLOAD PREMIUM BOT';
+
+             buildBtn.onclick=()=>{
+               buildBtn.textContent=
+                 '✓ DOWNLOAD STARTED';
+
+               window.location.href=
+                 PREMIUM_WORKER +
+                 '/download?id=' +
+                 encodeURIComponent(buildId);
+             };
+
+             return;
+           }
+
+           if(status.failed){
+
+             throw new Error(
+               status.error ||
+               'Your Premium BuildTradingBots bot could not be built. Please try again.'
+             );
+           }
+         }
 
        }catch(error){
 
