@@ -353,19 +353,25 @@ async function buildPlan(){
       throw new Error(result.error || 'The builder returned an error.');
     }
 
-    const buildId=result.build_id;
-   hideTurnstile();
-    setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
-    startBuildProgressMessages();
+   const buildId=result.build_id;
+const commitSha=result.commit_sha;
 
-    while(true){
-      await new Promise(resolve=>setTimeout(resolve,5000));
+hideTurnstile();
+setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+startBuildProgressMessages();
 
-      const statusResponse=await fetch(
-        WORKER+'/status?id='+encodeURIComponent(buildId)
-      );
+while(true){
+  await new Promise(resolve=>setTimeout(resolve,5000));
 
-      const status=await statusResponse.json();
+  const statusResponse=await fetch(
+    WORKER +
+    '/build/status?id=' +
+    encodeURIComponent(buildId) +
+    '&sha=' +
+    encodeURIComponent(commitSha)
+  );
+
+  const status=await statusResponse.json();
 
       if(!statusResponse.ok || !status.ok){
         throw new Error(status.error || 'Could not check build status.');
