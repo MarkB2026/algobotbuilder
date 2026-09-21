@@ -2322,7 +2322,9 @@ This is the configuration contract for review; engine support for each field mus
       const plan=enginePlan();
 
 const turnstileToken =
-  window.turnstile?.getResponse?.();
+  document.querySelector(
+    '[name="cf-turnstile-response"]'
+  )?.value;
 
 if(!turnstileToken){
   throw new Error(
