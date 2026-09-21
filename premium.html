@@ -1070,7 +1070,39 @@ premiumBuildBtn.textContent =
     }
 
     premiumQuote = data;
+// ------------------------------------------------------------
+// BETA PAYMENT BYPASS
+// ------------------------------------------------------------
+// The Worker is the authority. During beta it returns
+// payment_required:false, so allow the Premium build without
+// requiring a Bitcoin transaction.
+//
+// When PREMIUM_PAYMENT_REQUIRED is later changed to true in the
+// Worker, this bypass disappears automatically and the button
+// remains locked until /premium/verify returns verified:true.
+// ------------------------------------------------------------
 
+if (data.payment_required === false) {
+
+  const premiumBuildBtn =
+    document.getElementById('premiumBetaBuildBtn');
+
+  premiumBuildBtn.disabled = false;
+  premiumBuildBtn.textContent =
+    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+
+  statusEl.classList.remove(
+    'payment-fail',
+    'payment-pending'
+  );
+
+  statusEl.classList.add('payment-success');
+
+  statusEl.innerHTML =
+    '<b>✓ BETA ACCESS ACTIVE</b><br>' +
+    'Bitcoin payment is currently waived during beta.';
+
+}
     localStorage.setItem(
       'algobot_premium_quote',
       JSON.stringify({
