@@ -2346,14 +2346,37 @@ plan.turnstile_token=turnstileToken;
            '<b>✓ BUILD STARTED</b><br>' +
            'Your Premium bot is being built.';
 
-         buildBtn.textContent=
-           'BUILDING BOT...';
+        buildBtn.textContent=
+  'BUILDING...';
 
-         while(true){
+// Cosmetic progress messages only.
+// Actual completion is still controlled by /build/status.
+const buildProgressMessages = [
+  'Preparing your custom bot files...',
+  'Building your trading application...',
+  'Compiling strategy and runtime components...',
+  'Packaging your Windows application...',
+  'Building the installer...',
+  'Finalizing your download...',
+  'Almost there — completing your build...'
+];
 
-           await new Promise(
-             resolve=>setTimeout(resolve,5000)
-           );
+let buildProgressIndex = 0;
+
+const buildProgressTimer = setInterval(() => {
+  statusEl.innerHTML =
+    '<b>BUILDING YOUR PREMIUM BOT</b><br>' +
+    buildProgressMessages[buildProgressIndex];
+
+  buildProgressIndex =
+    (buildProgressIndex + 1) % buildProgressMessages.length;
+}, 15000);
+
+while(true){
+
+  await new Promise(
+    resolve=>setTimeout(resolve,5000)
+  );
 
            const statusResponse=
              await fetch(
