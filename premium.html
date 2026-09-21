@@ -1020,13 +1020,12 @@ body.plan-open .main{padding-right:14px}
         </div>
       </div>
 
-      <div class="popup-actions">
-
-        <button id="premiumBetaBuildBtn"
-                type="button"
-                class="start">
-          BUILD PREMIUM ALGOBOT — BETA ACCESS
-        </button>
+      <button id="premiumBetaBuildBtn"
+        type="button"
+        class="start"
+        disabled>
+  VERIFY PAYMENT TO BUILD
+</button>
 
       </div>
 
@@ -1045,7 +1044,12 @@ async function loadPremiumBitcoinQuote() {
   const amountEl = document.getElementById('premiumBtcAmount');
   const addressEl = document.getElementById('premiumBtcAddress');
   const timerEl = document.getElementById('premiumQuoteTimer');
+const premiumBuildBtn =
+  document.getElementById('premiumBetaBuildBtn');
 
+premiumBuildBtn.disabled = true;
+premiumBuildBtn.textContent =
+  'VERIFY PAYMENT TO BUILD';
   statusEl.classList.remove(
   'payment-fail',
   'payment-success',
