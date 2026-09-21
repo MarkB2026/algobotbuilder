@@ -2075,38 +2075,330 @@ This is the configuration contract for review; engine support for each field mus
 
 <script>
 (function(){
- const val=(id,d=null)=>{const e=document.getElementById(id);return !e?d:(e.type==='checkbox'?e.checked:e.value)};
+
+ const val=(id,d=null)=>{
+   const e=document.getElementById(id);
+   return !e ? d : (e.type==='checkbox' ? e.checked : e.value);
+ };
+
  function enginePlan(){
-  const pid=val('primaryStrategy','RSI_DIVERGENCE_REVERSAL'), bb=pid==='BOLLINGER_MEAN_REVERSION';
+
+  const pid=val(
+    'primaryStrategy',
+    'RSI_DIVERGENCE_REVERSAL'
+  );
+
+  const bb=pid==='BOLLINGER_MEAN_REVERSION';
+
   return {
-   schema_version:"allbot.engine.plan.v1.2",
-   mode:(document.querySelector('.modes button.active')?.textContent||'OBSERVE').trim().toUpperCase(),
-   expected_move:bb?"MEAN_REVERSION":"TREND_CHANGE_REVERSAL",
-   pattern:{id:pid,direction:val('strategyDirectionV11','Long + Short'),
-    core:bb?{bollinger:{period:+val('bbPeriod',20),stddev:+val('bbStd',2),basis:val('bbBasis','SMA'),
-      trigger:val('bbTrigger'),mean_target:val('bbMeanTarget')},
-      confirmation:{method:val('bbConfirmation'),price_turn:!!val('bbRequireTurn',true),
-      hl_lh:!!val('bbRequireStructure',true),structure_break:!!val('bbRequireBreak',true)}}:
-     {rsi_divergence:{period:14,confirmed_price_pivots:true,established_trend_required:true,
-      sequence:"DIVERGENCE → PRICE TURN → HL/LH → STRUCTURE BREAK"}}},
-   filters:{strategy:{bollinger:!!val('filterBollinger',false),rsi_level:!!val('filterRsi',false),
-      rsi_divergence:!!val('filterRsiDivergence',false),rvol:!!val('filterRvol',false),
-      volume:!!val('filterVolume',false),vwap:!!val('filterVwap',false),time_of_day:!!val('filterTime',false)},
-    trade_quality:{remaining_atr:!!val('qualityRemainingAtr',true),spread_liquidity:!!val('qualitySpread',true),
-      valid_market_data:!!val('qualityMarketData',true),reject_halted:!!val('qualityHalt',true),ownership_safety:true}},
-   sentience:{level:+val('sentience',0),hard_boundaries_cannot_be_overridden:true},
-   safety:{external_ownership_protection:true,validate_before_start:true,live_requires_explicit_authorization:true}
+
+   schema_version:"allbot.engine.plan.v1.4.9",
+
+   plan_name:"AllBot Premium Plan",
+
+   mode:(
+     document.querySelector('.modes button.active')?.textContent
+     ||'OBSERVE'
+   ).trim().toUpperCase(),
+
+   expected_move:
+     bb
+       ?"MEAN_REVERSION"
+       :"TREND_CHANGE_REVERSAL",
+
+   pattern:{
+     id:pid,
+     direction:val(
+       'strategyDirectionV11',
+       'Long + Short'
+     ),
+
+     core:
+       bb
+       ?{
+          bollinger:{
+            period:+val('bbPeriod',20),
+            stddev:+val('bbStd',2),
+            basis:val('bbBasis','SMA'),
+            trigger:val('bbTrigger'),
+            mean_target:val('bbMeanTarget')
+          },
+          confirmation:{
+            method:val('bbConfirmation'),
+            price_turn:!!val(
+              'bbRequireTurn',
+              true
+            ),
+            hl_lh:!!val(
+              'bbRequireStructure',
+              true
+            ),
+            structure_break:!!val(
+              'bbRequireBreak',
+              true
+            )
+          }
+        }
+       :{
+          rsi_divergence:{
+            period:14,
+            confirmed_price_pivots:true,
+            established_trend_required:true,
+            sequence:
+              "DIVERGENCE → PRICE TURN → HL/LH → STRUCTURE BREAK"
+          }
+        }
+   },
+
+   scanner:{
+     symbols:[
+       "SPY",
+       "IWM",
+       "TSLA",
+       "MSTR"
+     ],
+     interval_seconds:30,
+     rvol_lookback:20,
+     minimum_rvol:1.0,
+     history_bars:220
+   },
+
+   execution:{
+     max_spread_dollars:0.10,
+     max_spread_pct:0.15
+   },
+
+   behaviour:{
+     position_dollars:10000,
+     one_share_override:
+       !!document.getElementById(
+         "oneShareOverride"
+       )?.checked,
+     max_trade_risk:60,
+     sink_or_swim_minutes:3
+   },
+
+   broker:{
+     type:"IBKR",
+     connection_type:
+       val(
+         "ibkrConnectionType",
+         "TWS"
+       ),
+     host:
+       val(
+         "ibkrHost",
+         "127.0.0.1"
+       )==="localhost"
+         ?"localhost"
+         :"127.0.0.1",
+     port:+val(
+       "ibkrPort",
+       (
+         (
+           document.querySelector(
+             '.modes button.active'
+           )?.textContent
+           ||'PAPER'
+         ).trim().toUpperCase()==='PAPER'
+           ?7497
+           :7496
+       )
+     ),
+     client_id:+val(
+       "ibkrClientId",
+       71
+     ),
+     timeout:+val(
+       "ibkrTimeout",
+       10
+     )
+   },
+
+   filters:{
+     strategy:{
+       bollinger:
+         !!val(
+           'filterBollinger',
+           false
+         ),
+       rsi_level:
+         !!val(
+           'filterRsi',
+           false
+         ),
+       rsi_divergence:
+         !!val(
+           'filterRsiDivergence',
+           false
+         ),
+       rvol:
+         !!val(
+           'filterRvol',
+           false
+         ),
+       volume:
+         !!val(
+           'filterVolume',
+           false
+         ),
+       vwap:
+         !!val(
+           'filterVwap',
+           false
+         ),
+       time_of_day:
+         !!val(
+           'filterTime',
+           false
+         )
+     },
+
+     trade_quality:{
+       remaining_atr:
+         !!val(
+           'qualityRemainingAtr',
+           true
+         ),
+       spread_liquidity:
+         !!val(
+           'qualitySpread',
+           true
+         ),
+       valid_market_data:
+         !!val(
+           'qualityMarketData',
+           true
+         ),
+       reject_halted:
+         !!val(
+           'qualityHalt',
+           true
+         ),
+       ownership_safety:true
+     }
+   },
+
+   sentience:{
+     level:+val(
+       'sentience',
+       0
+     ),
+     hard_boundaries_cannot_be_overridden:true
+   },
+
+   safety:{
+     external_ownership_protection:true,
+     validate_before_start:true,
+     live_requires_explicit_authorization:true
+   }
+
   };
  }
+
  window.AllBotEnginePlan=enginePlan;
- const a=document.querySelector('.plan-actions');
- if(a&&!document.getElementById('saveEnginePlan')){
-  const b=document.createElement('button');b.id='saveEnginePlan';b.textContent='SAVE ENGINE PLAN';
-  b.onclick=()=>{const blob=new Blob([JSON.stringify(enginePlan(),null,2)],{type:'application/json'});
-   const x=document.createElement('a');x.href=URL.createObjectURL(blob);x.download='AllBot_Engine_Plan.json';x.click();
-   setTimeout(()=>URL.revokeObjectURL(x.href),500)};
-  a.insertBefore(b,a.firstChild);
+
+
+ // ============================================================
+ // PREMIUM BUILD BUTTON
+ // ============================================================
+
+ const buildBtn=
+   document.getElementById(
+     'premiumBetaBuildBtn'
+   );
+
+ if(buildBtn){
+
+   buildBtn.addEventListener(
+     'click',
+     async function(){
+
+       const statusEl=
+         document.getElementById(
+           'premiumPaymentStatus'
+         );
+
+       const plan=enginePlan();
+
+       buildBtn.disabled=true;
+       buildBtn.textContent='BUILDING...';
+
+       statusEl.classList.remove(
+         'payment-fail',
+         'payment-pending'
+       );
+
+       statusEl.classList.add(
+         'payment-success'
+       );
+
+       statusEl.innerHTML=
+         '<b>BUILD STARTED</b><br>' +
+         'Submitting your Premium AlgoBot configuration...';
+
+       try{
+
+         const response=
+           await fetch(
+             PREMIUM_WORKER + '/',
+             {
+               method:'POST',
+               headers:{
+                 'Content-Type':
+                   'application/json'
+               },
+               body:JSON.stringify(plan)
+             }
+           );
+
+         const data=
+           await response.json();
+
+         if(
+           !response.ok ||
+           !data.ok
+         ){
+           throw new Error(
+             data.error ||
+             'Premium build request failed.'
+           );
+         }
+
+         statusEl.innerHTML=
+           '<b>✓ BUILD STARTED</b><br>' +
+           'Your Premium AlgoBot is being built.';
+
+         buildBtn.textContent=
+           'BUILD STARTED';
+
+       }catch(error){
+
+         console.error(error);
+
+         statusEl.classList.remove(
+           'payment-success'
+         );
+
+         statusEl.classList.add(
+           'payment-fail'
+         );
+
+         statusEl.innerHTML=
+           '<b>BUILD ERROR</b><br>' +
+           error.message;
+
+         buildBtn.disabled=false;
+
+         buildBtn.textContent=
+           'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+       }
+
+     }
+   );
+
  }
+
 })();
 </script>
 </body>
