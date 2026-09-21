@@ -1305,6 +1305,8 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
  
      
 
+</script>
+
 <div id="popupBackdrop" class="popup-backdrop" aria-hidden="true">
   <div class="allbot-popup">
     <div class="popup-top">
@@ -2278,15 +2280,10 @@ if(!turnstileToken){
     'payment-success',
     'payment-pending'
   );
-
-  statusEl.classList.add(
-    'payment-fail'
-  );
-
+  statusEl.classList.add('payment-fail');
   statusEl.innerHTML =
     '<b>BUILD ERROR</b><br>' +
     'Please complete the security verification.';
-
   return;
 }
 
