@@ -90,6 +90,37 @@ select:hover,select:focus{
   margin-top:10px;padding:9px 11px;border-radius:8px;background:#162536;
   border:1px solid #324d66;font-size:12px;color:#dcecff
 }
+  .popup-state.payment-fail{
+  background:rgba(120,25,35,.28);
+  border-color:#ff4f5e;
+  color:#ffd9dd;
+  box-shadow:0 0 18px rgba(255,79,94,.10);
+}
+
+.popup-state.payment-fail b{
+  color:#ff6b78;
+}
+
+.popup-state.payment-success{
+  background:rgba(20,110,60,.28);
+  border-color:#42c77a;
+  color:#d9ffe9;
+  box-shadow:0 0 18px rgba(66,199,122,.10);
+}
+
+.popup-state.payment-success b{
+  color:#58e895;
+}
+
+.popup-state.payment-pending{
+  background:rgba(150,105,20,.22);
+  border-color:#d6a743;
+  color:#fff0c7;
+}
+
+.popup-state.payment-pending b{
+  color:#ffd36b;
+}
 .popup-actions{display:flex;justify-content:flex-end;gap:8px;padding-top:14px}
 .popup-actions button{min-width:105px}
 .popup-danger{border-color:#75434a!important;color:#ff9da5!important}
