@@ -2336,11 +2336,18 @@ plan.turnstile_token=turnstileToken;
          const buildId=data.build_id;
          const commitSha=data.commit_sha;
          
-// Build has been accepted — Turnstile is no longer needed.
+// Build has been accepted — payment/security UI is finished.
 const turnstileBox = document.querySelector('.cf-turnstile');
 
 if(turnstileBox){
   turnstileBox.style.display = 'none';
+}
+
+// Stop the Bitcoin quote countdown from changing the
+// completed build status later.
+if(premiumQuoteTimerInterval){
+  clearInterval(premiumQuoteTimerInterval);
+  premiumQuoteTimerInterval = null;
 }
          if(!buildId || !commitSha){
            throw new Error(
