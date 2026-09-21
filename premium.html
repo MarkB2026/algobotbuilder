@@ -2576,13 +2576,13 @@ statusEl.innerHTML =
       );
 
       const statusResponse =
-        await fetch(
-          PREMIUM_WORKER +
-          '/status?id=' +
-          encodeURIComponent(
-            buildId
-          )
-        );
+  await fetch(
+    PREMIUM_WORKER +
+    '/build/status?id=' +
+    encodeURIComponent(buildId) +
+    '&sha=' +
+    encodeURIComponent(data.commit_sha)
+  );
 
       const status =
         await statusResponse.json();
