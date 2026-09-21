@@ -1115,13 +1115,43 @@ if (data.payment_required === false) {
     );
 
     amountEl.textContent = data.required_btc + ' BTC';
-    addressEl.textContent = data.bitcoin_address;
+addressEl.textContent = data.bitcoin_address;
 
-    statusEl.innerHTML =
-      '<b>BITCOIN QUOTE READY</b><br>' +
-      'Send the exact amount shown below.';
+startPremiumQuoteCountdown(data.expires_at);
 
-    startPremiumQuoteCountdown(data.expires_at);
+// ------------------------------------------------------------
+// PAYMENT MODE
+// Worker is the authority.
+// ------------------------------------------------------------
+
+if (data.payment_required === false) {
+
+  // Beta: payment is waived.
+  premiumBuildBtn.disabled = false;
+  premiumBuildBtn.textContent =
+    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+
+  statusEl.classList.remove(
+    'payment-fail',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-success');
+
+  statusEl.innerHTML =
+    '<b>✓ BETA ACCESS ACTIVE</b><br>' +
+    'Bitcoin payment is currently waived during beta.';
+
+} else {
+
+  // Production: Bitcoin payment must be verified.
+  premiumBuildBtn.disabled = true;
+  premiumBuildBtn.textContent =
+    'VERIFY PAYMENT TO BUILD';
+
+  statusEl.innerHTML =
+    '<b>BITCOIN QUOTE READY</b><br>' +
+    'Send the exact amount shown below.';
+}
 
   } catch (error) {
     console.error(error);
