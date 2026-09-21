@@ -2319,7 +2319,18 @@ This is the configuration contract for review; engine support for each field mus
            'premiumPaymentStatus'
          );
 
-       const plan=enginePlan();
+      const plan=enginePlan();
+
+const turnstileToken =
+  window.turnstile?.getResponse?.();
+
+if(!turnstileToken){
+  throw new Error(
+    'Please complete the security verification.'
+  );
+}
+
+plan.turnstile_token=turnstileToken;
 
        buildBtn.disabled=true;
        buildBtn.textContent='BUILDING...';
