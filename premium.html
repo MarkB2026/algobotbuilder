@@ -1188,29 +1188,66 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
     const data = await response.json();
 
     if (data.verified) {
-      statusEl.innerHTML =
-        '<b>✓ PAYMENT VERIFIED</b><br>Premium payment confirmed.';
-    } else if (data.status === 'not_found') {
-      statusEl.innerHTML =
-        '<b>PAYMENT NOT FOUND</b><br>Transaction not found yet. Check the TXID and try again.';
-    } else if (data.status === 'waiting_confirmation') {
-      statusEl.innerHTML =
-        '<b>✓ PAYMENT FOUND</b><br>Waiting for Bitcoin confirmation...';
-    } else {
-      statusEl.innerHTML =
-        '<b>PAYMENT NOT VERIFIED</b><br>' +
-        (data.error || data.status || 'Please try again.');
-    }
+  statusEl.classList.remove(
+    'payment-fail',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-success');
 
-  } catch (error) {
-    console.error(error);
+  statusEl.innerHTML =
+    '<b>✓ PAYMENT VERIFIED</b><br>Premium payment confirmed.';
 
-    statusEl.innerHTML =
-      '<b>VERIFICATION ERROR</b><br>Unable to check the Bitcoin transaction.';
-  } finally {
-    verifyBtn.disabled = false;
-    verifyBtn.textContent = 'VERIFY PAYMENT';
+} else if (data.status === 'not_found') {
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-fail');
+
+  statusEl.innerHTML =
+    '<b>PAYMENT NOT FOUND</b><br>' +
+    'Transaction not found yet. Check the TXID and try again.';
+
+} else if (data.status === 'waiting_confirmation') {
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-fail'
+  );
+  statusEl.classList.add('payment-pending');
+
+  statusEl.innerHTML =
+    '<b>✓ PAYMENT FOUND</b><br>' +
+    'Waiting for Bitcoin confirmation...';
+
+} else {
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-fail');
+
+  statusEl.innerHTML =
+    '<b>PAYMENT NOT VERIFIED</b><br>' +
+    (data.error || data.status || 'Please try again.');
   }
+
+} catch (error) {
+  console.error(error);
+
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-fail');
+
+  statusEl.innerHTML =
+    '<b>VERIFICATION ERROR</b><br>' +
+    'Unable to check the Bitcoin transaction.';
+
+} finally {
+  verifyBtn.disabled = false;
+  verifyBtn.textContent = 'VERIFY PAYMENT';
+}
 });
 </script>
 
