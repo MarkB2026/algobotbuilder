@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
- 
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -939,7 +938,7 @@ body.plan-open .main{padding-right:14px}
 </main>
 </div>
   <!-- ============================================================
-     BUILDTRADINGBOTS PREMIUM — BITCOIN CHECKOUT
+     ALGOBOT BUILDER PREMIUM — BITCOIN CHECKOUT
      ============================================================ -->
 
 <div id="premiumPaymentBackdrop" class="popup-backdrop" aria-hidden="true">
@@ -947,7 +946,7 @@ body.plan-open .main{padding-right:14px}
 
     <div class="popup-top">
       <div>
-        <div class="popup-kicker">BUILDTRADINGBOTS</div>
+        <div class="popup-kicker">ALGOBOT BUILDER</div>
         <div class="popup-title">Premium Builder</div>
       </div>
 
@@ -964,7 +963,7 @@ body.plan-open .main{padding-right:14px}
         </div>
 
         <div style="color:var(--muted);font-size:12px">
-          One-time Bitcoin payment for this Premium BuildTradingBots build.
+          One-time Bitcoin payment for this Premium AlgoBot build.
         </div>
       </div>
 
@@ -1102,7 +1101,7 @@ if (data.payment_required === false) {
   // Beta: payment is waived.
   premiumBuildBtn.disabled = false;
   premiumBuildBtn.textContent =
-    'BUILD PREMIUM BOT — BETA ACCESS';
+    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
 
   statusEl.classList.remove(
     'payment-fail',
@@ -2258,37 +2257,52 @@ This is the configuration contract for review; engine support for each field mus
      'premiumBetaBuildBtn'
    );
 
+ // Once a build is complete, the same button becomes DOWNLOAD.
+ // Keeping this state here prevents the original build handler from
+ // running a second time (and re-submitting an expired Turnstile token).
+ let completedPremiumBuildId=null;
+
  if(buildBtn){
 
    buildBtn.addEventListener(
      'click',
      async function(){
 
+       // READY/DOWNLOAD mode: download only. Do not run Turnstile/build again.
+       if(completedPremiumBuildId){
+         buildBtn.textContent='✓ DOWNLOAD STARTED';
+         window.location.href=
+           PREMIUM_WORKER +
+           '/download?id=' +
+           encodeURIComponent(completedPremiumBuildId);
+         return;
+       }
+
        const statusEl=
          document.getElementById(
            'premiumPaymentStatus'
          );
 
-      const plan=enginePlan();
+       const plan=enginePlan();
 
-const turnstileToken =
-  document.querySelector(
-    '[name="cf-turnstile-response"]'
-  )?.value;
+       const turnstileToken=
+         document.querySelector(
+           '[name="cf-turnstile-response"]'
+         )?.value;
 
-if(!turnstileToken){
-  statusEl.classList.remove(
-    'payment-success',
-    'payment-pending'
-  );
-  statusEl.classList.add('payment-fail');
-  statusEl.innerHTML =
-    '<b>BUILD ERROR</b><br>' +
-    'Please complete the security verification.';
-  return;
-}
+       if(!turnstileToken){
+         statusEl.classList.remove(
+           'payment-success',
+           'payment-pending'
+         );
+         statusEl.classList.add('payment-fail');
+         statusEl.innerHTML=
+           '<b>BUILD ERROR</b><br>' +
+           'Please complete the security verification.';
+         return;
+       }
 
-plan.turnstile_token=turnstileToken;
+       plan.turnstile_token=turnstileToken;
 
        buildBtn.disabled=true;
        buildBtn.textContent='BUILDING BOT...';
@@ -2297,11 +2311,7 @@ plan.turnstile_token=turnstileToken;
          'payment-fail',
          'payment-pending'
        );
-
-       statusEl.classList.add(
-         'payment-success'
-       );
-
+       statusEl.classList.add('payment-success');
        statusEl.innerHTML=
          '<b>BUILD STARTED</b><br>' +
          'Submitting your Premium BuildTradingBots configuration...';
@@ -2314,20 +2324,15 @@ plan.turnstile_token=turnstileToken;
              {
                method:'POST',
                headers:{
-                 'Content-Type':
-                   'application/json'
+                 'Content-Type':'application/json'
                },
                body:JSON.stringify(plan)
              }
            );
 
-         const data=
-           await response.json();
+         const data=await response.json();
 
-         if(
-           !response.ok ||
-           !data.ok
-         ){
+         if(!response.ok || !data.ok){
            throw new Error(
              data.error ||
              'Premium build request failed.'
@@ -2336,16 +2341,6 @@ plan.turnstile_token=turnstileToken;
 
          const buildId=data.build_id;
          const commitSha=data.commit_sha;
-         
-// Build has been accepted — payment/security UI is finished.
-const turnstileBox = document.querySelector('.cf-turnstile');
-
-if(turnstileBox){
-  turnstileBox.style.display = 'none';
-}
-
-// Stop the Bitcoin quote countdown from changing the
-// completed build status later.
 
          if(!buildId || !commitSha){
            throw new Error(
@@ -2353,41 +2348,45 @@ if(turnstileBox){
            );
          }
 
+         // Build accepted. Turnstile is no longer needed for this build.
+         const turnstileBox=
+           document.querySelector('.cf-turnstile');
+
+         if(turnstileBox){
+           turnstileBox.style.display='none';
+         }
+
          statusEl.innerHTML=
            '<b>✓ BUILD STARTED</b><br>' +
            'Your Premium bot is being built.';
 
-        buildBtn.textContent=
-  'BUILDING BOT...';
+         const buildProgressMessages=[
+           'Preparing your custom bot files...',
+           'Building your trading application...',
+           'Compiling strategy and runtime components...',
+           'Packaging your Windows application...',
+           'Building the installer...',
+           'Finalizing your download...',
+           'Almost there — completing your build...'
+         ];
 
-// Cosmetic progress messages only.
-// Actual completion is still controlled by /build/status.
-const buildProgressMessages = [
-  'Preparing your custom bot files...',
-  'Building your trading application...',
-  'Compiling strategy and runtime components...',
-  'Packaging your Windows application...',
-  'Building the installer...',
-  'Finalizing your download...',
-  'Almost there — completing your build...'
-];
+         let buildProgressIndex=0;
 
-let buildProgressIndex = 0;
+         const buildProgressTimer=setInterval(()=>{
+           statusEl.innerHTML=
+             '<b>BUILDING YOUR PREMIUM BOT</b><br>' +
+             buildProgressMessages[buildProgressIndex];
 
-const buildProgressTimer = setInterval(() => {
-  statusEl.innerHTML =
-    '<b>BUILDING YOUR PREMIUM BOT</b><br>' +
-    buildProgressMessages[buildProgressIndex];
+           buildProgressIndex=
+             (buildProgressIndex + 1) %
+             buildProgressMessages.length;
+         },15000);
 
-  buildProgressIndex =
-    (buildProgressIndex + 1) % buildProgressMessages.length;
-}, 15000);
+         while(true){
 
-while(true){
-
-  await new Promise(
-    resolve=>setTimeout(resolve,5000)
-  );
+           await new Promise(
+             resolve=>setTimeout(resolve,5000)
+           );
 
            const statusResponse=
              await fetch(
@@ -2398,76 +2397,48 @@ while(true){
                encodeURIComponent(commitSha)
              );
 
-           const status=
-             await statusResponse.json();
+           const status=await statusResponse.json();
 
-           if(
-             !statusResponse.ok ||
-             !status.ok
-           ){
+           if(!statusResponse.ok || !status.ok){
+             clearInterval(buildProgressTimer);
              throw new Error(
                status.error ||
                'Could not check build status.'
              );
            }
 
-         if(status.ready){
+           if(status.ready){
+             clearInterval(buildProgressTimer);
 
- if(status.ready){
+             // Switch this existing click handler into DOWNLOAD mode.
+             completedPremiumBuildId=buildId;
 
-  clearInterval(buildProgressTimer);
+             statusEl.classList.remove(
+               'payment-fail',
+               'payment-pending'
+             );
+             statusEl.classList.add('payment-success');
+             statusEl.innerHTML=
+               '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
+               'Your Windows installer is ready to download.';
 
-  statusEl.classList.remove(
-    'payment-fail',
-    'payment-pending'
-  );
+             buildBtn.disabled=false;
+             buildBtn.textContent='✓ DOWNLOAD PREMIUM BOT';
+             buildBtn.style.setProperty(
+               'background','#16a34a','important'
+             );
+             buildBtn.style.setProperty(
+               'border-color','#22c55e','important'
+             );
+             buildBtn.style.setProperty(
+               'color','#ffffff','important'
+             );
 
-  statusEl.classList.add(
-    'payment-success'
-  );
-
-  statusEl.innerHTML=
-    '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
-    'Your Windows installer is ready to download.';
-
-  buildBtn.disabled=false;
-
-  buildBtn.textContent=
-    '✓ DOWNLOAD PREMIUM BOT';
-
-  buildBtn.style.setProperty(
-    'background',
-    '#16a34a',
-    'important'
-  );
-
-  buildBtn.style.setProperty(
-    'border-color',
-    '#22c55e',
-    'important'
-  );
-
-  buildBtn.style.setProperty(
-    'color',
-    '#ffffff',
-    'important'
-  );
-
-  buildBtn.onclick=()=>{
-    buildBtn.textContent=
-      '✓ DOWNLOAD STARTED';
-
-    window.location.href=
-      PREMIUM_WORKER +
-      '/download?id=' +
-      encodeURIComponent(buildId);
-  };
-
-  return;
-}
+             return;
+           }
 
            if(status.failed){
-
+             clearInterval(buildProgressTimer);
              throw new Error(
                status.error ||
                'Your Premium BuildTradingBots bot could not be built. Please try again.'
@@ -2479,20 +2450,13 @@ while(true){
 
          console.error(error);
 
-         statusEl.classList.remove(
-           'payment-success'
-         );
-
-         statusEl.classList.add(
-           'payment-fail'
-         );
-
+         statusEl.classList.remove('payment-success');
+         statusEl.classList.add('payment-fail');
          statusEl.innerHTML=
            '<b>BUILD ERROR</b><br>' +
            error.message;
 
          buildBtn.disabled=false;
-
          buildBtn.textContent=
            'BUILD PREMIUM BOT — BETA ACCESS';
        }
@@ -2504,15 +2468,5 @@ while(true){
 
 })();
 </script>
-   <div style="
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  height:12px;
-  background:#ff00ff;
-  z-index:999999;
-  box-shadow:0 0 12px #ff00ff;
-"></div>
 </body>
 </html>
