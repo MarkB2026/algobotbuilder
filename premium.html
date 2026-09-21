@@ -1119,6 +1119,68 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
   backdrop.classList.remove('show');
   backdrop.setAttribute('aria-hidden', 'true');
 });
+   document.getElementById('premiumVerifyBtn').addEventListener('click', async () => {
+  const txid = document.getElementById('premiumTxid').value.trim();
+  const statusEl = document.getElementById('premiumPaymentStatus');
+  const verifyBtn = document.getElementById('premiumVerifyBtn');
+
+  if (!premiumQuote) {
+    statusEl.innerHTML =
+      '<b>NO ACTIVE QUOTE</b><br>Please reopen the payment window for a new quote.';
+    return;
+  }
+
+  if (!txid) {
+    statusEl.innerHTML =
+      '<b>TRANSACTION ID REQUIRED</b><br>Paste your Bitcoin transaction ID first.';
+    return;
+  }
+
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = 'CHECKING...';
+
+  try {
+    const response = await fetch(PREMIUM_WORKER + '/premium/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        txid: txid,
+        quote_id: premiumQuote.quote_id,
+        quote_signature: premiumQuote.quote_signature,
+        required_sats: premiumQuote.required_sats,
+        expires_at: premiumQuote.expires_at
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.verified) {
+      statusEl.innerHTML =
+        '<b>✓ PAYMENT VERIFIED</b><br>Premium payment confirmed.';
+    } else if (data.status === 'not_found') {
+      statusEl.innerHTML =
+        '<b>PAYMENT NOT FOUND</b><br>Transaction not found yet. Check the TXID and try again.';
+    } else if (data.status === 'waiting_confirmation') {
+      statusEl.innerHTML =
+        '<b>✓ PAYMENT FOUND</b><br>Waiting for Bitcoin confirmation...';
+    } else {
+      statusEl.innerHTML =
+        '<b>PAYMENT NOT VERIFIED</b><br>' +
+        (data.error || data.status || 'Please try again.');
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    statusEl.innerHTML =
+      '<b>VERIFICATION ERROR</b><br>Unable to check the Bitcoin transaction.';
+  } finally {
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = 'VERIFY PAYMENT';
+  }
+});
 </script>
 
 <div id="popupBackdrop" class="popup-backdrop" aria-hidden="true">
