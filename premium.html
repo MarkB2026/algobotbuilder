@@ -1003,6 +1003,98 @@ body.plan-open .main{padding-right:14px}
   </div>
 </div>
 <script>
+  const PREMIUM_WORKER =
+  'https://falling-sky-7997.algobotbuilder.workers.dev';
+
+let premiumQuote = null;
+let premiumQuoteTimerInterval = null;
+
+async function loadPremiumBitcoinQuote() {
+  const statusEl = document.getElementById('premiumPaymentStatus');
+  const amountEl = document.getElementById('premiumBtcAmount');
+  const addressEl = document.getElementById('premiumBtcAddress');
+  const timerEl = document.getElementById('premiumQuoteTimer');
+
+  statusEl.textContent = 'Preparing Bitcoin quote...';
+  amountEl.textContent = '—';
+  addressEl.textContent = '—';
+  timerEl.textContent = '—';
+
+  try {
+    const response = await fetch(PREMIUM_WORKER + '/premium/quote');
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Unable to create Bitcoin quote');
+    }
+
+    premiumQuote = data;
+
+    localStorage.setItem(
+      'algobot_premium_quote',
+      JSON.stringify({
+        quote_id: data.quote_id,
+        quote_signature: data.quote_signature,
+        required_sats: data.required_sats,
+        required_btc: data.required_btc,
+        expires_at: data.expires_at
+      })
+    );
+
+    amountEl.textContent = data.required_btc + ' BTC';
+    addressEl.textContent = data.bitcoin_address;
+
+    statusEl.innerHTML =
+      '<b>BITCOIN QUOTE READY</b><br>' +
+      'Send the exact amount shown below.';
+
+    startPremiumQuoteCountdown(data.expires_at);
+
+  } catch (error) {
+    console.error(error);
+
+    statusEl.innerHTML =
+      '<b>QUOTE ERROR</b><br>' +
+      'Unable to retrieve the Bitcoin quote. Please try again.';
+  }
+}
+
+function startPremiumQuoteCountdown(expiresAt) {
+  const timerEl = document.getElementById('premiumQuoteTimer');
+
+  if (premiumQuoteTimerInterval) {
+    clearInterval(premiumQuoteTimerInterval);
+  }
+
+  function updateTimer() {
+    const remaining = new Date(expiresAt).getTime() - Date.now();
+
+    if (remaining <= 0) {
+      clearInterval(premiumQuoteTimerInterval);
+      premiumQuoteTimerInterval = null;
+
+      timerEl.textContent = 'Expired';
+
+      document.getElementById('premiumPaymentStatus').innerHTML =
+        '<b>QUOTE EXPIRED</b><br>' +
+        'Close this window and open it again for a new quote.';
+
+      return;
+    }
+
+    const totalSeconds = Math.floor(remaining / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    timerEl.textContent =
+      minutes + ':' + String(seconds).padStart(2, '0');
+  }
+
+  updateTimer();
+
+  premiumQuoteTimerInterval =
+    setInterval(updateTimer, 1000);
+}
 const names=['STRICT','CAUTIOUS','ASSISTED','ADAPTIVE','AUTONOMOUS'];
 document.getElementById('sentience').addEventListener('input',e=>document.getElementById('sentLabel').textContent=e.target.value+' — '+names[+e.target.value]);
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{
