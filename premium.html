@@ -1296,6 +1296,66 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
   verifyBtn.textContent = 'VERIFY PAYMENT';
 }
 });
+  document.getElementById('premiumBetaBuildBtn').addEventListener('click', async () => {
+  const statusEl = document.getElementById('premiumPaymentStatus');
+  const buildBtn = document.getElementById('premiumBetaBuildBtn');
+
+  if (!window.AllBotEnginePlan) {
+    statusEl.innerHTML =
+      '<b>BUILD ERROR</b><br>Premium engine plan is not available.';
+    return;
+  }
+
+  const botPlan = window.AllBotEnginePlan();
+
+  botPlan.schema_version = 'allbot.engine.plan.v1.4.9';
+
+  buildBtn.disabled = true;
+  buildBtn.textContent = 'BUILDING...';
+
+  statusEl.classList.remove(
+    'payment-fail',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-success');
+
+  statusEl.innerHTML =
+    '<b>BUILD STARTED</b><br>Submitting your Premium AlgoBot configuration...';
+
+  try {
+    const response = await fetch(PREMIUM_WORKER + '/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(botPlan)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || 'The Premium builder returned an error.');
+    }
+
+    statusEl.innerHTML =
+      '<b>✓ BUILD STARTED</b><br>' +
+      'Your Premium AlgoBot is being compiled and packaged.';
+
+    buildBtn.textContent = 'BUILD STARTED';
+
+  } catch (error) {
+    console.error(error);
+
+    buildBtn.disabled = false;
+    buildBtn.textContent = 'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+
+    statusEl.classList.remove('payment-success');
+    statusEl.classList.add('payment-fail');
+
+    statusEl.innerHTML =
+      '<b>BUILD ERROR</b><br>' + error.message;
+  }
+});
 </script>
 
 <div id="popupBackdrop" class="popup-backdrop" aria-hidden="true">
