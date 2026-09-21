@@ -2406,35 +2406,58 @@ while(true){
              );
            }
 
-          if(status.ready){
+         if(status.ready){
 
   clearInterval(buildProgressTimer);
 
   statusEl.classList.remove(
-               'payment-fail',
-               'payment-pending'
-             );
+    'payment-fail',
+    'payment-pending'
+  );
 
-             statusEl.classList.add(
-               'payment-success'
-             );
+  statusEl.classList.add(
+    'payment-success'
+  );
 
-             statusEl.innerHTML=
-  '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
-  'Your Windows installer is ready to download.';
+  statusEl.innerHTML=
+    '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
+    'Your Windows installer is ready to download.';
 
-             '✓ DOWNLOAD PREMIUM BOT';
-               buildBtn.textContent=
-                 '✓ DOWNLOAD STARTED';
+  buildBtn.disabled=false;
 
-               window.location.href=
-                 PREMIUM_WORKER +
-                 '/download?id=' +
-                 encodeURIComponent(buildId);
-             };
+  buildBtn.textContent=
+    '✓ DOWNLOAD PREMIUM BOT';
 
-             return;
-           }
+  buildBtn.style.setProperty(
+    'background',
+    '#16a34a',
+    'important'
+  );
+
+  buildBtn.style.setProperty(
+    'border-color',
+    '#22c55e',
+    'important'
+  );
+
+  buildBtn.style.setProperty(
+    'color',
+    '#ffffff',
+    'important'
+  );
+
+  buildBtn.onclick=()=>{
+    buildBtn.textContent=
+      '✓ DOWNLOAD STARTED';
+
+    window.location.href=
+      PREMIUM_WORKER +
+      '/download?id=' +
+      encodeURIComponent(buildId);
+  };
+
+  return;
+}
 
            if(status.failed){
 
