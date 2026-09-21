@@ -2282,123 +2282,369 @@ This is the configuration contract for review; engine support for each field mus
 
 
  // ============================================================
- // PREMIUM BUILD BUTTON
- // ============================================================
+// PREMIUM BUILD BUTTON
+// ============================================================
 
- const buildBtn=
-   document.getElementById(
-     'premiumBetaBuildBtn'
-   );
+const buildBtn =
+  document.getElementById(
+    'premiumBetaBuildBtn'
+  );
 
- if(buildBtn){
+let premiumBuildProgressTimer = null;
+let premiumReadyBuildId = null;
 
-   buildBtn.addEventListener(
-     'click',
-     async function(){
+function stopPremiumBuildProgress(){
+  if(premiumBuildProgressTimer){
+    clearInterval(premiumBuildProgressTimer);
+    premiumBuildProgressTimer = null;
+  }
+}
 
-       const statusEl=
-         document.getElementById(
-           'premiumPaymentStatus'
-         );
+function showPremiumBuildSpinner(statusEl){
+  let spinner =
+    document.getElementById(
+      'premiumBuildSpinner'
+    );
 
-      const plan=enginePlan();
+  if(!spinner){
+    spinner =
+      document.createElement('div');
 
-const turnstileToken =
-  document.querySelector(
-    '[name="cf-turnstile-response"]'
-  )?.value;
+    spinner.id =
+      'premiumBuildSpinner';
 
-if(!turnstileToken){
+    spinner.className =
+      'premium-build-spinner';
+
+    statusEl.parentNode.insertBefore(
+      spinner,
+      statusEl
+    );
+  }
+
+  spinner.className =
+    'premium-build-spinner';
+
+  spinner.style.display =
+    'block';
+
+  return spinner;
+}
+
+function startPremiumBuildProgress(
+  statusEl
+){
+  const messages = [
+    'Preparing your AlgoBot configuration...',
+    'Building your trading engine...',
+    'Adding your strategy rules and risk controls...',
+    'Building your local AlgoBot dashboard...',
+    'Packaging the AlgoBot application...',
+    'Creating your Windows installer...',
+    'Finishing up — your download should be ready shortly...'
+  ];
+
+  let index = 0;
+
+  statusEl.innerHTML =
+    '<b>BUILDING YOUR PREMIUM ALGOBOT</b><br>' +
+    'Your custom AlgoBot is being compiled and packaged. ' +
+    'This usually takes about 3 minutes. Please keep this page open.';
+
+  stopPremiumBuildProgress();
+
+  premiumBuildProgressTimer =
+    setInterval(() => {
+
+      if(index < messages.length){
+
+        statusEl.innerHTML =
+          '<b>BUILDING YOUR PREMIUM ALGOBOT</b><br>' +
+          messages[index];
+
+        index++;
+
+      }else{
+
+        statusEl.innerHTML =
+          '<b>BUILDING YOUR PREMIUM ALGOBOT</b><br>' +
+          'Still working — larger builds can take a little longer. ' +
+          'Please keep this page open.';
+      }
+
+    }, 30000);
+}
+
+function premiumBuildFailed(
+  statusEl,
+  message
+){
+  stopPremiumBuildProgress();
+
+  const spinner =
+    document.getElementById(
+      'premiumBuildSpinner'
+    );
+
+  if(spinner){
+    spinner.className =
+      'premium-build-spinner failed';
+  }
+
   statusEl.classList.remove(
     'payment-success',
     'payment-pending'
   );
-  statusEl.classList.add('payment-fail');
+
+  statusEl.classList.add(
+    'payment-fail'
+  );
+
   statusEl.innerHTML =
-    '<b>BUILD ERROR</b><br>' +
-    'Please complete the security verification.';
-  return;
+    '<b>BOT BUILD FAILED</b><br>' +
+    message;
+
+  premiumReadyBuildId = null;
+
+  buildBtn.disabled = false;
+
+  buildBtn.textContent =
+    'TRY BUILD AGAIN';
+
+  if(window.turnstile){
+    try{
+      turnstile.reset();
+    }catch(e){}
+  }
 }
 
-plan.turnstile_token=turnstileToken;
+async function startPremiumBuild(){
 
-       buildBtn.disabled=true;
-       buildBtn.textContent='BUILDING...';
+  const statusEl =
+    document.getElementById(
+      'premiumPaymentStatus'
+    );
 
-       statusEl.classList.remove(
-         'payment-fail',
-         'payment-pending'
-       );
+  // --------------------------------------------
+  // If build is already ready, this click
+  // becomes the download button.
+  // --------------------------------------------
 
-       statusEl.classList.add(
-         'payment-success'
-       );
+  if(premiumReadyBuildId){
 
-       statusEl.innerHTML=
-         '<b>BUILD STARTED</b><br>' +
-         'Submitting your Premium AlgoBot configuration...';
+    buildBtn.textContent =
+      '✓ DOWNLOAD STARTED';
 
-       try{
+    window.location.href =
+      PREMIUM_WORKER +
+      '/download?id=' +
+      encodeURIComponent(
+        premiumReadyBuildId
+      );
 
-         const response=
-           await fetch(
-             PREMIUM_WORKER + '/',
-             {
-               method:'POST',
-               headers:{
-                 'Content-Type':
-                   'application/json'
-               },
-               body:JSON.stringify(plan)
-             }
-           );
+    return;
+  }
 
-         const data=
-           await response.json();
+  const plan =
+    enginePlan();
 
-         if(
-           !response.ok ||
-           !data.ok
-         ){
-           throw new Error(
-             data.error ||
-             'Premium build request failed.'
-           );
-         }
+  const turnstileToken =
+    document.querySelector(
+      '[name="cf-turnstile-response"]'
+    )?.value;
 
-         statusEl.innerHTML=
-           '<b>✓ BUILD STARTED</b><br>' +
-           'Your Premium AlgoBot is being built.';
+  if(!turnstileToken){
 
-         buildBtn.textContent=
-           'BUILD STARTED';
+    statusEl.classList.remove(
+      'payment-success',
+      'payment-pending'
+    );
 
-       }catch(error){
+    statusEl.classList.add(
+      'payment-fail'
+    );
 
-         console.error(error);
+    statusEl.innerHTML =
+      '<b>BUILD ERROR</b><br>' +
+      'Please complete the security verification.';
 
-         statusEl.classList.remove(
-           'payment-success'
-         );
+    return;
+  }
 
-         statusEl.classList.add(
-           'payment-fail'
-         );
+  plan.turnstile_token =
+    turnstileToken;
 
-         statusEl.innerHTML=
-           '<b>BUILD ERROR</b><br>' +
-           error.message;
+  buildBtn.disabled = true;
 
-         buildBtn.disabled=false;
+  buildBtn.textContent =
+    'BUILDING...';
 
-         buildBtn.textContent=
-           'BUILD PREMIUM ALGOBOT — BETA ACCESS';
-       }
+  statusEl.classList.remove(
+    'payment-fail'
+  );
 
-     }
-   );
+  statusEl.classList.add(
+    'payment-success'
+  );
 
- }
+  showPremiumBuildSpinner(
+    statusEl
+  );
+
+  statusEl.innerHTML =
+    '<b>BUILDING YOUR PREMIUM ALGOBOT</b><br>' +
+    'Submitting configuration...';
+
+  try{
+
+    // ------------------------------------------
+    // Submit Premium build
+    // ------------------------------------------
+
+    const response =
+      await fetch(
+        PREMIUM_WORKER + '/',
+        {
+          method:'POST',
+
+          headers:{
+            'Content-Type':
+              'application/json'
+          },
+
+          body:
+            JSON.stringify(plan)
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+      throw new Error(
+        data.error ||
+        'Premium build request failed.'
+      );
+    }
+
+    const buildId =
+      data.build_id;
+
+    if(!buildId){
+      throw new Error(
+        'Builder did not return a build ID.'
+      );
+    }
+
+    // ------------------------------------------
+    // Same progress-message system as Basic
+    // ------------------------------------------
+
+    startPremiumBuildProgress(
+      statusEl
+    );
+
+    // ------------------------------------------
+    // Poll the SAME proven /status endpoint
+    // used by Basic
+    // ------------------------------------------
+
+    while(true){
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            5000
+          )
+      );
+
+      const statusResponse =
+        await fetch(
+          PREMIUM_WORKER +
+          '/status?id=' +
+          encodeURIComponent(
+            buildId
+          )
+        );
+
+      const status =
+        await statusResponse.json();
+
+      if(
+        !statusResponse.ok ||
+        !status.ok
+      ){
+        throw new Error(
+          status.error ||
+          'Could not check build status.'
+        );
+      }
+
+      if(status.ready){
+
+        stopPremiumBuildProgress();
+
+        premiumReadyBuildId =
+          buildId;
+
+        const spinner =
+          document.getElementById(
+            'premiumBuildSpinner'
+          );
+
+        if(spinner){
+          spinner.className =
+            'premium-build-spinner ready';
+        }
+
+        statusEl.classList.remove(
+          'payment-fail',
+          'payment-pending'
+        );
+
+        statusEl.classList.add(
+          'payment-success'
+        );
+
+        statusEl.innerHTML =
+          '<b>✓ YOUR PREMIUM ALGOBOT IS READY</b><br>' +
+          'Installer ready to download.';
+
+        document.title =
+          '✓ YOUR PREMIUM ALGOBOT IS READY — AlgoBot Builder';
+
+        buildBtn.disabled =
+          false;
+
+        buildBtn.textContent =
+          'DOWNLOAD ALGOBOT PREMIUM';
+
+        return;
+      }
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    premiumBuildFailed(
+      statusEl,
+      error.message
+    );
+  }
+}
+
+if(buildBtn){
+
+  buildBtn.addEventListener(
+    'click',
+    startPremiumBuild
+  );
+}
 
 })();
 </script>
