@@ -2406,9 +2406,11 @@ while(true){
              );
            }
 
-           if(status.ready){
+          if(status.ready){
 
-             statusEl.classList.remove(
+  clearInterval(buildProgressTimer);
+
+  statusEl.classList.remove(
                'payment-fail',
                'payment-pending'
              );
@@ -2421,12 +2423,7 @@ while(true){
   '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
   'Your Windows installer is ready to download.';
 
-             buildBtn.disabled=false;
-
-             buildBtn.textContent=
-  '✓ DOWNLOAD PREMIUM BOT';
-
-             buildBtn.onclick=()=>{
+             '✓ DOWNLOAD PREMIUM BOT';
                buildBtn.textContent=
                  '✓ DOWNLOAD STARTED';
 
