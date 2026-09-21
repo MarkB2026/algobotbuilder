@@ -2345,10 +2345,7 @@ if(turnstileBox){
 
 // Stop the Bitcoin quote countdown from changing the
 // completed build status later.
-if(premiumQuoteTimerInterval){
-  clearInterval(premiumQuoteTimerInterval);
-  premiumQuoteTimerInterval = null;
-}
+
          if(!buildId || !commitSha){
            throw new Error(
              'Build started but build tracking information was not returned.'
