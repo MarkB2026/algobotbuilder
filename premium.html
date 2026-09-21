@@ -905,6 +905,103 @@ body.plan-open .main{padding-right:14px}
 <button id="popupTestBtn">SETTINGS SUMMARY</button><div class="spacer"></div><button id="start" class="start">BUILD CUSTOM BOT</button></div>
 </main>
 </div>
+  <!-- ============================================================
+     ALGOBOT BUILDER PREMIUM — BITCOIN CHECKOUT
+     ============================================================ -->
+
+<div id="premiumPaymentBackdrop" class="popup-backdrop" aria-hidden="true">
+  <div class="allbot-popup">
+
+    <div class="popup-top">
+      <div>
+        <div class="popup-kicker">ALGOBOT BUILDER</div>
+        <div class="popup-title">Premium Builder</div>
+      </div>
+
+      <button id="premiumPaymentClose" type="button">×</button>
+    </div>
+
+    <div class="popup-body">
+
+      <div class="popup-section">
+        <div class="popup-section-title">PREMIUM ACCESS</div>
+
+        <div style="font-size:22px;font-weight:800;margin-bottom:4px">
+          $10 USD
+        </div>
+
+        <div style="color:var(--muted);font-size:12px">
+          One-time Bitcoin payment for this Premium AlgoBot build.
+        </div>
+      </div>
+
+      <div id="premiumBetaBox"
+           class="popup-state"
+           style="border-color:#4e8cff">
+        <b>BETA ACCESS</b><br>
+        Premium payment is currently waived during beta.
+      </div>
+
+      <div class="popup-section">
+        <div class="popup-section-title">BITCOIN PAYMENT</div>
+
+        <div id="premiumPaymentStatus" class="popup-state">
+          Preparing Bitcoin quote...
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="label">SEND EXACTLY</div>
+          <div id="premiumBtcAmount"
+               style="font-size:20px;font-weight:800;margin-top:4px">
+            —
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="label">BITCOIN ADDRESS</div>
+          <div id="premiumBtcAddress"
+               style="font-family:Consolas,monospace;font-size:11px;
+                      word-break:break-all;margin-top:4px">
+            —
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="label">QUOTE EXPIRES</div>
+          <div id="premiumQuoteTimer" style="margin-top:4px">
+            —
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-section">
+        <div class="popup-section-title">TRANSACTION ID</div>
+
+        <input id="premiumTxid"
+               type="text"
+               placeholder="Paste Bitcoin transaction ID"
+               style="width:100%">
+
+        <div class="popup-actions">
+          <button id="premiumVerifyBtn" type="button">
+            VERIFY PAYMENT
+          </button>
+        </div>
+      </div>
+
+      <div class="popup-actions">
+
+        <button id="premiumBetaBuildBtn"
+                type="button"
+                class="start">
+          BUILD PREMIUM ALGOBOT — BETA ACCESS
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
 <script>
 const names=['STRICT','CAUTIOUS','ASSISTED','ADAPTIVE','AUTONOMOUS'];
 document.getElementById('sentience').addEventListener('input',e=>document.getElementById('sentLabel').textContent=e.target.value+' — '+names[+e.target.value]);
