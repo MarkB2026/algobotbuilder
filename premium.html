@@ -2599,10 +2599,19 @@ statusEl.innerHTML =
 
       if(status.ready){
 
-        stopPremiumBuildProgress();
+  stopPremiumBuildProgress();
 
-        premiumReadyBuildId =
-          buildId;
+  premiumReadyBuildId =
+    buildId;
+
+  const buildVisual =
+    document.getElementById(
+      'premiumBuildVisual'
+    );
+
+  if(buildVisual){
+    buildVisual.style.display = 'block';
+  }
 
         const spinner =
           document.getElementById(
