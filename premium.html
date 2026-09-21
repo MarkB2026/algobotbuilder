@@ -2274,9 +2274,20 @@ const turnstileToken =
   )?.value;
 
 if(!turnstileToken){
-  throw new Error(
-    'Please complete the security verification.'
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-pending'
   );
+
+  statusEl.classList.add(
+    'payment-fail'
+  );
+
+  statusEl.innerHTML =
+    '<b>BUILD ERROR</b><br>' +
+    'Please complete the security verification.';
+
+  return;
 }
 
 plan.turnstile_token=turnstileToken;
