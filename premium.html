@@ -2491,11 +2491,20 @@ async function startPremiumBuild(){
     'payment-success'
   );
 
-  showPremiumBuildSpinner(
-    statusEl
+ const buildVisual =
+  document.getElementById(
+    'premiumBuildVisual'
   );
 
-  statusEl.innerHTML =
+if(buildVisual){
+  buildVisual.style.display = 'block';
+}
+
+showPremiumBuildSpinner(
+  statusEl
+);
+
+statusEl.innerHTML =
     '<b>BUILDING YOUR PREMIUM ALGOBOT</b><br>' +
     'Submitting configuration...';
 
