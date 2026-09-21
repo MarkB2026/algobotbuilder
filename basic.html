@@ -55,7 +55,7 @@
 </section>
 
 <section id="execution" class="page">
-<div class="section"><div class="head"><span>BROKER & MODE</span></div><div class="body"><div class="grid"><label class="field">Broker<select name="broker"><option selected>IBKR</option><option disabled>MT5 — Coming Later</option></select></label><label class="field">Mode<select name="mode"><option>OBSERVE</option><option selected>PAPER</option><option>LIVE</option></select></label><label class="field">Host<input name="host" value="127.0.0.1"></label><label class="field">Port<input name="port" type="number" value="7497"></label><label class="field">Client ID<input name="client_id" type="number" value="91"></label></div><div class="note">The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.</div></div></div>
+<div class="section"><div class="head"><span>BROKER & MODE</span></div><div class="body"><div class="grid"><label class="field">Broker<select name="broker"><option selected>IBKR</option><option disabled>MT5 — Coming Later</option></select></label><label class="field">Mode<select name="mode"><option>OBSERVE</option><option selected>PAPER</option><option>LIVE</option></select></label><label class="field">Host<input name="host" value="127.0.0.1"></label><label class="field">Port<input name="port" type="text" value="AUTO" placeholder="AUTO"></label><label class="field">Client ID<input name="client_id" type="number" value="91"></label></div><div class="note">The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.</div></div></div>
 <div class="section"><div class="head"><span>SESSION & SAFETY</span></div><div class="body"><div class="grid"><label class="field">Max Daily Trades<input name="max_daily_trades" type="number" value="5"></label><label class="field">Max Daily Loss $<input name="max_daily_loss" type="number" value="200"></label><label class="field">Daily Profit Stop $<input name="daily_profit_stop" type="number" value="300"></label><label class="field">Hard Exit Time<input name="hard_exit" type="time" value="15:55"></label></div><div class="checks"><label class="check"><input name="intraday_only" type="checkbox" checked> Intraday only</label><label class="check"><input name="cancel_orders" type="checkbox" checked> Cancel outstanding orders at shutdown</label><label class="check"><input name="decisions_csv" type="checkbox" checked> Decisions Report CSV</label><label class="check"><input name="hive_optin" type="checkbox"> Share anonymized bot data with The Hive</label></div></div></div>
 </section>
 
@@ -194,7 +194,7 @@ function plan(){
       name:val('broker'),
       mode:val('mode'),
       host:val('host'),
-      port:Number(val('port')),
+      port:(val('port').trim().toUpperCase()==='AUTO' ? 'AUTO' : Number(val('port'))),
       client_id:Number(val('client_id'))
     },
 
