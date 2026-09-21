@@ -380,10 +380,10 @@ while(true){
       if(status.ready){
         stopBuildProgressMessages();
         setBuildState('ready','✓ YOUR BOT IS READY','Installer ready to download.');
-        document.title='✓ YOUR BOT IS READY — AlgoBot Builder';
+        document.title='✓ YOUR BOT IS READY — Bot Builder';
 
         buildButton.disabled=false;
-        buildButton.textContent='DOWNLOAD ALGOBOT';
+        buildButton.textContent='DOWNLOAD BOT';
         buildButton.onclick=()=>{
           buildButton.textContent='✓ DOWNLOAD STARTED';
           window.location.href=
