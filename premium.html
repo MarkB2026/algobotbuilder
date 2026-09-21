@@ -2335,7 +2335,12 @@ plan.turnstile_token=turnstileToken;
 
          const buildId=data.build_id;
          const commitSha=data.commit_sha;
+// Build has been accepted — Turnstile is no longer needed.
+const turnstileBox = document.querySelector('.cf-turnstile');
 
+if(turnstileBox){
+  turnstileBox.style.display = 'none';
+}
          if(!buildId || !commitSha){
            throw new Error(
              'Build started but build tracking information was not returned.'
