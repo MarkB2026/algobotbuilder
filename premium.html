@@ -2597,7 +2597,14 @@ statusEl.innerHTML =
         );
       }
 
-      if(status.ready){
+   if(status.failed){
+
+  throw new Error(
+    'Your Premium AlgoBot could not be built. Please try again.'
+  );
+}
+
+if(status.ready){
 
   stopPremiumBuildProgress();
 
