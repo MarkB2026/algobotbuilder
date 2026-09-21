@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BuildTradingBots — Beta Preview</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#071018;color:#eef7fb;font-family:Segoe UI,Arial,sans-serif}
+body{background:radial-gradient(circle at 50% -10%,#153348 0,#09131c 38%,#060c12 80%)}
+.wrap{width:min(1500px,100%);margin:auto;padding:28px 20px 36px}
+header{text-align:center;margin-bottom:22px}
+.kicker{color:#62dff6;font-size:12px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase}
+h1{margin:7px 0 6px;font-size:clamp(28px,4vw,46px)}
+header p{margin:0;color:#8fa4b2}
+.viewer{background:#0b151e;border:1px solid #203849;border-radius:15px;padding:12px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.stage{position:relative;display:grid;place-items:center;background:#050a0f;border:1px solid #182b38;border-radius:10px;overflow:hidden;min-height:min(69vw,720px)}
+.slide{display:none;margin:0;position:absolute;inset:0;align-items:center;justify-content:center}
+.slide.active{display:flex}
+.slide img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.navrow{display:flex;justify-content:center;gap:14px;padding-top:14px}
+.nav{width:48px;height:38px;border-radius:9px;border:1px solid #315163;background:#071018;color:#fff;font-size:25px;cursor:pointer}
+.nav:hover{border-color:#35d2ee;color:#35d2ee}
+.dots{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:13px 0 2px}
+.dot{width:9px;height:9px;border-radius:50%;border:1px solid #456170;background:#162630;padding:0;cursor:pointer}
+.dot.active{background:#35d2ee;border-color:#35d2ee}
+.count{text-align:center;color:#8297a4;font:12px Consolas,monospace;margin-top:8px}
+footer{text-align:center;color:#718795;font-size:12px;margin-top:20px}
+@media(max-width:600px){.wrap{padding:16px 8px 26px}.stage{min-height:80vw}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header><div class="kicker">BuildTradingBots</div><h1>Beta Preview</h1><p>Build it. Download. Trade.</p></header>
+<section class="viewer">
+<div class="stage"><figure class="slide active"><img src="1.jpg" alt="BuildTradingBots beta screenshot 1"></figure>
+<figure class="slide"><img src="2.jpg" alt="BuildTradingBots beta screenshot 2"></figure>
+<figure class="slide"><img src="3.jpg" alt="BuildTradingBots beta screenshot 3"></figure>
+<figure class="slide"><img src="4.jpg" alt="BuildTradingBots beta screenshot 4"></figure>
+<figure class="slide"><img src="5.jpg" alt="BuildTradingBots beta screenshot 5"></figure>
+<figure class="slide"><img src="6.jpg" alt="BuildTradingBots beta screenshot 6"></figure>
+<figure class="slide"><img src="7.jpg" alt="BuildTradingBots beta screenshot 7"></figure>
+<figure class="slide"><img src="8.jpg" alt="BuildTradingBots beta screenshot 8"></figure>
+<figure class="slide"><img src="9.jpg" alt="BuildTradingBots beta screenshot 9"></figure></div>
+<div class="navrow"><button class="nav prev" aria-label="Previous">&#8249;</button><button class="nav next" aria-label="Next">&#8250;</button></div>
+<div class="dots"><button class="dot active" data-go="0" aria-label="Screenshot 1"></button>
+<button class="dot" data-go="1" aria-label="Screenshot 2"></button>
+<button class="dot" data-go="2" aria-label="Screenshot 3"></button>
+<button class="dot" data-go="3" aria-label="Screenshot 4"></button>
+<button class="dot" data-go="4" aria-label="Screenshot 5"></button>
+<button class="dot" data-go="5" aria-label="Screenshot 6"></button>
+<button class="dot" data-go="6" aria-label="Screenshot 7"></button>
+<button class="dot" data-go="7" aria-label="Screenshot 8"></button>
+<button class="dot" data-go="8" aria-label="Screenshot 9"></button></div>
+<div class="count"><span id="current">1</span> / 9</div>
+</section>
+<footer>BuildTradingBots — Beta interface preview</footer>
+</main>
+<script>
+(()=>{
+const s=[...document.querySelectorAll('.slide')],d=[...document.querySelectorAll('.dot')],c=document.getElementById('current');let n=0;
+function show(i){n=(i+s.length)%s.length;s.forEach((x,j)=>x.classList.toggle('active',j===n));d.forEach((x,j)=>x.classList.toggle('active',j===n));c.textContent=n+1}
+document.querySelector('.prev').onclick=()=>show(n-1);document.querySelector('.next').onclick=()=>show(n+1);
+d.forEach(x=>x.onclick=()=>show(+x.dataset.go));document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')show(n-1);if(e.key==='ArrowRight')show(n+1)})
+})();
+</script>
+</body>
+</html>
