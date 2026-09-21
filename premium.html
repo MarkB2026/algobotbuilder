@@ -1197,7 +1197,7 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
 
     const data = await response.json();
 
-    if (data.verified) {
+   if (data.verified) {
   statusEl.classList.remove(
     'payment-fail',
     'payment-pending'
@@ -1206,6 +1206,13 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
 
   statusEl.innerHTML =
     '<b>✓ PAYMENT VERIFIED</b><br>Premium payment confirmed.';
+
+  const premiumBuildBtn =
+    document.getElementById('premiumBetaBuildBtn');
+
+  premiumBuildBtn.disabled = false;
+  premiumBuildBtn.textContent =
+    'BUILD PREMIUM ALGOBOT';
 
 } else if (data.status === 'not_found') {
   statusEl.classList.remove(
