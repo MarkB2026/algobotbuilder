@@ -1046,6 +1046,12 @@ async function loadPremiumBitcoinQuote() {
   const addressEl = document.getElementById('premiumBtcAddress');
   const timerEl = document.getElementById('premiumQuoteTimer');
 
+  statusEl.classList.remove(
+  'payment-fail',
+  'payment-success',
+  'payment-pending'
+);
+
   statusEl.textContent = 'Preparing Bitcoin quote...';
   amountEl.textContent = '—';
   addressEl.textContent = '—';
