@@ -2257,64 +2257,76 @@ This is the configuration contract for review; engine support for each field mus
      'premiumBetaBuildBtn'
    );
 
- // Once a build is complete, the same button becomes DOWNLOAD.
- // Keeping this state here prevents the original build handler from
- // running a second time (and re-submitting an expired Turnstile token).
- let completedPremiumBuildId=null;
-
  if(buildBtn){
 
    buildBtn.addEventListener(
      'click',
      async function(){
 
-       // READY/DOWNLOAD mode: download only. Do not run Turnstile/build again.
-       if(completedPremiumBuildId){
-         buildBtn.textContent='✓ DOWNLOAD STARTED';
-         window.location.href=
-           PREMIUM_WORKER +
-           '/download?id=' +
-           encodeURIComponent(completedPremiumBuildId);
-         return;
-       }
-
        const statusEl=
          document.getElementById(
            'premiumPaymentStatus'
          );
 
-       const plan=enginePlan();
+      const plan=enginePlan();
 
-       const turnstileToken=
-         document.querySelector(
-           '[name="cf-turnstile-response"]'
-         )?.value;
+const turnstileToken =
+  document.querySelector(
+    '[name="cf-turnstile-response"]'
+  )?.value;
 
-       if(!turnstileToken){
-         statusEl.classList.remove(
-           'payment-success',
-           'payment-pending'
-         );
-         statusEl.classList.add('payment-fail');
-         statusEl.innerHTML=
-           '<b>BUILD ERROR</b><br>' +
-           'Please complete the security verification.';
-         return;
-       }
+if(!turnstileToken){
+  statusEl.classList.remove(
+    'payment-success',
+    'payment-pending'
+  );
+  statusEl.classList.add('payment-fail');
+  statusEl.innerHTML =
+    '<b>BUILD ERROR</b><br>' +
+    'Please complete the security verification.';
+  return;
+}
 
-       plan.turnstile_token=turnstileToken;
+plan.turnstile_token=turnstileToken;
 
        buildBtn.disabled=true;
-       buildBtn.textContent='BUILDING BOT...';
+       buildBtn.textContent='BUILDING...';
 
        statusEl.classList.remove(
          'payment-fail',
          'payment-pending'
        );
-       statusEl.classList.add('payment-success');
+
+       statusEl.classList.add(
+         'payment-success'
+       );
+
        statusEl.innerHTML=
          '<b>BUILD STARTED</b><br>' +
-         'Submitting your Premium BuildTradingBots configuration...';
+         'Submitting your Premium AlgoBot configuration...';
+
+       // Cosmetic progress messages only.
+       // This does not change the build request or backend logic.
+       const buildProgressMessages = [
+         'Preparing your custom bot files...',
+         'Building your trading application...',
+         'Compiling strategy and runtime components...',
+         'Packaging your Windows application...',
+         'Building the installer...',
+         'Finalizing your download...',
+         'Almost there — completing your build...'
+       ];
+
+       let buildProgressIndex = 0;
+
+       const buildProgressTimer = setInterval(() => {
+         statusEl.innerHTML =
+           '<b>BUILDING YOUR PREMIUM BOT</b><br>' +
+           buildProgressMessages[buildProgressIndex];
+
+         buildProgressIndex =
+           (buildProgressIndex + 1) % buildProgressMessages.length;
+       }, 15000);
 
        try{
 
@@ -2324,141 +2336,55 @@ This is the configuration contract for review; engine support for each field mus
              {
                method:'POST',
                headers:{
-                 'Content-Type':'application/json'
+                 'Content-Type':
+                   'application/json'
                },
                body:JSON.stringify(plan)
              }
            );
 
-         const data=await response.json();
+         const data=
+           await response.json();
 
-         if(!response.ok || !data.ok){
+         if(
+           !response.ok ||
+           !data.ok
+         ){
            throw new Error(
              data.error ||
              'Premium build request failed.'
            );
          }
 
-         const buildId=data.build_id;
-         const commitSha=data.commit_sha;
-
-         if(!buildId || !commitSha){
-           throw new Error(
-             'Build started but build tracking information was not returned.'
-           );
-         }
-
-         // Build accepted. Turnstile is no longer needed for this build.
-         const turnstileBox=
-           document.querySelector('.cf-turnstile');
-
-         if(turnstileBox){
-           turnstileBox.style.display='none';
-         }
-
          statusEl.innerHTML=
            '<b>✓ BUILD STARTED</b><br>' +
-           'Your Premium bot is being built.';
+           'Your Premium AlgoBot is being built.';
 
-         const buildProgressMessages=[
-           'Preparing your custom bot files...',
-           'Building your trading application...',
-           'Compiling strategy and runtime components...',
-           'Packaging your Windows application...',
-           'Building the installer...',
-           'Finalizing your download...',
-           'Almost there — completing your build...'
-         ];
-
-         let buildProgressIndex=0;
-
-         const buildProgressTimer=setInterval(()=>{
-           statusEl.innerHTML=
-             '<b>BUILDING YOUR PREMIUM BOT</b><br>' +
-             buildProgressMessages[buildProgressIndex];
-
-           buildProgressIndex=
-             (buildProgressIndex + 1) %
-             buildProgressMessages.length;
-         },15000);
-
-         while(true){
-
-           await new Promise(
-             resolve=>setTimeout(resolve,5000)
-           );
-
-           const statusResponse=
-             await fetch(
-               PREMIUM_WORKER +
-               '/build/status?id=' +
-               encodeURIComponent(buildId) +
-               '&sha=' +
-               encodeURIComponent(commitSha)
-             );
-
-           const status=await statusResponse.json();
-
-           if(!statusResponse.ok || !status.ok){
-             clearInterval(buildProgressTimer);
-             throw new Error(
-               status.error ||
-               'Could not check build status.'
-             );
-           }
-
-           if(status.ready){
-             clearInterval(buildProgressTimer);
-
-             // Switch this existing click handler into DOWNLOAD mode.
-             completedPremiumBuildId=buildId;
-
-             statusEl.classList.remove(
-               'payment-fail',
-               'payment-pending'
-             );
-             statusEl.classList.add('payment-success');
-             statusEl.innerHTML=
-               '<b>✓ BUILD COMPLETE — YOUR PREMIUM BOT IS READY</b><br>' +
-               'Your Windows installer is ready to download.';
-
-             buildBtn.disabled=false;
-             buildBtn.textContent='✓ DOWNLOAD PREMIUM BOT';
-             buildBtn.style.setProperty(
-               'background','#16a34a','important'
-             );
-             buildBtn.style.setProperty(
-               'border-color','#22c55e','important'
-             );
-             buildBtn.style.setProperty(
-               'color','#ffffff','important'
-             );
-
-             return;
-           }
-
-           if(status.failed){
-             clearInterval(buildProgressTimer);
-             throw new Error(
-               status.error ||
-               'Your Premium BuildTradingBots bot could not be built. Please try again.'
-             );
-           }
-         }
+         buildBtn.textContent=
+           'BUILD STARTED';
 
        }catch(error){
 
+         clearInterval(buildProgressTimer);
+
          console.error(error);
 
-         statusEl.classList.remove('payment-success');
-         statusEl.classList.add('payment-fail');
+         statusEl.classList.remove(
+           'payment-success'
+         );
+
+         statusEl.classList.add(
+           'payment-fail'
+         );
+
          statusEl.innerHTML=
            '<b>BUILD ERROR</b><br>' +
            error.message;
 
          buildBtn.disabled=false;
+
          buildBtn.textContent=
-           'BUILD PREMIUM BOT — BETA ACCESS';
+           'BUILD PREMIUM ALGOBOT — BETA ACCESS';
        }
 
      }
