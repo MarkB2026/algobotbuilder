@@ -1012,7 +1012,19 @@ document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',(
 }));
 document.querySelectorAll('.modes button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.modes button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}));
 document.getElementById('progressive').addEventListener('change',e=>document.getElementById('progressiveBox').classList.toggle('hidden',!e.target.checked));
-document.getElementById('start').addEventListener('click',e=>{let on=e.target.dataset.on==='1';e.target.dataset.on=on?'0':'1';e.target.textContent=on?'BUILD CUSTOM BOT':'BUILD CUSTOM BOT'});
+document.getElementById('start').addEventListener('click', () => {
+  const backdrop = document.getElementById('premiumPaymentBackdrop');
+
+  backdrop.classList.add('show');
+  backdrop.setAttribute('aria-hidden', 'false');
+});
+
+document.getElementById('premiumPaymentClose').addEventListener('click', () => {
+  const backdrop = document.getElementById('premiumPaymentBackdrop');
+
+  backdrop.classList.remove('show');
+  backdrop.setAttribute('aria-hidden', 'true');
+});
 </script>
 
 <div id="popupBackdrop" class="popup-backdrop" aria-hidden="true">
