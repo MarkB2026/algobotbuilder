@@ -261,11 +261,11 @@ function startBuildProgressMessages(){
   const textEl = document.getElementById('buildStatusText');
 
   const messages = [
-    'Preparing your AlgoBot configuration...',
+    'Preparing your bots configuration...',
     'Building your trading engine...',
     'Adding your strategy rules and risk controls...',
-    'Building your local AlgoBot dashboard...',
-    'Packaging the AlgoBot application...',
+    'Building your local dashboard...',
+    'Packaging the application...',
     'Creating your Windows installer...',
     'Finishing up — your download should be ready shortly...'
   ];
@@ -273,7 +273,7 @@ function startBuildProgressMessages(){
   let index = 0;
 
   textEl.textContent =
-    'Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
+    'Your custom bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
 
   if(buildProgressTimer){
     clearInterval(buildProgressTimer);
@@ -327,7 +327,7 @@ async function buildPlan(){
   if(botPlan.broker.mode==='LIVE'){
     const ok=confirm(
       'LIVE TRADING MODE SELECTED.\n\n' +
-      'This AlgoBot can connect to your live IBKR account and may submit real orders.\n\n' +
+      'This Bot can connect to your live IBKR account and may submit real orders.\n\n' +
       'Symbol: ' + botPlan.symbol + '\n' +
       'Quantity: ' + botPlan.risk.quantity + '\n' +
       '1-Share Override: ' + botPlan.risk.one_share_override + '\n\n' +
@@ -338,7 +338,7 @@ async function buildPlan(){
 
   buildButton.disabled=true;
   buildButton.textContent='BUILDING...';
-  setBuildState('building','BUILDING YOUR ALGOBOT','Submitting configuration...');
+  setBuildState('building','BUILDING YOUR BOT','Submitting configuration...');
 
   try{
     const response=await fetch(WORKER+'/',{
@@ -357,7 +357,7 @@ async function buildPlan(){
 const commitSha=result.commit_sha;
 
 hideTurnstile();
-setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+setBuildState('building','BUILDING YOUR BOT','Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
 startBuildProgressMessages();
 
 while(true){
@@ -379,8 +379,8 @@ while(true){
 
       if(status.ready){
         stopBuildProgressMessages();
-        setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
-        document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
+        setBuildState('ready','✓ YOUR BOT IS READY','Installer ready to download.');
+        document.title='✓ YOUR BOT IS READY — AlgoBot Builder';
 
         buildButton.disabled=false;
         buildButton.textContent='DOWNLOAD ALGOBOT';
