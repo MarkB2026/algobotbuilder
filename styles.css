@@ -1722,7 +1722,18 @@ footer {
   border-color: rgba(46,216,255,.32);
 }
 
+.icon-banner {
+  padding: 0 0 35px;
+  text-align: center;
+}
 
+.icon-banner img {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+  margin: 0 auto;
+}
 /* Manually change to display a colored bar at the top of the page to know when css has taken effect. (blue,yellow,green,red etc) */
 body {
   border-top: 10px solid red !important;
