@@ -489,7 +489,7 @@ body.plan-open .main{padding-right:14px}
         <div id="websiteEntryRules" class="web-rules"></div>
         <button type="button" id="websiteAddRule" class="web-add">+ ADD INDICATOR / CONDITION</button>
         <div class="web-rule-options"><label><input type="checkbox" id="websiteRequireAll" checked> Require all entry rules</label><label><input type="checkbox" id="websiteConfirmedBar" checked> Confirm on closed bar</label></div>
-        <p class="web-note" id="websiteRuleNotice" role="status">Explore the controls here. Additional conditions require build-engine support before they can be included in a downloaded bot.</p>
+        <p class="web-note" id="websiteRuleNotice" role="status">Additional conditions are checked by the Premium engine before entry. PAPER or OBSERVE only.</p>
       </div>
 
       <div class="card" id="bollingerCoreCard" style="display:none">
@@ -2080,7 +2080,7 @@ document.getElementById('websiteAddRule').addEventListener('click',addWebsiteRul
   return {
 
    schema_version:"allbot.engine.plan.v1.4.9",
-   website_entry_conditions:{rules:websiteEntryRules(),require_all:document.getElementById('websiteRequireAll').checked,confirmed_bar:document.getElementById('websiteConfirmedBar').checked},
+   entry_conditions:{rules:websiteEntryRules(),require_all:document.getElementById('websiteRequireAll').checked,confirmed_bar:document.getElementById('websiteConfirmedBar').checked},
 
    plan_name:"AllBot Premium Plan",
 
@@ -2322,13 +2322,10 @@ document.getElementById('websiteAddRule').addEventListener('click',addWebsiteRul
            'premiumPaymentStatus'
          );
 
-       // Do not silently discard website-only rules during a paid/live build.
-       if(websiteEntryRules().length){
-         alert('Your additional entry conditions are saved in the on-page plan preview, but the Premium build engine has not yet been verified to execute them. Remove the additional conditions to build the existing supported bot.');
-         document.getElementById('websiteRuleNotice').textContent='Build paused: additional conditions must be connected to the Premium engine before download.';
-         return;
-       }
        const plan=enginePlan();
+       if(plan.mode === 'LIVE') { alert('Premium v1.4.9 supports OBSERVE and PAPER only.'); return; }
+       if(plan.pattern?.id !== 'RSI_DIVERGENCE_REVERSAL') { alert('This engine currently supports RSI Divergence only.'); return; }
+       if(plan.entry_conditions.rules.some(r => !Number.isInteger(r.period) || r.period < 1 || r.period > 1000 || !Number.isFinite(r.value))) { alert('Check entry condition periods and values.'); return; }
 
        const turnstileToken=
          document.querySelector(
