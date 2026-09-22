@@ -1,13 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Bot Builder — an algorithmic trading bot builder for creating configurable local trading bots, plus ready-made trading bots and tools." />
-  <title>MYBOT Builder — Algorithmic Trading Bot Builder</title>
-  <link rel="stylesheet" href="styles.css" />
-
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="Bot Builder — an algorithmic trading bot builder for creating configurable local trading bots, plus ready-made trading bots and tools." name="description"/>
+<title>MyBotBuilder | Specialized Trading Bots</title>
+<link href="styles.css" rel="stylesheet"/>
+<style>
     .nav-build { color:#55d8ff !important; font-weight:800; letter-spacing:.04em; }
     .build-cta {
       display:inline-flex; align-items:center; justify-content:center; min-height:58px;
@@ -42,9 +42,7 @@
 }
     @media (max-width:760px) { .build-cta { width:100%; } }
   </style>
-
-
-  <style>
+<style>
     .site-header {
       display: flex;
       justify-content: flex-start;
@@ -103,9 +101,7 @@
       .nav-build-major { min-height: 48px; }
     }
   </style>
-
-
-  <style>
+<style>
     .nav-hive-major {
       display:inline-flex !important;
       align-items:center;
@@ -135,672 +131,547 @@
       line-height:1;
     }
   </style>
-
-</head>
-
+<style id="mbb-homepage-updates">
+.site-header{align-items:center!important;gap:20px!important;flex-wrap:wrap}
+.mbb-header-logo{display:block;flex:0 0 112px;line-height:0}
+.mbb-header-logo img{display:block;width:112px;height:112px;object-fit:contain}
+.site-header nav{flex:1;min-width:0}
+.hero{align-items:center}
+.hero-copy{max-width:900px}
+.mbb-catalog{max-width:1320px;margin:24px auto 58px;padding:0 12px}
+.mbb-catalog iframe{display:block;width:100%;height:1900px;border:1px solid rgba(85,216,255,.19);border-radius:18px;background:#070b13}
+.mbb-catalog-note{text-align:center;opacity:.72;margin:14px 0 0}
+@media(max-width:900px){.mbb-header-logo{flex-basis:86px}.mbb-header-logo img{width:86px;height:86px}.mbb-catalog iframe{height:2900px}}
+@media(max-width:600px){.mbb-catalog iframe{height:4300px}}
+</style></head>
 <body>
+<header class="site-header"><a aria-label="MyBotBuilder homepage" class="mbb-header-logo" href="#top"><img alt="MyBotBuilder logo" src="assets/mybotbuilder-logo.png"/></a>
+<nav>
+<a class="nav-build nav-build-major" href="basic.html?v=1.6.1"><span class="nav-bot-icon">&lt;/&gt;</span> START A BUILD <span class="nav-arrow">→</span></a>
+<a class="nav-hive-major" href="#beebot"><span class="nav-hive-icon">⬡</span> JOIN THE HIVE</a>
+<a href="#tools">Products (beta)</a>
+<a href="#semi-autonomous">Trading Bots</a>
+<a href="#other-tools">Tools</a>
+<a href="#feedback">Feedback</a>
+<a href="#about">About</a>
+<a href="#privacy">Privacy</a>
+<a href="#support">Donate Bitcoin</a>
+</nav>
+</header>
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+<div class="hero-copy">
+<p class="eyebrow">MYBOTBUILDER · LOCAL-FIRST TRADING SOFTWARE</p>
+<h1>Specialized Trading Bots.<br/><span>Built for the way you trade.</span></h1>
+<p class="lede">Choose your strategy. Customize your rules. Run your bot locally, with Basic and Pro editions.</p>
+<div class="hero-actions">
+<a class="build-cta" href="build.html">New Feature! BUILD YOUR OWN BOT!</a>
+<a class="button secondary" href="#tools">Explore ready-made bots &amp; tools</a>
+<a class="button secondary" href="#bot-lineup">Explore our bots ↓</a></div>
+<div class="build-your-own">
+<strong>MYBOT BUILDER — ALGORITHMIC TRADING BOT BUILDER</strong>
+<p>Choose the strategy, rules and risk controls. Build your bot from simple selections, or download one of the ready-made bots and tools below.</p>
+</div>
+</div>
 
-  <header class="site-header">
-
-    <nav>
-     <a class="nav-build nav-build-major" href="basic.html?v=1.6.1"><span class="nav-bot-icon">&lt;/&gt;</span> START A BUILD <span class="nav-arrow">→</span></a>
-      <a class="nav-hive-major" href="#beebot"><span class="nav-hive-icon">⬡</span> JOIN THE HIVE</a>
-      
-      <a href="#tools">Products (beta)</a>
-      <a href="#semi-autonomous">Trading Bots</a>
-      <a href="#other-tools">Tools</a>
-      <a href="#feedback">Feedback</a>
-      <a href="#about">About</a>
-      <a href="#privacy">Privacy</a>
-      <a href="#support">Donate Bitcoin</a>
-    </nav>
-  </header>
-
-  <main id="top">
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">MYBOT BUILDER • ALGORITHMIC TRADING BOT BUILDER</p>
-
-        <h1>
-          Powerful software,<br>
-          <span>built with AI.</span>
-        </h1>
-
-        <p class="lede">
-          Products and tools designed to simplify trading without unnecessary complexity.
-          No subscriptions. Free to use.
-        </p>
-
-        <div class="hero-actions">
-          <a class="build-cta" href="build.html">New Feature! BUILD YOUR OWN BOT!</a>
-          <a class="button secondary" href="#tools">Explore ready-made bots &amp; tools</a>
-        </div>
-
-        <div class="build-your-own">
-          <strong>MYBOT BUILDER — ALGORITHMIC TRADING BOT BUILDER</strong>
-          <p>Choose the strategy, rules and risk controls. Build your bot from simple selections, or download one of the ready-made bots and tools below.</p>
-        </div>
-      </div>
-
-      <div class="hero-art">
-        <img src="assets/logo.png" alt="Build A Trading Bot" />
-      </div>
-    </section>
-
-    <!-- PRINCIPLES -->
-    <section class="trust-strip" aria-label="Key principles">
-      <div>
-        <strong>Free to use</strong>
-        <span>Download it, use it and help make it better.</span>
-      </div>
-
-      <div>
-        <strong>Local-first</strong>
-        <span>Your data stays on your computer unless you choose to share it.</span>
-      </div>
-
-      <div>
-        <strong>Built in public</strong>
-        <span>Real-world feedback helps shape what comes next.</span>
-      </div>
-    </section>
-
-    <!-- PUBLIC BETA INTRO -->
-    <section class="beta-intro">
-      <div>
-        <p class="eyebrow">PUBLIC BETA</p>
-        <h2>
-          Free software. Built in public.<br>
+</section><section aria-label="Specialized bot lineup" class="mbb-catalog" id="bot-lineup"><iframe loading="lazy" src="bots.html" title="MyBotBuilder specialized bot lineup"></iframe><p class="mbb-catalog-note">Explore all eight specialized bots above. Detailed demos, tools and downloads continue below.</p></section>
+<!-- PRINCIPLES -->
+<section aria-label="Key principles" class="trust-strip">
+<div>
+<strong>Free to use</strong>
+<span>Download it, use it and help make it better.</span>
+</div>
+<div>
+<strong>Local-first</strong>
+<span>Your data stays on your computer unless you choose to share it.</span>
+</div>
+<div>
+<strong>Built in public</strong>
+<span>Real-world feedback helps shape what comes next.</span>
+</div>
+</section>
+<!-- PUBLIC BETA INTRO -->
+<section class="beta-intro">
+<div>
+<p class="eyebrow">PUBLIC BETA</p>
+<h2>
+          Free software. Built in public.<br/>
           Improved by users.
         </h2>
-      </div>
-
-     <div class="beta-intro-copy">
-  <p>
+</div>
+<div class="beta-intro-copy">
+<p>
     Tools and bots are free to download and use. These applications are
     actively developed, and real-world feedback helps determine what gets
     fixed, improved and built next.
   </p>
-
-  <p>
-    <strong>Live Trading Note:</strong> Some bots include optional API connections
+<p>
+<strong>Live Trading Note:</strong> Some bots include optional API connections
     for IBKR and MT5 and are capable of executing live trades. No broker connection
     is configured by default — you have to enter and configure your own connection
     details. This makes it easy to download a bot, explore its features and settings,
     and see how it works before connecting a trading account.
   </p>
-
-  <p>
+<p>
     If you choose to connect a broker, proceed with care. The bots include multiple
     safety controls, overrides and paper-trading features, but always confirm your
     connection and PAPER/LIVE settings before running a trading bot.
   </p>
 </div>
-
-
-        <p>
+<p>
           Found a bug? Report it. Have an idea? Suggest a feature.
           Need a completely different utility? Request a new script.
         </p>
-      </div>
-    </section>
 
-    <!-- BEEBOT + THE HIVE -->
-    <section id="beebot" class="section beebot-section">
-      <div class="section-heading">
-        <p class="eyebrow">BEEBOT + THE HIVE</p>
-        <h2>Trade locally. Learn collectively.</h2>
-        <p class="section-intro">
+</section>
+<!-- BEEBOT + THE HIVE -->
+<section class="section beebot-section" id="beebot">
+<div class="section-heading">
+<p class="eyebrow">BEEBOT + THE HIVE</p>
+<h2>Trade locally. Learn collectively.</h2>
+<p class="section-intro">
           BEEBOT is an RSI mean-reversion trading bot with an optional connection
           to The Hive — a community trade database built from participating BEEBOT users.
         </p>
-      </div>
-
-      <article class="beebot-flagship">
-        <div class="beebot-panel">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-            <div class="pill">RSI Mean Reversion</div>
-          </div>
-
-          <p class="eyebrow">BEEBOT</p>
-          <h3>Your bot. Your rules.</h3>
-          <p class="tagline">Automated mean-reversion trading with local control.</p>
-
-          <p>
+</div>
+<article class="beebot-flagship">
+<div class="beebot-panel">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+<div class="pill">RSI Mean Reversion</div>
+</div>
+<p class="eyebrow">BEEBOT</p>
+<h3>Your bot. Your rules.</h3>
+<p class="tagline">Automated mean-reversion trading with local control.</p>
+<p>
             BEEBOT scans for RSI mean-reversion opportunities, evaluates candidates
             against your configured trading plan and can execute trades through your broker.
           </p>
-
-          <p>
+<p>
             Every trade is recorded in your own local database. You decide whether
             BEEBOT operates independently or connects to The Hive.
           </p>
-
-          <ul>
-            <li>RSI mean-reversion strategy</li>
-            <li>Configurable trading plan and execution rules</li>
-            <li>Paper and live trading modes</li>
-            <li>Local trade history and analytics</li>
-            <li>Controlled position sizing and safety overrides</li>
-            <li>Optional Hive connectivity</li>
-          </ul>
-
-          <div class="card-actions">
-            <button class="button primary disabled" disabled>
+<ul>
+<li>RSI mean-reversion strategy</li>
+<li>Configurable trading plan and execution rules</li>
+<li>Paper and live trading modes</li>
+<li>Local trade history and analytics</li>
+<li>Controlled position sizing and safety overrides</li>
+<li>Optional Hive connectivity</li>
+</ul>
+<div class="card-actions">
+<button class="button primary disabled" disabled="">
               Free download coming soon
             </button>
-            <a class="text-link" href="#beebot-video">Watch demo ↓</a>
-          </div>
-
-          <div class="beebot-video" id="beebot-video">
-            <video controls playsinline preload="metadata">
-              <source src="assets/videos/BeeBot_Web_Demo.mp4" type="video/mp4" />
+<a class="text-link" href="#beebot-video">Watch demo ↓</a>
+</div>
+<div class="beebot-video" id="beebot-video">
+<video controls="" playsinline="" preload="metadata">
+<source src="assets/videos/BeeBot_Web_Demo.mp4" type="video/mp4"/>
               Your browser does not support embedded video.
             </video>
-          </div>
-        </div>
-
-        <div class="hive-panel">
-          
-          <div class="hive-icon">⬡</div>
-          <p class="eyebrow">THE HIVE</p>
-          <h3>Shared data.<br>Better context.</h3>
-
-          <p>
+</div>
+</div>
+<div class="hive-panel">
+<div class="hive-icon">⬡</div>
+<p class="eyebrow">THE HIVE</p>
+<h3>Shared data.<br/>Better context.</h3>
+<p>
             The Hive is an optional shared network database for participating bots. 
             Your bot always runs locally and maintains its own private local database. 
             If you choose to connect to The Hive, your bot can contribute structured trade data to the shared network and, 
             in return, benefit from the growing pool of data contributed by other participating bots. It can scan candidates
             being identified across the network and compare a current setup with similar historical trades stored in the Hive database.
           </p>
-
-          <div class="hive-example">
-            <div class="hive-example-header">EXAMPLE SIMILAR-TRADE MATCH</div>
-            <div class="hive-match-count">34</div>
-            <div class="hive-match-label">similar trades found</div>
-
-            <div class="hive-stats">
-              <div><strong>23</strong><span>Wins</span></div>
-              <div><strong>11</strong><span>Losses</span></div>
-              <div><strong>+1.8%</strong><span>Avg. result</span></div>
-              <div><strong>0.72</strong><span>Avg. ATR</span></div>
-            </div>
-
-            <div class="hive-example-note">
+<div class="hive-example">
+<div class="hive-example-header">EXAMPLE SIMILAR-TRADE MATCH</div>
+<div class="hive-match-count">34</div>
+<div class="hive-match-label">similar trades found</div>
+<div class="hive-stats">
+<div><strong>23</strong><span>Wins</span></div>
+<div><strong>11</strong><span>Losses</span></div>
+<div><strong>+1.8%</strong><span>Avg. result</span></div>
+<div><strong>0.72</strong><span>Avg. ATR</span></div>
+</div>
+<div class="hive-example-note">
               Illustrative example — not actual trading results.
             </div>
-          </div>
-
-          <div class="hive-features">
-            <div class="hive-feature">
-              <strong>SCAN THE HIVE</strong>
-              <span>See candidates currently appearing across participating BEEBOTs.</span>
-            </div>
-
-            <div class="hive-feature">
-              <strong>COMPARE YOUR TRADE</strong>
-              <span>
+</div>
+<div class="hive-features">
+<div class="hive-feature">
+<strong>SCAN THE HIVE</strong>
+<span>See candidates currently appearing across participating BEEBOTs.</span>
+</div>
+<div class="hive-feature">
+<strong>COMPARE YOUR TRADE</strong>
+<span>
                 Find historical trades with characteristics similar to your current
                 setup and review their outcomes.
               </span>
-            </div>
-
-            <div class="hive-feature">
-              <strong>BUILD THE DATASET</strong>
-              <span>
+</div>
+<div class="hive-feature">
+<strong>BUILD THE DATASET</strong>
+<span>
                 Shared trades add observations that can improve future comparisons
                 for the community.
               </span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-
-    </section>
-
-    <!-- TRADING TOOLS -->
-    <section id="tools" class="section">
-      <div class="section-heading">
-        <p class="eyebrow">TRADING TOOLS</p>
-        <h2>Track the strategy. See the whole result.</h2>
-        <p class="section-intro">
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- TRADING TOOLS -->
+<section class="section" id="tools">
+<div class="section-heading">
+<p class="eyebrow">TRADING TOOLS</p>
+<h2>Track the strategy. See the whole result.</h2>
+<p class="section-intro">
           Local-first tools for tracking options strategies, income and portfolio performance.
         </p>
-      </div>
-
-      <!-- WHEEL STRATEGY TRACKER -->
-      <article class="tool-card">
-        <div class="tool-copy">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-          </div>
-
-          <h3>Wheel Strategy Tracker</h3>
-          <p class="tagline">Track the entire wheel.</p>
-
-          <p>
+</div>
+<!-- WHEEL STRATEGY TRACKER -->
+<article class="tool-card">
+<div class="tool-copy">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+</div>
+<h3>Wheel Strategy Tracker</h3>
+<p class="tagline">Track the entire wheel.</p>
+<p>
             Follow a wheel strategy from opening premium through assignment,
             stock ownership, covered calls and completed cycles — all in one place.
           </p>
-
-          <ul>
-            <li>Read-only broker position import</li>
-            <li>Whole-wheel profit and transaction tracking</li>
-            <li>Manual tracking remains available</li>
-            <li>Local SQLite storage and backups</li>
-          </ul>
-
-          <div class="card-actions">
-            <button class="button primary disabled" disabled>
+<ul>
+<li>Read-only broker position import</li>
+<li>Whole-wheel profit and transaction tracking</li>
+<li>Manual tracking remains available</li>
+<li>Local SQLite storage and backups</li>
+</ul>
+<div class="card-actions">
+<button class="button primary disabled" disabled="">
               Free download coming soon
             </button>
-            <a class="text-link" href="#wheel-video">Watch demo ↓</a>
-          </div>
-        </div>
-
-        <div class="tool-media" id="wheel-video">
-          <video controls playsinline preload="metadata">
-            <source src="assets/videos/wheel-demo.mp4" type="video/mp4" />
+<a class="text-link" href="#wheel-video">Watch demo ↓</a>
+</div>
+</div>
+<div class="tool-media" id="wheel-video">
+<video controls="" playsinline="" preload="metadata">
+<source src="assets/videos/wheel-demo.mp4" type="video/mp4"/>
             Your browser does not support embedded video.
           </video>
-        </div>
-      </article>
-
-      <!-- DIVIDEND & NAV TRACKER -->
-      <article class="tool-card reverse">
-        <div class="tool-copy">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-          </div>
-
-          <h3>Dividend &amp; NAV Tracker</h3>
-          <p class="tagline">Your yield. The whole picture.</p>
-
-          <p>
+</div>
+</article>
+<!-- DIVIDEND & NAV TRACKER -->
+<article class="tool-card reverse">
+<div class="tool-copy">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+</div>
+<h3>Dividend &amp; NAV Tracker</h3>
+<p class="tagline">Your yield. The whole picture.</p>
+<p>
             See dividend income alongside NAV gain or decay so you can tell
             the difference between distributions received and actual portfolio return.
           </p>
-
-          <ul>
-            <li>Track selected positions — not your whole account</li>
-            <li>Actual IBKR Flex dividend history when available</li>
-            <li>Estimated public distribution history otherwise</li>
-            <li>Gross income, NAV movement and net result</li>
-          </ul>
-
-          <div class="card-actions">
-            <button class="button primary disabled" disabled>
+<ul>
+<li>Track selected positions — not your whole account</li>
+<li>Actual IBKR Flex dividend history when available</li>
+<li>Estimated public distribution history otherwise</li>
+<li>Gross income, NAV movement and net result</li>
+</ul>
+<div class="card-actions">
+<button class="button primary disabled" disabled="">
               Free download coming soon
             </button>
-            <a class="text-link" href="#dividend-video">Watch demo ↓</a>
-          </div>
-        </div>
-
-        <div class="tool-media" id="dividend-video">
-          <video controls playsinline preload="metadata">
-            <source src="assets/videos/dividend-demo.mp4" type="video/mp4" />
+<a class="text-link" href="#dividend-video">Watch demo ↓</a>
+</div>
+</div>
+<div class="tool-media" id="dividend-video">
+<video controls="" playsinline="" preload="metadata">
+<source src="assets/videos/dividend-demo.mp4" type="video/mp4"/>
             Your browser does not support embedded video.
           </video>
-        </div>
-      </article>
-    </section>
-
-    <!-- SEMI-AUTONOMOUS TRADING BOTS -->
-    <section id="semi-autonomous" class="section semi-autonomous-section">
-      <div class="section-heading">
-        <p class="eyebrow">SEMI-AUTONOMOUS TRADING BOTS</p>
-        <h2>Automation with the trader still in control.</h2>
-        <p class="section-intro">
+</div>
+</article>
+</section>
+<!-- SEMI-AUTONOMOUS TRADING BOTS -->
+<section class="section semi-autonomous-section" id="semi-autonomous">
+<div class="section-heading">
+<p class="eyebrow">SEMI-AUTONOMOUS TRADING BOTS</p>
+<h2>Automation with the trader still in control.</h2>
+<p class="section-intro">
           Focused trading systems designed to automate specific parts of execution
           and trade management while keeping strategy configuration and oversight local.
         </p>
-      </div>
-
-      <div class="bot-tools-grid">
-        <article class="mini-tool trading-bot">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-          </div>
-          <h3>Leg In / Leg Out</h3>
-          <p>Manage multi-leg option strategies one position at a time with controlled entry and exit workflows.</p>
-          <p class="tool-status">Coming soon...</p>
-        </article>
-
-        <article class="mini-tool trading-bot">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-          </div>
-          <h3>ScalpBot</h3>
-          <p>Local semi-autonomous trading system designed around short-duration intraday strategies.</p>
-          <p class="tool-status">Coming soon...</p>
-        </article>
-
-        <article class="mini-tool trading-bot">
-          <div class="pill-row">
-            <div class="pill">Windows desktop</div>
-            <div class="pill beta-pill">Public Beta</div>
-          </div>
-          <h3>SwingBot</h3>
-          <p>Local semi-autonomous automation for longer-duration technical and momentum-based trades.</p>
-          <p class="tool-status">Coming soon...</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- TOOLS & UTILITIES -->
-    <section id="other-tools" class="section other-tools-section">
-      <div class="section-heading">
-        <p class="eyebrow">TOOLS &amp; UTILITIES</p>
-        <h2>Research, analysis and trading utilities.</h2>
-        <p class="section-intro">
+</div>
+<div class="bot-tools-grid">
+<article class="mini-tool trading-bot">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+</div>
+<h3>Leg In / Leg Out</h3>
+<p>Manage multi-leg option strategies one position at a time with controlled entry and exit workflows.</p>
+<p class="tool-status">Coming soon...</p>
+</article>
+<article class="mini-tool trading-bot">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+</div>
+<h3>ScalpBot</h3>
+<p>Local semi-autonomous trading system designed around short-duration intraday strategies.</p>
+<p class="tool-status">Coming soon...</p>
+</article>
+<article class="mini-tool trading-bot">
+<div class="pill-row">
+<div class="pill">Windows desktop</div>
+<div class="pill beta-pill">Public Beta</div>
+</div>
+<h3>SwingBot</h3>
+<p>Local semi-autonomous automation for longer-duration technical and momentum-based trades.</p>
+<p class="tool-status">Coming soon...</p>
+</article>
+</div>
+</section>
+<!-- TOOLS & UTILITIES -->
+<section class="section other-tools-section" id="other-tools">
+<div class="section-heading">
+<p class="eyebrow">TOOLS &amp; UTILITIES</p>
+<h2>Research, analysis and trading utilities.</h2>
+<p class="section-intro">
           Focused desktop tools for dividends, valuation, quantitative research,
           options analysis and wheel-strategy tracking.
         </p>
-      </div>
-
-      <div class="mini-tools-grid">
-
-    <div class="mini-tool live">
-          <h3>Dynamic Options Plotter</h3>
-          <p>Visualize option positions, payoff structures and changing trade scenarios.</p>
-          <a href="https://github.com/MarkB2026/freetradingbots/releases/download/Dynamic_Options_Plotter_v1.13/Dynamic_Options_Plotter_Setup_v1_13.exe"
-             class="download-btn">
+</div>
+<div class="mini-tools-grid">
+<div class="mini-tool live">
+<h3>Dynamic Options Plotter</h3>
+<p>Visualize option positions, payoff structures and changing trade scenarios.</p>
+<a class="download-btn" href="https://github.com/MarkB2026/freetradingbots/releases/download/Dynamic_Options_Plotter_v1.13/Dynamic_Options_Plotter_Setup_v1_13.exe">
             Download for Windows
           </a>
-        </div>
-
-
-        
-        <div class="mini-tool live">
-          <h3>Dividend History Tracker</h3>
-          <p>Track dividend history, NAV movement and net investment income.</p>
-          <a href="https://github.com/MarkB2026/freetradingbots/releases/download/dividend-history-tracker-v1.8-beta/Dividend_History_Tracker_Setup_v1_8_Beta.exe"
-             class="download-btn">
+</div>
+<div class="mini-tool live">
+<h3>Dividend History Tracker</h3>
+<p>Track dividend history, NAV movement and net investment income.</p>
+<a class="download-btn" href="https://github.com/MarkB2026/freetradingbots/releases/download/dividend-history-tracker-v1.8-beta/Dividend_History_Tracker_Setup_v1_8_Beta.exe">
             Download for Windows
           </a>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Financial Lens / Lookup</h3>
-          <p>Financial lookup, valuation and historical research tools.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Quants</h3>
-          <p>Quantitative analysis tools and experiments.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Options Plot Chart</h3>
-          <p>Options payoff plotting tools for visualizing positions and trade structures.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Wheel Tracker</h3>
-          <p>Desktop wheel-strategy tracking interface for following positions and completed cycles.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Wheel Tracker – Streamlit</h3>
-          <p>Streamlit version of the wheel tracking interface.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-
-        <div class="mini-tool">
-          <h3>Value Investing Dashboard</h3>
-          <p>Dashboard for value-investing analysis and financial research.</p>
-          <p class="tool-status">Coming soon...</p>
-        </div>
-      </div>
-
-      <p class="other-tools-note">
+</div>
+<div class="mini-tool">
+<h3>Financial Lens / Lookup</h3>
+<p>Financial lookup, valuation and historical research tools.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+<div class="mini-tool">
+<h3>Quants</h3>
+<p>Quantitative analysis tools and experiments.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+<div class="mini-tool">
+<h3>Options Plot Chart</h3>
+<p>Options payoff plotting tools for visualizing positions and trade structures.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+<div class="mini-tool">
+<h3>Wheel Tracker</h3>
+<p>Desktop wheel-strategy tracking interface for following positions and completed cycles.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+<div class="mini-tool">
+<h3>Wheel Tracker – Streamlit</h3>
+<p>Streamlit version of the wheel tracking interface.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+<div class="mini-tool">
+<h3>Value Investing Dashboard</h3>
+<p>Dashboard for value-investing analysis and financial research.</p>
+<p class="tool-status">Coming soon...</p>
+</div>
+</div>
+<p class="other-tools-note">
         More tools are being prepared for public beta. Download links will appear here as installers become available.
       </p>
-
-      <a class="button secondary" href="#feedback">Request a Tool</a>
-    </section>
-
-    <!-- WINDOWS INSTALLATION -->
-    <section id="install" class="section install-section">
-      <div class="section-heading">
-        <p class="eyebrow">WINDOWS INSTALLATION</p>
-        <h2>Download. Install. Start using it.</h2>
-
-        <p class="section-intro">
+<a class="button secondary" href="#feedback">Request a Tool</a>
+</section>
+<!-- WINDOWS INSTALLATION -->
+<section class="section install-section" id="install">
+<div class="section-heading">
+<p class="eyebrow">WINDOWS INSTALLATION</p>
+<h2>Download. Install. Start using it.</h2>
+<p class="section-intro">
           Build A Trading Bot desktop tools are currently built for Windows 10 and Windows 11.
           Application data is stored locally unless a feature explicitly lets you
           choose to share data.
         </p>
-      </div>
-
-      <div class="install-steps">
-        <div class="install-step">
-          <span class="install-number">1</span>
-          <div>
-            <h3>Download</h3>
-            <p>
+</div>
+<div class="install-steps">
+<div class="install-step">
+<span class="install-number">1</span>
+<div>
+<h3>Download</h3>
+<p>
               Click <strong>Download for Windows</strong> on the tool you want.
               The download is the ready-to-install Windows application.
             </p>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <span class="install-number">2</span>
-          <div>
-           <h3>Run the installer</h3>
+</div>
+</div>
+<div class="install-step">
+<span class="install-number">2</span>
+<div>
+<h3>Run the installer</h3>
 <p>
   Open the downloaded <strong>EXE</strong> file and follow the
   installation prompts. Once installed, launch Dynamic Options Plotter
   from your desktop or Start menu.
 </p>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <span class="install-number">3</span>
-          <div>
-            <h3>Windows security message</h3>
-            <p>
+</div>
+</div>
+<div class="install-step">
+<span class="install-number">3</span>
+<div>
+<h3>Windows security message</h3>
+<p>
               Windows may display a security or SmartScreen message because
               Build A Trading Bot is independently distributed. Only continue if you
               downloaded the installer directly from <strong>BuildATradingBot.com</strong>.
             </p>
-          </div>
-        </div>
-
-        <div class="install-step">
-          <span class="install-number">4</span>
-          <div>
-            <h3>Launch the tool</h3>
-            <p>
+</div>
+</div>
+<div class="install-step">
+<span class="install-number">4</span>
+<div>
+<h3>Launch the tool</h3>
+<p>
               Open the application from your Start menu or desktop shortcut.
               Your local application data remains on your computer.
             </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="install-note">
-        <strong>Connections depend on the tool.</strong>
+</div>
+</div>
+</div>
+<div class="install-note">
+<strong>Connections depend on the tool.</strong>
         Tracker applications use supported broker connections for the information
         they need. Trading applications such as BEEBOT may place orders only when
         configured by the user for trading execution.
       </div>
-    </section>
-
-    <!-- COMMUNITY / FEEDBACK -->
-    <section id="feedback" class="section community-section">
-      <div class="section-heading community-heading">
-        <p class="eyebrow">HELP BUILD A TRADING BOT</p>
-
-        <h2>Use it. Break it. Improve it.</h2>
-
-        <p>
+</section>
+<!-- COMMUNITY / FEEDBACK -->
+<section class="section community-section" id="feedback">
+<div class="section-heading community-heading">
+<p class="eyebrow">HELP BUILD A TRADING BOT</p>
+<h2>Use it. Break it. Improve it.</h2>
+<p>
           Build A Trading Bot is being developed with the people actually using it.
           Feedback is not an afterthought — it is part of the development process.
         </p>
-      </div>
-
-      <div class="feedback-grid">
-        <article class="feedback-card">
-          <div class="feedback-icon">!</div>
-          <h3>Report a Bug</h3>
-
-          <p>
+</div>
+<div class="feedback-grid">
+<article class="feedback-card">
+<div class="feedback-icon">!</div>
+<h3>Report a Bug</h3>
+<p>
             Something broken, displaying the wrong result or behaving unexpectedly?
             Tell us what happened so it can be fixed.
           </p>
-
-          <a
-            class="button secondary feedback-button"
-            href="https://github.com/MarkB2026/freetradingbots/issues/new?title=Bug%20Report%3A%20"
-            target="_blank"
-            rel="noopener noreferrer">
+<a class="button secondary feedback-button" href="https://github.com/MarkB2026/freetradingbots/issues/new?title=Bug%20Report%3A%20" rel="noopener noreferrer" target="_blank">
             Report a Bug
           </a>
-        </article>
-
-        <article class="feedback-card">
-          <div class="feedback-icon">+</div>
-          <h3>Suggest a Feature</h3>
-
-          <p>
+</article>
+<article class="feedback-card">
+<div class="feedback-icon">+</div>
+<h3>Suggest a Feature</h3>
+<p>
             Have an idea that would make one of the existing tools more useful?
             Suggest it and help shape future versions.
           </p>
-
-          <a
-            class="button secondary feedback-button"
-            href="https://github.com/MarkB2026/freetradingbots/issues/new?title=Feature%20Request%3A%20"
-            target="_blank"
-            rel="noopener noreferrer">
+<a class="button secondary feedback-button" href="https://github.com/MarkB2026/freetradingbots/issues/new?title=Feature%20Request%3A%20" rel="noopener noreferrer" target="_blank">
             Suggest a Feature
           </a>
-        </article>
-
-        <article class="feedback-card">
-          <div class="feedback-icon">&lt;/&gt;</div>
-          <h3>Request a Script</h3>
-
-          <p>
+</article>
+<article class="feedback-card">
+<div class="feedback-icon">&lt;/&gt;</div>
+<h3>Request a Script</h3>
+<p>
             Need something specific? Request anything from a simple utility to
             turnkey automation — including automated trading bots, semi-automated
             systems and CSV-driven execution tools. Custom development may be
             available in exchange for a contribution to Build A Trading Bot.
           </p>
-
-          <a
-            class="button secondary feedback-button"
-            href="https://github.com/MarkB2026/freetradingbots/issues/new?title=New%20Script%20Request%3A%20"
-            target="_blank"
-            rel="noopener noreferrer">
+<a class="button secondary feedback-button" href="https://github.com/MarkB2026/freetradingbots/issues/new?title=New%20Script%20Request%3A%20" rel="noopener noreferrer" target="_blank">
             Request a Script
           </a>
-        </article>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section split-section">
-      <div>
-        <p class="eyebrow">ABOUT BUILD A TRADING BOT</p>
-        <h2>Software ideas turned into working tools.</h2>
-      </div>
-
-      <div class="body-copy">
-        <p>
+</article>
+</div>
+</section>
+<!-- ABOUT -->
+<section class="section split-section" id="about">
+<div>
+<p class="eyebrow">ABOUT BUILD A TRADING BOT</p>
+<h2>Software ideas turned into working tools.</h2>
+</div>
+<div class="body-copy">
+<p>
           Build A Trading Bot is a home for practical software created through human
           direction and AI-assisted development. The goal is simple: build
           useful tools, keep them understandable and make them easy to run.
         </p>
-
-        <p>
+<p>
           AI is part of the development process. Each application has its own
           defined purpose, rules and capabilities.
         </p>
-      </div>
-    </section>
-
-    <!-- PRIVACY -->
-    <section id="privacy" class="privacy-card">
-      <p class="eyebrow">LOCAL-FIRST BY DESIGN</p>
-
-      <h2>Your financial data does not need another cloud.</h2>
-
-      <p>
+</div>
+</section>
+<!-- PRIVACY -->
+<section class="privacy-card" id="privacy">
+<p class="eyebrow">LOCAL-FIRST BY DESIGN</p>
+<h2>Your financial data does not need another cloud.</h2>
+<p>
         Build A Trading Bot desktop tools are designed to run locally. Trading data and
         application databases remain on your computer unless you explicitly use
         a feature that shares data, such as optionally contributing BEEBOT trade
         information to The Hive.
       </p>
-    </section>
-
-    <!-- BITCOIN SUPPORT -->
-    <section id="support" class="support-card compact-support">
-      <div class="support-copy">
-        <p class="eyebrow">SUPPORT BUILD A TRADING BOT</p>
-        <h2>Support continued development.</h2>
-
-        <p>
+</section>
+<!-- BITCOIN SUPPORT -->
+<section class="support-card compact-support" id="support">
+<div class="support-copy">
+<p class="eyebrow">SUPPORT BUILD A TRADING BOT</p>
+<h2>Support continued development.</h2>
+<p>
           Bots, scripts &amp; tools are free to use. If you find them useful,
           Bitcoin contributions are appreciated.
         </p>
-      </div>
-
-      <div class="bitcoin-box compact-bitcoin-box">
-        <div class="btc-label">Bitcoin (BTC) — Bitcoin Network</div>
-
-        <div class="btc-address-row">
-          <input
-            id="btc-address"
-            type="text"
-            value="bc1qsmmrmpfad5hx4ek7f4k6pws2f5hn6ugfglg6yu"
-            readonly
-            aria-label="Build A Trading Bot Bitcoin address"
-          />
-
-          <button
-            class="button primary"
-            type="button"
-            onclick="copyBitcoinAddress()">
+</div>
+<div class="bitcoin-box compact-bitcoin-box">
+<div class="btc-label">Bitcoin (BTC) — Bitcoin Network</div>
+<div class="btc-address-row">
+<input aria-label="Build A Trading Bot Bitcoin address" id="btc-address" readonly="" type="text" value="bc1qsmmrmpfad5hx4ek7f4k6pws2f5hn6ugfglg6yu"/>
+<button class="button primary" onclick="copyBitcoinAddress()" type="button">
             Copy address
           </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="brand footer-brand">
-      <span class="brand-word">Free<span>TradingBots.com</span></span>
-      <span class="brand-dot"></span>
-    </div>
-
-    <p>Build. Download. Trade.</p>
-
-    <p class="copyright">
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer>
+<div class="brand footer-brand">
+<span class="brand-word">Free<span>TradingBots.com</span></span>
+<span class="brand-dot"></span>
+</div>
+<p>Build. Download. Trade.</p>
+<p class="copyright">
       © <span id="year"></span> BuildATradingBot.com
     </p>
-  </footer>
-
-  <!-- JAVASCRIPT -->
-  <script>
+</footer>
+<!-- JAVASCRIPT -->
+<script>
     document.getElementById('year').textContent =
       new Date().getFullYear();
 
@@ -813,49 +684,5 @@
       });
     }
   </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
