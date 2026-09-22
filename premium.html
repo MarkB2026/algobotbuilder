@@ -189,6 +189,15 @@ body.plan-open .main{padding-right:14px}
 
 /* Website strategy condition builder — isolated from existing dashboard controls */
 .web-rules{display:grid;gap:10px;margin-top:12px}.web-rule{display:grid;grid-template-columns:1.4fr 1fr .7fr .7fr 38px;gap:8px;align-items:end}.web-rule label{display:grid;gap:5px;color:#aebdca;font-size:12px}.web-rule select,.web-rule input{width:100%;min-height:38px;background:#101b28;color:#eef6fb;border:1px solid #36516a;border-radius:6px;padding:7px}.web-add{padding:10px 14px;background:#10293a;color:#a9e9ff;border:1px dashed #438bb3;border-radius:8px;cursor:pointer;font-weight:750}.web-remove{min-height:38px;background:#271b25;color:#ffb7b7;border:1px solid #654452;border-radius:6px;cursor:pointer}.web-rule-options{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:#d3e4f0;font-size:12px}.web-rule-options label{display:flex;gap:7px;align-items:center}.web-note{margin:10px 0 0;color:#9ab0c2;font-size:12px;line-height:1.5}@media(max-width:750px){.web-rule{grid-template-columns:1fr 1fr}.web-rule label:first-child{grid-column:1/-1}}
+
+/* Private-beta positioning: additive; builder logic unchanged */
+.positioning-banner{margin:0 0 18px;padding:22px 24px;border:1px solid #28728b;border-radius:12px;background:linear-gradient(115deg,#102c3b,#101a26);box-shadow:0 10px 30px rgba(0,0,0,.13)}
+.positioning-banner .eyebrow{color:#8be5f8;font-size:11px;font-weight:900;letter-spacing:1.8px}
+.positioning-banner h1{font-size:clamp(21px,3vw,31px);line-height:1.15;margin:9px 0;color:#f4fbff}
+.positioning-banner p{max-width:880px;color:#c2d7e5;line-height:1.65;margin:9px 0}
+.positioning-banner strong{color:#fff}
+.positioning-banner .small-print{color:#90aaba;font-size:12px}
+.positioning-banner .beta-pill{display:inline-block;margin-top:9px;border:1px solid #6684a1;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:800;color:#b4e7ff}
 </style>
 
 
@@ -289,7 +298,7 @@ body.plan-open .main{padding-right:14px}
 <body>
 <div class="shell">
 <aside class="sidebar">
-  <div class="brand">BuildTradingBots</div><div style="font-size:10px;color:var(--muted);margin-top:2px">CUSTOM BOT BUILDER • ADVANCED</div>
+  <div class="brand">BuildTradingBots</div><div style="font-size:10px;color:var(--muted);margin-top:2px">CUSTOM BOT BUILDER • PRIVATE BETA</div>
   <div class="connected"><span class="dot"></span>IBKR CONNECTED</div>
   <div class="nav">
     <button data-page="strategy">Strategy</button>
@@ -305,7 +314,8 @@ body.plan-open .main{padding-right:14px}
   <div class="sidebox"><div class="label">TODAY</div><div class="row"><span>Realized</span><b>+$184</b></div><div class="row"><span>Open P&amp;L</span><b>+$71</b></div><div class="row"><span>Trades</span><b>6</b></div></div>
 </aside>
 
-<main class="main"><div class="card" style="border-color:#4e8cff;background:#102238;margin-bottom:10px"><div class="page-title">BUILD YOUR CUSTOM TRADING BOT</div><div class="sub" style="margin:0">Choose the strategy, entry evidence, sizing, leg-in/out, Sink or Swim, stop progression, trailing/ratcheting, cooldown, session rules, scanner, broker and safety controls. Review the complete plan before building.</div></div>
+<main class="main"><section class="positioning-banner" aria-label="Premium private beta"><div class="eyebrow">PREMIUM · INVITATION-ONLY BETA</div><h1>Automate trade management. Keep control of your strategy.</h1><p>Not a get-rich-quick algorithm or a promise of thousands of trades a day. Premium is designed for traders who want to define their own entries, position sizing, stops, legging, profit protection, trailing and ratcheting rules—then let the bot manage those rules consistently.</p><p><strong>Experience automated trade management, and you may never want to go back to doing everything manually.</strong></p><span class="beta-pill">SELECTED TESTERS · PAPER / OBSERVE ONLY</span><p class="small-print">This private beta is for invited testers who can provide structured feedback. Access to this page alone does not authorize a Premium build; server-side access restrictions are required.</p></section>
+<div class="card" style="border-color:#4e8cff;background:#102238;margin-bottom:10px"><div class="page-title">BUILD YOUR CUSTOM TRADING BOT</div><div class="sub" style="margin:0">Choose the strategy, entry evidence, sizing, leg-in/out, Sink or Swim, stop progression, trailing/ratcheting, cooldown, session rules, scanner, broker and safety controls. Review the complete plan before building.</div></div>
 <div class="top">
  <div class="card"><div class="label">MODE <button type="button" class="info-btn" data-help="MODE" aria-label="Explain MODE">i</button></div><div class="modes"><button>OBSERVE</button><button class="active">PAPER</button><button>LIVE</button></div></div>
  <div class="card"><div class="row"><span class="label">SENTIENCE</span><b id="sentLabel">2 — ASSISTED</b></div><input id="sentience" type="range" min="0" max="4" value="2"><div class="row" style="font-size:10px;color:var(--muted)"><span>STRICT</span><span>AUTONOMOUS</span></div></div>

@@ -36,10 +36,20 @@
 .build-status-title{font-weight:900;font-size:16px;color:#bdefff}
 .build-status-text{margin-top:8px;color:#91a4b1;font-size:13px}
 
+
+/* Private-beta positioning: additive; builder logic unchanged */
+.positioning-banner{margin:0 0 18px;padding:22px 24px;border:1px solid #28728b;border-radius:12px;background:linear-gradient(115deg,#102c3b,#101a26);box-shadow:0 10px 30px rgba(0,0,0,.13)}
+.positioning-banner .eyebrow{color:#8be5f8;font-size:11px;font-weight:900;letter-spacing:1.8px}
+.positioning-banner h1{font-size:clamp(21px,3vw,31px);line-height:1.15;margin:9px 0;color:#f4fbff}
+.positioning-banner p{max-width:880px;color:#c2d7e5;line-height:1.65;margin:9px 0}
+.positioning-banner strong{color:#fff}
+.positioning-banner .small-print{color:#90aaba;font-size:12px}
+.positioning-banner .beta-pill{display:inline-block;margin-top:9px;border:1px solid #6684a1;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:800;color:#b4e7ff}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Build<span>TradingBots</span></div><div class="tag">BUILD IT. DOWNLOAD. TRADE. — Build the bot you want. Run it locally.</div></div><div class="badge">CUSTOM BOT BUILDER</div></div>
-<div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Intelligence</button><button class="tab" data-page="review">5 · Review & Build</button></div>
+<section class="positioning-banner" aria-label="Why automate trade management"><div class="eyebrow">BUILD IT. DOWNLOAD. TRADE.</div><h1>Your trading plan. Your rules. Less time managing every trade.</h1><p>This isn't a get-rich-quick algorithm promising thousands of trades a day. Build a bot around the decisions you make: entries, position sizing, stops, profit targets, trailing rules and risk limits. Let it handle the repetitive work so you can focus on your strategy.</p><p><strong>Once you've experienced automated trade management, you may never want to return to managing every trade manually.</strong></p><span class="beta-pill">BASIC BUILDER · PUBLIC BETA</span><p class="small-print">Start in PAPER mode. Automated trading involves risk and cannot guarantee profits or prevent losses.</p></section>
+<div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Preview</button><button class="tab" data-page="review">5 · Review & Build</button></div>
 
 <section id="strategy" class="page active">
 <div class="section"><div class="head"><span>BOT BASICS</span><small>Name it and choose what it trades</small></div><div class="body"><div class="grid"><label class="field">Bot Name<input name="bot_name" value="My Trading Bot"></label><label class="field">Symbol<input name="symbol" value="MARA"></label><label class="field">Direction<select name="direction"><option>LONG</option><option>SHORT</option></select></label><label class="field">Strategy Timeframe<select name="timeframe"><option>1 min</option><option selected>5 min</option><option>15 min</option><option>30 min</option><option>1 hour</option><option>Daily</option></select></label></div></div></div>
@@ -73,7 +83,7 @@
 <div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Advanced Scanner</h3><p>Scan a universe for qualifying candidates using price, RVOL, spread, structure and setup quality.</p><div class="fake"><select disabled><option>Dynamic universe</option></select></div></div>
 <div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Protected Profit</h3><p>Automatically increase the amount of open profit the bot refuses to give back as the trade matures.</p><div class="fake"><input disabled value="Profit stages"></div></div>
 <div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Advanced Hive Intelligence</h3><p>Use standardized community observations and outcomes as an additional intelligence layer.</p><div class="fake"><select disabled><option>Hive connected</option></select></div></div>
-</div><div class="premium-footer"><span><b>Premium is more than extra indicators.</b> It adds the BeeBot-style trade-management intelligence layer.</span><span class="premium-badge">COMING WITH PREMIUM BUILDER</span></div></div></div>
+</div><div class="premium-footer"><span><b>Premium is more than extra indicators.</b> Advanced trade-management features are being tested with selected participants.</span><span class="premium-badge">PRIVATE BETA · INVITATION ONLY</span></div></div></div>
 </section>
 
 <section id="review" class="page">
@@ -110,7 +120,7 @@
   </div>
 </section>
 
-<div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium intelligence visible but locked</div></div><button class="buildbtn" id="buildBtn">BUILD MY TRADING BOT</button></div>
+<div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium preview · Private beta by invitation</div></div><button class="buildbtn" id="buildBtn">BUILD MY TRADING BOT</button></div>
 </div>
 
 <script>
