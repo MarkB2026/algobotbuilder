@@ -441,7 +441,7 @@ async function buildPlan(){
 
   buildButton.disabled=true;
   buildButton.textContent='BUILDING...';
-  setBuildState('building','BUILDING YOUR ALGOBOT','Submitting configuration...');
+  setBuildState('building','BUILDING YOUR BOT','Submitting configuration...');
 
   try{
     const response=await fetch(WORKER+'/',{
@@ -458,7 +458,7 @@ async function buildPlan(){
 
     const buildId=result.build_id;
    hideTurnstile();
-    setBuildState('building','BUILDING YOUR ALGOBOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+    setBuildState('building','BUILDING YOUR BOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
     startBuildProgressMessages();
 
     while(true){
