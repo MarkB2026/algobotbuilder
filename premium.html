@@ -186,6 +186,9 @@ select:hover,select:focus{
 .plan-line{margin:3px 0}.plan-muted{color:#8297aa}.plan-warn{color:#ffd48a}
 body.plan-open .main{padding-right:14px}
 @media(max-width:900px){.plan-drawer{width:100vw}.plan-float{right:10px;bottom:10px}}
+
+/* Website strategy condition builder — isolated from existing dashboard controls */
+.web-rules{display:grid;gap:10px;margin-top:12px}.web-rule{display:grid;grid-template-columns:1.4fr 1fr .7fr .7fr 38px;gap:8px;align-items:end}.web-rule label{display:grid;gap:5px;color:#aebdca;font-size:12px}.web-rule select,.web-rule input{width:100%;min-height:38px;background:#101b28;color:#eef6fb;border:1px solid #36516a;border-radius:6px;padding:7px}.web-add{padding:10px 14px;background:#10293a;color:#a9e9ff;border:1px dashed #438bb3;border-radius:8px;cursor:pointer;font-weight:750}.web-remove{min-height:38px;background:#271b25;color:#ffb7b7;border:1px solid #654452;border-radius:6px;cursor:pointer}.web-rule-options{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:#d3e4f0;font-size:12px}.web-rule-options label{display:flex;gap:7px;align-items:center}.web-note{margin:10px 0 0;color:#9ab0c2;font-size:12px;line-height:1.5}@media(max-width:750px){.web-rule{grid-template-columns:1fr 1fr}.web-rule label:first-child{grid-column:1/-1}}
 </style>
 
 
@@ -478,6 +481,15 @@ body.plan-open .main{padding-right:14px}
         <div class="muted" id="strategyPlainEnglish" style="margin-top:8px">
           Finds momentum divergence at confirmed price pivots, then waits for reversal structure before entry.
         </div>
+      </div>
+
+      <div class="card" id="websiteEntryRulesCard">
+        <div class="section-head"><span>ADDITIONAL ENTRY CONDITIONS</span><span style="color:#8fdcf5;font-size:11px">EXPLORE BEFORE YOU DOWNLOAD</span></div>
+        <p class="web-note">Just like the Basic Builder: add RSI, MACD, moving averages and other conditions. These are additional entry rules, not independent trading engines.</p>
+        <div id="websiteEntryRules" class="web-rules"></div>
+        <button type="button" id="websiteAddRule" class="web-add">+ ADD INDICATOR / CONDITION</button>
+        <div class="web-rule-options"><label><input type="checkbox" id="websiteRequireAll" checked> Require all entry rules</label><label><input type="checkbox" id="websiteConfirmedBar" checked> Confirm on closed bar</label></div>
+        <p class="web-note" id="websiteRuleNotice" role="status">Explore the controls here. Additional conditions require build-engine support before they can be included in a downloaded bot.</p>
       </div>
 
       <div class="card" id="bollingerCoreCard" style="display:none">
@@ -938,7 +950,7 @@ body.plan-open .main{padding-right:14px}
 </main>
 </div>
   <!-- ============================================================
-     BOT BUILDER PREMIUM — BITCOIN CHECKOUT
+     ALGOBOT BUILDER PREMIUM — BITCOIN CHECKOUT
      ============================================================ -->
 
 <div id="premiumPaymentBackdrop" class="popup-backdrop" aria-hidden="true">
@@ -946,7 +958,7 @@ body.plan-open .main{padding-right:14px}
 
     <div class="popup-top">
       <div>
-        <div class="popup-kicker">BUILDTRADINGBOTS.COM BUILDER</div>
+        <div class="popup-kicker">ALGOBOT BUILDER</div>
         <div class="popup-title">Premium Builder</div>
       </div>
 
@@ -963,7 +975,7 @@ body.plan-open .main{padding-right:14px}
         </div>
 
         <div style="color:var(--muted);font-size:12px">
-          One-time Bitcoin payment for this Premium Bot build.
+          One-time Bitcoin payment for this Premium AlgoBot build.
         </div>
       </div>
 
@@ -1101,7 +1113,7 @@ if (data.payment_required === false) {
   // Beta: payment is waived.
   premiumBuildBtn.disabled = false;
   premiumBuildBtn.textContent =
-    'BUILD PREMIUM BOT — BETA ACCESS';
+    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
 
   statusEl.classList.remove(
     'payment-fail',
@@ -1246,7 +1258,7 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
 
   premiumBuildBtn.disabled = false;
   premiumBuildBtn.textContent =
-    'BUILD PREMIUM BOT';
+    'BUILD PREMIUM ALGOBOT';
 
 } else if (data.status === 'not_found') {
   statusEl.classList.remove(
@@ -2030,6 +2042,32 @@ This is the configuration contract for review; engine support for each field mus
    return !e ? d : (e.type==='checkbox' ? e.checked : e.value);
  };
 
+
+/* Additional website entry conditions: explicit serialization and safe build guard. */
+const websiteIndicators=['RSI','MACD','EMA','SMA','VWAP','Price','ATR','Volume','RVOL','Bollinger Bands'];
+const websiteOperators=['Below','Above','Crosses Above','Crosses Below'];
+function addWebsiteRule(){
+  const row=document.createElement('div');row.className='web-rule';
+  const fields=[['Indicator','indicator',websiteIndicators],['Condition','operator',websiteOperators]];
+  for(const [label,name,choices] of fields){
+    const wrap=document.createElement('label');wrap.textContent=label;
+    const select=document.createElement('select');select.dataset.field=name;
+    choices.forEach(choice=>{const option=document.createElement('option');option.textContent=choice;option.value=choice;select.appendChild(option)});
+    wrap.appendChild(select);row.appendChild(wrap);
+  }
+  for(const [label,name,initial] of [['Period','period','14'],['Value','value','30']]){
+    const wrap=document.createElement('label');wrap.textContent=label;
+    const input=document.createElement('input');input.type='number';input.dataset.field=name;input.value=initial;input.step='any';wrap.appendChild(input);row.appendChild(wrap);
+  }
+  const remove=document.createElement('button');remove.type='button';remove.className='web-remove';remove.textContent='×';remove.setAttribute('aria-label','Remove condition');remove.onclick=()=>row.remove();row.appendChild(remove);
+  document.getElementById('websiteEntryRules').appendChild(row);
+}
+function websiteEntryRules(){return [...document.querySelectorAll('#websiteEntryRules .web-rule')].map(row=>{
+  const get=field=>row.querySelector('[data-field="'+field+'"]')?.value;
+  return {indicator:get('indicator'),condition:get('operator'),period:Number(get('period')),value:Number(get('value'))};
+});}
+document.getElementById('websiteAddRule').addEventListener('click',addWebsiteRule);
+
  function enginePlan(){
 
   const pid=val(
@@ -2042,6 +2080,7 @@ This is the configuration contract for review; engine support for each field mus
   return {
 
    schema_version:"allbot.engine.plan.v1.4.9",
+   website_entry_conditions:{rules:websiteEntryRules(),require_all:document.getElementById('websiteRequireAll').checked,confirmed_bar:document.getElementById('websiteConfirmedBar').checked},
 
    plan_name:"AllBot Premium Plan",
 
@@ -2283,6 +2322,12 @@ This is the configuration contract for review; engine support for each field mus
            'premiumPaymentStatus'
          );
 
+       // Do not silently discard website-only rules during a paid/live build.
+       if(websiteEntryRules().length){
+         alert('Your additional entry conditions are saved in the on-page plan preview, but the Premium build engine has not yet been verified to execute them. Remove the additional conditions to build the existing supported bot.');
+         document.getElementById('websiteRuleNotice').textContent='Build paused: additional conditions must be connected to the Premium engine before download.';
+         return;
+       }
        const plan=enginePlan();
 
        const turnstileToken=
@@ -2468,7 +2513,5 @@ This is the configuration contract for review; engine support for each field mus
 
 })();
 </script>
-
-
 </body>
 </html>
