@@ -42,6 +42,18 @@
 .premium-button{background:linear-gradient(180deg,#ffd782,#dba638);border:0;color:#221807;font-weight:900;border-radius:8px;padding:12px 20px;cursor:pointer}
 .premium-button:disabled{opacity:.5;cursor:not-allowed}.payment-panel{display:none;margin-top:15px;padding:15px;border:1px solid #6e582a;border-radius:9px;background:#14170f}
 .payment-panel.show{display:block}.payment-panel code{word-break:break-all;color:#ffdb8a}.payment-panel input{margin:8px 0}.payment-message{margin-top:10px;color:#ffda89;white-space:pre-wrap}
+
+/* Premium launch roadmap */
+.premium-section-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 14px;padding-bottom:10px;border-bottom:1px solid #735a2d;color:#ffda86;font-size:15px;font-weight:900;letter-spacing:.5px}
+.premium-section-label small{font-size:11px;color:#c5b48c;font-weight:600;letter-spacing:0}
+.premium-section-label.future{color:#9ba9b6;border-bottom-color:#34404c;margin-top:25px}
+.premium-card.launch{border-color:#84672e;background:linear-gradient(145deg,#282215,#161a1e);box-shadow:inset 0 1px 0 #b68c3230}
+.premium-card.launch h3{color:#ffe0a0}
+.premium-card.future{background:#0d1217;border-color:#252c34;opacity:.56;filter:grayscale(.65)}
+.premium-card.future h3{color:#a7b1bb}
+.premium-card.future .lock{color:#8994a1}
+.premium-card.future .fake{opacity:.24}
+.premium-intro{font-size:13px;color:#c5bba6;margin:0 0 16px}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -66,20 +78,24 @@
 </section>
 
 <section id="premium" class="page">
-<div class="section premium-wrap"><div class="head"><span class="premium-title">PREMIUM INTELLIGENCE</span><span class="premium-badge">PREMIUM</span></div><div class="body"><div class="premium-grid">
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Sink or Swim</h3><p>Give a new trade a grace period to prove itself before normal stop management takes over.</p><div class="fake"><select disabled><option>Enabled</option></select><input disabled value="Grace period"></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>HAL Adaptive Intelligence</h3><p>Allow the management engine to react to changing trade quality and market conditions.</p><div class="fake"><select disabled><option>Adaptive</option></select><select disabled><option>Authority 2</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Weather Stops</h3><p>Let stop behaviour evolve as the trade develops instead of relying on one static stop.</p><div class="fake"><select disabled><option>Progressive</option></select><input disabled value="ATR / structure"></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Pass-Through Logic</h3><p>Give technical levels controlled tolerance instead of treating every touch as an automatic exit.</p><div class="fake"><select disabled><option>Structure pass-through</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Leg In / Leg Out</h3><p>Build and reduce positions in controlled tranches using confirmation, profit and structure rules.</p><div class="fake"><select disabled><option>3 legs</option></select><select disabled><option>25% exits</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Progressive Ratcheting</h3><p>Technical stop → breakeven → profit trail → tight trail while never loosening protection.</p><div class="fake"><select disabled><option>4 stages</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Cooldown & Smart Re-entry</h3><p>Prevent churn after an exit and require a fresh setup, pivot, divergence reset or reversal.</p><div class="fake"><input disabled value="Cooldown"><select disabled><option>Fresh setup</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Structure / ATR Run Room</h3><p>Judge whether enough movement remains for the trade before committing risk.</p><div class="fake"><select disabled><option>ATR + structure</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Position Adoption & Recovery</h3><p>Advanced ownership, handoff and restart management for eligible existing positions.</p><div class="fake"><select disabled><option>Explicit adoption</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Advanced Scanner</h3><p>Scan a universe for qualifying candidates using price, RVOL, spread, structure and setup quality.</p><div class="fake"><select disabled><option>Dynamic universe</option></select></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Protected Profit</h3><p>Automatically increase the amount of open profit the bot refuses to give back as the trade matures.</p><div class="fake"><input disabled value="Profit stages"></div></div>
-<div class="premium-card"><span class="lock">🔒 LOCKED</span><h3>Advanced Hive Intelligence</h3><p>Use standardized community observations and outcomes as an additional intelligence layer.</p><div class="fake"><select disabled><option>Hive connected</option></select></div></div>
-</div><div class="premium-footer"><span><b>Premium is more than extra indicators.</b> It adds the BeeBot-style trade-management intelligence layer.</span><span class="premium-badge">COMING WITH PREMIUM BUILDER</span></div></div></div>
+<div class="section premium-wrap"><div class="head"><span class="premium-title">PREMIUM TRADE MANAGEMENT</span><span class="premium-badge">PREMIUM ROADMAP</span></div>
+<div class="body">
+<p class="premium-intro">A focused first release, followed by more advanced behaviours as they are implemented and tested. The features below are a release plan, not currently activated in generated bots.</p>
+<div class="premium-section-label">✦ PREMIUM LAUNCH <small>Initial $10 edition · planned features</small></div>
+<div class="premium-grid"><div class="premium-card launch"><span class="lock">🔒 PREMIUM</span><h3>Progressive Ratcheting</h3><p>Advance from the initial stop to breakeven and profit protection as a trade develops.</p><div class="fake"><input disabled value="4 configurable stages"></div></div>
+<div class="premium-card launch"><span class="lock">🔒 PREMIUM</span><h3>Protected Profit</h3><p>Protect an increasing portion of open profit as a position advances.</p><div class="fake"><input disabled value="Profit protection stages"></div></div>
+<div class="premium-card launch"><span class="lock">🔒 PREMIUM</span><h3>Cooldown &amp; Smart Re-entry</h3><p>Pause after an exit and require a fresh qualifying setup before another entry.</p><div class="fake"><input disabled value="Cooldown + fresh setup"></div></div></div>
+<div class="premium-section-label future">◷ FUTURE PREMIUM FEATURES <small>Planned for later updates</small></div>
+<div class="premium-grid"><div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Sink or Swim</h3><p>Give a new trade a defined period to establish itself.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Weather Stops</h3><p>Volatility- and structure-aware stop management.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Pass-Through Logic</h3><p>Controlled tolerance around technical stop levels.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Leg In / Leg Out</h3><p>Scale positions in and out through managed tranches.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Structure / ATR Run Room</h3><p>Evaluate remaining price movement against risk.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Position Adoption & Recovery</h3><p>Safely resume management of eligible existing positions.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Advanced Scanner</h3><p>Filter a wider candidate universe using market conditions.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Advanced Hive Intelligence</h3><p>Optional community-derived observations and analytics.</p></div></div>
+<div class="premium-footer"><span><b>Start with the essentials.</b> More advanced management will be added after engine and paper-trading validation.</span><span class="premium-badge">IN DEVELOPMENT</span></div>
+</div></div>
 </section>
 
 <section id="review" class="page">
