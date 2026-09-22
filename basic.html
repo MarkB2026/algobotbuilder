@@ -36,6 +36,12 @@
 .build-status-title{font-weight:900;font-size:16px;color:#bdefff}
 .build-status-text{margin-top:8px;color:#91a4b1;font-size:13px}
 
+/* Bitcoin Premium checkout */
+.premium-cta{border:1px solid #876b2f;background:linear-gradient(135deg,#241d10,#131a20);border-radius:10px;padding:17px;margin-top:14px}
+.premium-cta h3{margin:0 0 5px;color:#ffd782;font-size:18px}.premium-cta p{margin:0 0 12px;color:#c6b99a}
+.premium-button{background:linear-gradient(180deg,#ffd782,#dba638);border:0;color:#221807;font-weight:900;border-radius:8px;padding:12px 20px;cursor:pointer}
+.premium-button:disabled{opacity:.5;cursor:not-allowed}.payment-panel{display:none;margin-top:15px;padding:15px;border:1px solid #6e582a;border-radius:9px;background:#14170f}
+.payment-panel.show{display:block}.payment-panel code{word-break:break-all;color:#ffdb8a}.payment-panel input{margin:8px 0}.payment-message{margin-top:10px;color:#ffda89;white-space:pre-wrap}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -94,6 +100,21 @@
       </div>
 
       <div class="note">The installer contains the trading application and required runtime components. You do not need the Python source code to run your bot.</div>
+
+      <div class="premium-cta" id="premiumCheckout">
+        <h3>₿ Unlock Premium Build — $10 USD</h3>
+        <p>Test the Bitcoin checkout with a 15-minute BTC quote and on-chain confirmation. Premium installer generation is not connected to this Basic builder yet.</p>
+        <button class="premium-button" type="button" id="premiumUnlockBtn">UNLOCK PREMIUM BUILD</button>
+        <div class="payment-panel" id="paymentPanel" aria-live="polite">
+          <div id="paymentQuote">Requesting Bitcoin quote…</div>
+          <label class="field" style="margin-top:12px">Bitcoin transaction ID (TXID)
+            <input id="paymentTxid" maxlength="64" placeholder="Paste your 64-character transaction ID" autocomplete="off">
+          </label>
+          <button class="premium-button" type="button" id="paymentVerifyBtn">VERIFY PAYMENT</button>
+          <button type="button" class="add" id="paymentRefreshBtn">CHECK PAYMENT STATUS</button>
+          <div class="payment-message" id="paymentMessage"></div>
+        </div>
+      </div>
 
       <div id="turnstileWrap" style="display:flex;justify-content:center;margin-top:22px;">
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx"></div>
@@ -362,7 +383,7 @@ async function buildPlan(){
       await new Promise(resolve=>setTimeout(resolve,5000));
 
       const statusResponse=await fetch(
-        WORKER+'/status?id='+encodeURIComponent(buildId)
+        WORKER+'/build/status?id='+encodeURIComponent(buildId)+'&sha='+encodeURIComponent(result.commit_sha)
       );
 
       const status=await statusResponse.json();
@@ -401,6 +422,58 @@ async function buildPlan(){
     }
   }
 }
+
+
+// Payment-test checkout. Deliberately does not claim a Premium installer or license.
+let premiumQuote=null;
+const payMessage=document.getElementById('paymentMessage');
+function paymentMessage(text){payMessage.textContent=text;}
+function showPaymentQuote(q){
+  const el=document.getElementById('paymentQuote');
+  el.replaceChildren();
+  const line=(label,value)=>{const p=document.createElement('p');const b=document.createElement('b');b.textContent=label+': ';const code=document.createElement('code');code.textContent=String(value);p.append(b,code);el.append(p);};
+  line('Amount (BTC)',q.required_btc);
+  line('Receiving address',q.bitcoin_address);
+  line('Expires',new Date(q.expires_at).toLocaleString());
+  line('Quote ID',q.quote_id);
+  const copy=document.createElement('button');copy.type='button';copy.className='add';copy.textContent='COPY BTC ADDRESS';
+  copy.onclick=()=>navigator.clipboard.writeText(q.bitcoin_address).then(()=>paymentMessage('Address copied.')).catch(()=>paymentMessage('Select and copy the address above.'));
+  el.append(copy);
+}
+document.getElementById('premiumUnlockBtn').onclick=async()=>{
+  document.getElementById('paymentPanel').classList.add('show');
+  paymentMessage('Fetching signed quote…');
+  try{
+    const r=await fetch(WORKER+'/premium/quote');const q=await r.json();
+    if(!r.ok||!q.ok)throw Error(q.error||'Could not create quote');
+    premiumQuote=q;showPaymentQuote(q);
+    paymentMessage('Send the exact BTC amount before the quote expires, then enter your TXID. This is a real Bitcoin payment.');
+  }catch(e){paymentMessage('Quote error: '+e.message);}
+};
+document.getElementById('paymentVerifyBtn').onclick=async()=>{
+  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
+  const txid=document.getElementById('paymentTxid').value.trim();
+  if(!/^[a-fA-F0-9]{64}$/.test(txid)){paymentMessage('Enter a valid 64-character TXID.');return;}
+  paymentMessage('Checking blockchain confirmation…');
+  try{
+    const r=await fetch(WORKER+'/premium/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      txid,quote_id:premiumQuote.quote_id,quote_signature:premiumQuote.quote_signature,
+      required_sats:premiumQuote.required_sats,expires_at:premiumQuote.expires_at
+    })});
+    const v=await r.json();
+    if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
+    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nPremium installer/activation is not connected to this Basic builder yet. Keep your quote ID and TXID.');}
+    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));
+  }catch(e){paymentMessage('Verification error: '+e.message);}
+};
+document.getElementById('paymentRefreshBtn').onclick=async()=>{
+  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
+  try{
+    const r=await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(premiumQuote.quote_id));
+    const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Status unavailable');
+    paymentMessage('Server payment status: '+v.status+'; confirmed: '+v.confirmed+'; received: '+v.received_sats+' sats.');
+  }catch(e){paymentMessage('Status error: '+e.message);}
+};
 
 document.getElementById('buildBtn').onclick=buildPlan;
 </script>
