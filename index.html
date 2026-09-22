@@ -136,8 +136,16 @@
 .mbb-header-logo{display:block;flex:0 0 112px;line-height:0}
 .mbb-header-logo img{display:block;width:112px;height:112px;object-fit:contain}
 .site-header nav{flex:1;min-width:0}
-.hero{align-items:center}
-.hero-copy{max-width:900px}
+/* Compact two-column hero: headline left, full brand logo right */
+.hero{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)!important;align-items:center!important;gap:44px!important;padding-top:44px!important;padding-bottom:50px!important}
+.hero-copy{max-width:720px!important;min-width:0}
+.hero-copy h1{font-size:clamp(2.5rem,4.1vw,4.25rem)!important;line-height:1.12!important;letter-spacing:-.035em!important;margin:16px 0 22px!important}
+.hero-copy h1 span{display:inline!important}
+.hero-copy .lede{max-width:610px}
+.hero-art{display:flex!important;align-items:center;justify-content:center;min-width:0}
+.hero-art img{display:block;width:100%!important;max-width:475px!important;height:auto!important;object-fit:contain;filter:drop-shadow(0 0 25px rgba(0,170,255,.12))}
+@media(max-width:950px){.hero{grid-template-columns:minmax(0,1fr) minmax(240px,.72fr)!important;gap:20px!important}.hero-copy h1{font-size:clamp(2.25rem,4.8vw,3.3rem)!important}.hero-art img{max-width:340px!important}}
+@media(max-width:700px){.hero{grid-template-columns:1fr!important;gap:12px!important;padding-top:32px!important}.hero-copy h1{font-size:clamp(2.25rem,9vw,3.25rem)!important}.hero-art{grid-row:2}.hero-art img{max-width:300px!important}.hero-copy .hero-actions{flex-wrap:wrap}}
 .mbb-catalog{max-width:1320px;margin:24px auto 58px;padding:0 12px}
 .mbb-catalog iframe{display:block;width:100%;height:1900px;border:1px solid rgba(85,216,255,.19);border-radius:18px;background:#070b13}
 .mbb-catalog-note{text-align:center;opacity:.72;margin:14px 0 0}
@@ -174,7 +182,7 @@
 <p>Choose the strategy, rules and risk controls. Build your bot from simple selections, or download one of the ready-made bots and tools below.</p>
 </div>
 </div>
-
+<div class="hero-art"><img src="assets/mybotbuilder-logo.png" alt="MyBotBuilder trading bot logo" width="475" height="475" /></div>
 </section><section aria-label="Specialized bot lineup" class="mbb-catalog" id="bot-lineup"><iframe loading="lazy" src="bots.html" title="MyBotBuilder specialized bot lineup"></iframe><p class="mbb-catalog-note">Explore all eight specialized bots above. Detailed demos, tools and downloads continue below.</p></section>
 <!-- PRINCIPLES -->
 <section aria-label="Key principles" class="trust-strip">
