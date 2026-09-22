@@ -938,7 +938,7 @@ body.plan-open .main{padding-right:14px}
 </main>
 </div>
   <!-- ============================================================
-     ALGOBOT BUILDER PREMIUM — BITCOIN CHECKOUT
+     BOT BUILDER PREMIUM — BITCOIN CHECKOUT
      ============================================================ -->
 
 <div id="premiumPaymentBackdrop" class="popup-backdrop" aria-hidden="true">
@@ -963,7 +963,7 @@ body.plan-open .main{padding-right:14px}
         </div>
 
         <div style="color:var(--muted);font-size:12px">
-          One-time Bitcoin payment for this Premium AlgoBot build.
+          One-time Bitcoin payment for this Premium Bot build.
         </div>
       </div>
 
@@ -1101,7 +1101,7 @@ if (data.payment_required === false) {
   // Beta: payment is waived.
   premiumBuildBtn.disabled = false;
   premiumBuildBtn.textContent =
-    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+    'BUILD PREMIUM BOT — BETA ACCESS';
 
   statusEl.classList.remove(
     'payment-fail',
@@ -1246,7 +1246,7 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
 
   premiumBuildBtn.disabled = false;
   premiumBuildBtn.textContent =
-    'BUILD PREMIUM ALGOBOT';
+    'BUILD PREMIUM BOT';
 
 } else if (data.status === 'not_found') {
   statusEl.classList.remove(
