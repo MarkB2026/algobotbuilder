@@ -68,13 +68,20 @@
 .premium-card.launch h3,.premium-card.launch .lock{color:#ffda86}
 .premium-footer{background:#111c26;border-color:#304455;color:#b3c5d2}
 .premium-footer b{color:#e7f0f7}
+
+/* Approved symbol whitelist */
+.whitelist-entry{display:flex;gap:9px;align-items:center}.whitelist-entry input{max-width:370px}.whitelist-entry .add{margin:0;white-space:nowrap;height:40px}.symbol-chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.symbol-chip{display:inline-flex;align-items:center;gap:9px;border:1px solid #3286a6;background:#112c3b;color:#d8f3ff;padding:7px 10px;border-radius:8px;font-weight:800}.symbol-chip button{width:23px;height:23px;border:1px solid #56778a;border-radius:5px;background:#193344;color:#e5f7ff;cursor:pointer}.symbol-count{color:#75dafa;font-weight:800}.symbol-error{color:#ff9b9b;min-height:16px;font-size:12px;margin-top:5px}@media(max-width:560px){.whitelist-entry{flex-wrap:wrap}.whitelist-entry input{max-width:none}}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
 <div style="border:1px solid #276482;background:#102a38;border-radius:9px;padding:13px 16px;margin-bottom:14px;color:#d4edfb"><strong>RSI DIVERGENCE — REVERSAL BOT</strong><br>RSI divergence and price confirmation provide the core setup. The entry rules below are <strong>additional filters</strong>, not independent trading strategies. Bollinger mean reversion and multiple independent strategy instances are planned. <a href="bots.html#reversal" style="color:#79e4ff">View Reversal Bot details ↗</a></div><div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Intelligence</button><button class="tab" data-page="review">5 · Review & Build</button></div>
 
 <section id="strategy" class="page active">
-<div class="section"><div class="head"><span>BOT BASICS</span><small>Name it and choose what it trades</small></div><div class="body"><div class="grid"><label class="field">Bot Name<input name="bot_name" value="My Trading Bot"></label><label class="field">Symbol<input name="symbol" value="MARA"></label><label class="field">Direction<select name="direction"><option>LONG</option><option>SHORT</option></select></label><label class="field">Strategy Timeframe<select name="timeframe"><option>1 min</option><option selected>5 min</option><option>15 min</option><option>30 min</option><option>1 hour</option><option>Daily</option></select></label></div></div></div>
+<div class="section"><div class="head"><span>BOT BASICS</span><small>Name it and choose what it trades</small></div><div class="body"><div class="grid"><label class="field">Bot Name<input name="bot_name" value="My Trading Bot"></label><div class="field"><span>Trading Symbols</span><span class="symbol-count" id="symbolCount">1 approved</span></div><label class="field">Direction<select name="direction"><option>LONG</option><option>SHORT</option></select></label><label class="field">Strategy Timeframe<select name="timeframe"><option>1 min</option><option selected>5 min</option><option>15 min</option><option>30 min</option><option>1 hour</option><option>Daily</option></select></label></div></div></div>
+<div class="section"><div class="head"><span>APPROVED SYMBOL WHITELIST</span><small>Only symbols entered here may be scanned or traded</small></div><div class="body">
+<div class="whitelist-entry"><input id="symbolEntry" type="text" placeholder="Add a symbol: SPY, WULF, RIOT..." maxlength="12" autocomplete="off" aria-label="Add approved symbol"><button type="button" id="addSymbol" class="add">+ ADD SYMBOL</button></div>
+<div id="symbolError" class="symbol-error" role="alert" aria-live="polite"></div><div id="symbolChips" class="symbol-chips"></div>
+<div class="note">The bot's universe is limited to this list. A whitelisted symbol does <strong>not</strong> authorize adoption of an existing broker position. Current engine enforcement is pending integration.</div></div></div>
 <div class="section"><div class="head"><span>ENTRY RULES</span><small>Add one or more conditions</small></div><div class="body"><div id="rules"><div class="rule"><select name="indicator"><option selected>RSI</option><option>MACD</option><option>EMA</option><option>SMA</option><option>VWAP</option><option>Price</option><option>ATR</option><option>Volume</option><option>RVOL</option><option>Bollinger Bands</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="30" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button></div></div><button class="add" type="button" id="addRule">+ ADD INDICATOR / CONDITION</button><div class="checks"><label class="check"><input type="checkbox" name="all_rules" checked> Require all entry rules</label><label class="check"><input type="checkbox" name="confirmed_bar" checked> Confirm on closed bar</label><label class="check"><input type="checkbox" name="trend_filter"> Trend filter</label><label class="check"><input type="checkbox" name="rvol_filter"> Minimum RVOL filter</label></div></div></div>
 <div class="section"><div class="head"><span>TRADE QUALITY FILTERS</span><span class="pill">OPTIONAL</span></div><div class="body"><div class="grid three"><label class="field">Minimum Price<input name="min_price" type="number" value="1"></label><label class="field">Minimum Volume<input name="min_volume" type="number" value="100000"></label><label class="field">Minimum RVOL<input name="min_rvol" type="number" step=".1" value="1.0"></label></div></div></div>
 </section>
@@ -105,7 +112,7 @@
 <div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Pass-Through Logic</h3><p>Controlled tolerance around technical stop levels.</p></div>
 <div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Leg In / Leg Out</h3><p>Scale positions in and out through managed tranches.</p></div>
 <div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Structure / ATR Run Room</h3><p>Evaluate remaining price movement against risk.</p></div>
-<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Position Adoption & Recovery</h3><p>Safely resume management of eligible existing positions.</p></div>
+<div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Position Recovery (Owned Trades Only)</h3><p>Restore management only for trades opened and recorded by this bot. Never adopt unrelated positions.</p></div>
 <div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Advanced Scanner</h3><p>Filter a wider candidate universe using market conditions.</p></div>
 <div class="premium-card future"><span class="lock">◷ FUTURE</span><h3>Advanced Hive Intelligence</h3><p>Optional community-derived observations and analytics.</p></div></div>
 <div class="premium-footer"><span><b>Start with the essentials.</b> More advanced management will be added after engine and paper-trading validation.</span><span class="premium-badge">IN DEVELOPMENT</span></div>
@@ -176,6 +183,31 @@ function showPage(id){
 
 tabs.forEach(t=>t.onclick=()=>showPage(t.dataset.page));
 
+// Explicit whitelist. The UI does not grant permission to adopt broker positions.
+const approvedSymbols=['MARA'];
+const symbolPattern=/^[A-Z][A-Z0-9.\-]{0,11}$/;
+function renderSymbols(){
+  const area=document.getElementById('symbolChips'); area.replaceChildren();
+  for(const symbol of approvedSymbols){
+    const chip=document.createElement('span');chip.className='symbol-chip';
+    const label=document.createElement('span');label.textContent=symbol;
+    const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Remove '+symbol);
+    remove.onclick=()=>{if(approvedSymbols.length===1){document.getElementById('symbolError').textContent='At least one approved symbol is required.';return;}approvedSymbols.splice(approvedSymbols.indexOf(symbol),1);renderSymbols();};
+    chip.append(label,remove);area.appendChild(chip);
+  }
+  document.getElementById('symbolCount').textContent=approvedSymbols.length+' approved';
+}
+function addApprovedSymbol(){
+  const input=document.getElementById('symbolEntry');const symbol=input.value.trim().toUpperCase();const error=document.getElementById('symbolError');error.textContent='';
+  if(!symbolPattern.test(symbol)){error.textContent='Enter a valid ticker (letters, digits, dot or hyphen; max 12 characters).';return;}
+  if(approvedSymbols.includes(symbol)){error.textContent=symbol+' is already approved.';return;}
+  if(approvedSymbols.length>=50){error.textContent='Maximum 50 symbols per bot.';return;}
+  approvedSymbols.push(symbol);input.value='';renderSymbols();input.focus();
+}
+document.getElementById('addSymbol').addEventListener('click',addApprovedSymbol);
+document.getElementById('symbolEntry').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addApprovedSymbol();}});
+renderSymbols();
+
 const modeSelect=document.querySelector('[name="mode"]');
 const portInput=document.querySelector('[name="port"]');
 function syncPortControl(){
@@ -208,7 +240,10 @@ function plan(){
   return {
     schema:'algobotbuilder.plan.v1.simple',
     bot_name:val('bot_name'),
-    symbol:val('symbol').toUpperCase(),
+    symbol:approvedSymbols[0], // Legacy compatibility until engine accepts symbols[]
+    symbols:[...approvedSymbols],
+    trading_universe:{mode:'WHITELIST',symbols:[...approvedSymbols]},
+    ownership:{adopt_existing_positions:false,manage_only_bot_opened:true},
     direction:val('direction'),
     timeframe:val('timeframe'),
 
@@ -373,13 +408,18 @@ async function buildPlan(){
   }
 
   const botPlan=plan();
+  // Fail closed: existing build service is not yet verified to consume multiple symbols.
+  if(botPlan.symbols.length>1){
+    alert('Your whitelist has '+botPlan.symbols.length+' symbols. Multi-symbol engine support is not integrated yet. Your list is shown in Review, but building is paused to prevent a single-symbol installer.');
+    return;
+  }
   botPlan.turnstile_token=turnstileToken;
 
   if(botPlan.broker.mode==='LIVE'){
     const ok=confirm(
       'LIVE TRADING MODE SELECTED.\n\n' +
       'This AlgoBot can connect to your live IBKR account and may submit real orders.\n\n' +
-      'Symbol: ' + botPlan.symbol + '\n' +
+      'Approved symbols: ' + botPlan.symbols.join(', ') + '\n' +
       'Quantity: ' + botPlan.risk.quantity + '\n' +
       '1-Share Override: ' + botPlan.risk.one_share_override + '\n\n' +
       'Continue with this build?'
