@@ -167,7 +167,7 @@ select option:disabled{color:#81909e;background:#17212d}
         <div id="buildSpinner" class="build-spinner"></div>
         <div id="buildStatusTitle" class="build-status-title">BUILDING YOUR ALGOBOT</div>
         <div id="buildStatusText" class="build-status-text">
-  Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
+  Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
 </div>
       </div>
     </div>
@@ -365,7 +365,7 @@ function startBuildProgressMessages(){
   let index = 0;
 
   textEl.textContent =
-    'Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
+    'Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
 
   if(buildProgressTimer){
     clearInterval(buildProgressTimer);
@@ -476,7 +476,7 @@ async function buildPlan(){
 
       if(status.ready){
         stopBuildProgressMessages();
-        setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
+        setBuildState('ready','✓ YOUR BOT IS READY','Installer ready to download.');
         document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
 
         buildButton.disabled=false;
