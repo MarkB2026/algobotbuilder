@@ -76,6 +76,21 @@ select option:disabled{color:#81909e;background:#17212d}
 
 /* Approved symbol whitelist */
 .whitelist-entry{display:flex;gap:9px;align-items:center}.whitelist-entry input{max-width:370px}.whitelist-entry .add{margin:0;white-space:nowrap;height:40px}.symbol-chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.symbol-chip{display:inline-flex;align-items:center;gap:9px;border:1px solid #3286a6;background:#112c3b;color:#d8f3ff;padding:7px 10px;border-radius:8px;font-weight:800}.symbol-chip button{width:23px;height:23px;border:1px solid #56778a;border-radius:5px;background:#193344;color:#e5f7ff;cursor:pointer}.symbol-count{color:#75dafa;font-weight:800}.symbol-error{color:#ff9b9b;min-height:16px;font-size:12px;margin-top:5px}@media(max-width:560px){.whitelist-entry{flex-wrap:wrap}.whitelist-entry input{max-width:none}}
+
+/* Step 5: Basic / Premium choice */
+.build-choice-intro{text-align:center;margin:2px 0 20px}.build-choice-intro h2{font-size:25px;margin:0 0 6px}.build-choice-intro p{color:var(--muted);margin:0}
+.build-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:18px 0}
+.build-choice{display:flex;flex-direction:column;gap:12px;border:1px solid #3b5668;border-radius:12px;padding:23px;background:linear-gradient(155deg,#182734,#101922)}
+.build-choice.paid{border:2px solid #c39840;background:linear-gradient(155deg,#292418,#131b22)}
+.choice-label{display:inline-block;align-self:flex-start;border:1px solid #507084;border-radius:999px;padding:4px 10px;color:#a8deee;font-size:11px;font-weight:900;letter-spacing:.8px}
+.paid .choice-label{border-color:#947234;color:#ffdf91}.choice-heading{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.choice-heading h3{font-size:21px;margin:0}.choice-price{font-size:29px;font-weight:900;color:#f4f9fc}.paid .choice-price{color:#ffdc8b}
+.build-choice p{color:#b8c9d5;margin:0}.choice-features{margin:0;padding:0;list-style:none;color:#d7e6ef;line-height:2}.choice-features li::before{content:'✓';color:#63d8a2;margin-right:9px;font-weight:900}
+.choice-action{margin-top:auto;min-height:45px;border:0;border-radius:8px;font-weight:900;cursor:pointer;background:linear-gradient(180deg,#39d4f0,#1299b9);color:#06171d;padding:11px 15px}
+.paid .choice-action{background:linear-gradient(180deg,#ffdc89,#d8a638);color:#261a08}
+.restore-box{border:1px solid #385263;background:#101d28;border-radius:10px;padding:16px;margin:18px 0}.restore-box h3{margin:0 0 6px}.restore-box p{margin:0 0 12px;color:var(--muted)}.restore-row{display:flex;gap:9px}.restore-row input{flex:1}.restore-row button{white-space:nowrap;border:1px solid #4d879d;background:#1b3543;color:#c4eefa;border-radius:7px;padding:8px 16px;cursor:pointer}.restore-note{font-size:12px;color:#cbbd91;margin-top:9px}
+#premiumCheckout{display:none}#premiumCheckout.show{display:block}
+@media(max-width:680px){.build-choices{grid-template-columns:1fr}.restore-row{flex-direction:column}}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -144,10 +159,29 @@ select option:disabled{color:#81909e;background:#17212d}
 
       <div class="note">The installer contains the trading application and required runtime components. You do not need the Python source code to run your bot.</div>
 
+      <div class="build-choice-intro"><h2>Your Bot Is Ready!</h2><p>Choose the edition you'd like to build. Your strategy settings stay the same.</p></div>
+      <div class="build-choices">
+        <div class="build-choice">
+          <span class="choice-label">FREE</span>
+          <div class="choice-heading"><h3>Basic Bot</h3><span class="choice-price">$0</span></div>
+          <p>A functional local trading bot with the essential strategy and risk controls.</p>
+          <ul class="choice-features"><li>RSI divergence strategy</li><li>Essential risk and safety controls</li><li>Local dashboard and Windows installer</li><li>No payment or license required</li></ul>
+          <button type="button" class="choice-action" id="freeBuildChoice">BUILD FREE BASIC BOT</button>
+        </div>
+        <div class="build-choice paid">
+          <span class="choice-label">PREMIUM UPGRADE</span>
+          <div class="choice-heading"><h3>Premium Bot</h3><span class="choice-price">$10</span></div>
+          <p>Advanced trade management and additional controls as features are released and tested.</p>
+          <ul class="choice-features"><li>Premium installer and dashboard (integration pending)</li><li>Planned ratcheting and profit protection</li><li>Permanent reusable license</li><li>Pay once with Bitcoin</li></ul>
+          <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
+        </div>
+      </div>
+      <div class="restore-box"><h3>Already purchased Premium?</h3><p>Keep your license key safe. Returning-customer activation will be connected when the Premium installer is ready.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">License restoration is not yet connected in this Basic builder.</div></div>
+
       <div class="premium-cta" id="premiumCheckout">
-        <h3>₿ Unlock Premium Build — $10 USD</h3>
-        <p>Test the Bitcoin checkout with a 15-minute BTC quote and on-chain confirmation. Premium installer generation is not connected to this Basic builder yet.</p>
-        <button class="premium-button" type="button" id="premiumUnlockBtn">UNLOCK PREMIUM BUILD</button>
+        <h3>₿ Premium Bitcoin Checkout — $10 USD</h3>
+        <p>Live payment test: a 15-minute BTC quote and on-chain confirmation. Premium installer generation is not connected to this Basic builder yet. Do not send a second payment while a transaction is pending.</p>
+        <button class="premium-button" type="button" id="premiumUnlockBtn">GENERATE BITCOIN QUOTE</button>
         <div class="payment-panel" id="paymentPanel" aria-live="polite">
           <div id="paymentQuote">Requesting Bitcoin quote…</div>
           <label class="field" style="margin-top:12px">Bitcoin transaction ID (TXID)
@@ -167,14 +201,14 @@ select option:disabled{color:#81909e;background:#17212d}
         <div id="buildSpinner" class="build-spinner"></div>
         <div id="buildStatusTitle" class="build-status-title">BUILDING YOUR ALGOBOT</div>
         <div id="buildStatusText" class="build-status-text">
-  Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
+  Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
 </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium intelligence visible but locked</div></div><button class="buildbtn" id="buildBtn">BUILD MY TRADING BOT</button></div>
+<div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium intelligence visible but locked</div></div><button class="buildbtn" id="buildBtn">BUILD FREE BASIC BOT</button></div>
 </div>
 
 <script>
@@ -365,7 +399,7 @@ function startBuildProgressMessages(){
   let index = 0;
 
   textEl.textContent =
-    'Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
+    'Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
 
   if(buildProgressTimer){
     clearInterval(buildProgressTimer);
@@ -476,7 +510,7 @@ async function buildPlan(){
 
       if(status.ready){
         stopBuildProgressMessages();
-        setBuildState('ready','✓ YOUR BOT IS READY','Installer ready to download.');
+        setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
         document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
 
         buildButton.disabled=false;
@@ -557,6 +591,18 @@ document.getElementById('paymentRefreshBtn').onclick=async()=>{
   }catch(e){paymentMessage('Status error: '+e.message);}
 };
 
+document.getElementById('freeBuildChoice').onclick=buildPlan;
+document.getElementById('showPremiumChoice').onclick=()=>{
+  const checkout=document.getElementById('premiumCheckout');
+  checkout.classList.add('show');
+  checkout.scrollIntoView({behavior:'smooth',block:'start'});
+};
+document.getElementById('restoreLicenseBtn').onclick=()=>{
+  const key=document.getElementById('restoreLicenseKey').value.trim();
+  document.getElementById('restoreLicenseMessage').textContent=key
+    ? 'License restoration is not connected yet. Keep your key; no new payment is needed.'
+    : 'Enter your existing Premium license key.';
+};
 document.getElementById('buildBtn').onclick=buildPlan;
 </script>
 </body>
