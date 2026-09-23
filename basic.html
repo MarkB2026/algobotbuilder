@@ -116,7 +116,7 @@ select option:disabled{color:#81909e;background:#17212d}
 .restore-demo-dialog header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
 .restore-demo-dialog h3{margin:0;font-size:20px;color:#ffdc88}
 .restore-demo-dialog p{color:#bbcedc;font-size:13px;line-height:1.5;margin:6px 0 15px}
-.restore-demo-dialog video{display:block;width:100%;height:auto;max-height:65vh;background:#0c1720;border:1px solid #385263;border-radius:7px}
+.restore-demo-dialog img{display:block;width:100%;height:auto;max-height:65vh;background:#0c1720;border:1px solid #385263;border-radius:7px}
 .restore-demo-close{background:#213848;color:#d9f3ff;border:1px solid #527f94;border-radius:6px;padding:7px 12px;cursor:pointer;font-size:18px}
 </style>
 </head><body><div class="shell">
@@ -750,7 +750,7 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
     left: 0;
     width: 100%;
     height: 5px;
-    background: red;
+    background: #ff00ff;
     z-index: 99999;
     font-size: 0;
   }
@@ -758,20 +758,20 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
 
 <dialog id="restoreDemoDialog" class="restore-demo-dialog" aria-labelledby="restoreDemoTitle">
   <header><h3 id="restoreDemoTitle">Restore Premium — quick demo</h3><button type="button" class="restore-demo-close" id="restoreDemoClose" aria-label="Close demo">×</button></header>
-  <p>Keep your original license key. After refreshing or reinstalling, use Restore Access to unlock Premium without paying again. The key in this demo is masked.</p>
-  <video id="restoreDemoVideo" controls preload="none" playsinline aria-label="Seven-second Premium license restoration demo"><source src="assets/premium-license-restore-demo.mp4" type="video/mp4">Your browser cannot play this demo video.</video>
+  <p>Keep your original license key. After refreshing or reinstalling, use Restore Access to unlock Premium without paying again. The license key in this example is masked.</p>
+  <img id="restoreDemoImage" src="assets/premium-restore-demo.png" alt="Premium restored using a masked license key; Build Premium is available without another payment" style="display:block;width:100%;height:auto;border:1px solid #385263;border-radius:7px">
 </dialog>
 <script>
 (function(){
   const open=document.getElementById('restoreDemoOpen');
   const dialog=document.getElementById('restoreDemoDialog');
   const close=document.getElementById('restoreDemoClose');
-  const video=document.getElementById('restoreDemoVideo');
-  if(!open||!dialog||!close||!video)return;
-  open.addEventListener('click',()=>{dialog.showModal();video.play().catch(()=>{});});
+
+  if(!open||!dialog||!close)return;
+  open.addEventListener('click',()=>{dialog.showModal();});
   close.addEventListener('click',()=>dialog.close());
   dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
-  dialog.addEventListener('close',()=>{video.pause();video.currentTime=0;});
+
 })();
 </script>
 </body>
