@@ -187,11 +187,11 @@ select option:disabled{color:#81909e;background:#17212d}
           <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
         </div>
       </div>
-      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Use your existing key to restore access when Premium activation is connected. No additional purchase required.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">License restoration is not yet connected in this Basic builder.</div></div>
+      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button></div>
 
       <div class="premium-cta" id="premiumCheckout">
         <h3>₿ Premium Bitcoin Checkout — $10 USD</h3>
-        <p>Real Bitcoin checkout. Premium installer generation is not connected yet. Do not make another payment if you already paid or have a pending transaction. Keep your quote ID and TXID.</p>
+        <p>Already paid? Use Restore Access above with your original license key. Do not pay twice. Keep your key and TXID.</p>
         <button class="premium-button" type="button" id="premiumUnlockBtn">GENERATE BITCOIN QUOTE</button>
         <div class="payment-panel" id="paymentPanel" aria-live="polite">
           <div id="paymentQuote">Requesting Bitcoin quote…</div>
@@ -557,10 +557,8 @@ async function buildPlan(){
 }
 
 
-// Payment-test checkout. Deliberately does not claim a Premium installer or license.
+// Premium payment and license unlock; license is never persisted in localStorage.
 let premiumQuote=null;
-try { premiumQuote=JSON.parse(localStorage.getItem('mbbPremiumPendingQuote')||'null'); } catch (_) { premiumQuote=null; }
-function savePremiumQuote(q){premiumQuote=q;try{localStorage.setItem('mbbPremiumPendingQuote',JSON.stringify(q));}catch(_){}}
 const payMessage=document.getElementById('paymentMessage');
 function paymentMessage(text){payMessage.textContent=text;}
 function showPaymentQuote(q){
@@ -575,23 +573,18 @@ function showPaymentQuote(q){
   copy.onclick=()=>navigator.clipboard.writeText(q.bitcoin_address).then(()=>paymentMessage('Address copied.')).catch(()=>paymentMessage('Select and copy the address above.'));
   el.append(copy);
 }
-if(premiumQuote && premiumQuote.quote_id){
-  showPaymentQuote(premiumQuote);
-  document.getElementById('paymentPanel').classList.add('show');
-  paymentMessage('Recovered your previous payment quote. If you already paid, enter the original TXID and verify; do not pay again.');
-}
 document.getElementById('premiumUnlockBtn').onclick=async()=>{
   document.getElementById('paymentPanel').classList.add('show');
   paymentMessage('Fetching signed quote…');
   try{
     const r=await fetch(WORKER+'/premium/quote');const q=await r.json();
     if(!r.ok||!q.ok)throw Error(q.error||'Could not create quote');
-    savePremiumQuote(q);showPaymentQuote(q);
-    paymentMessage('Send the exact BTC amount within 60 minutes, then enter your TXID. Once registered, blockchain confirmation may arrive later. Do not send a second payment.');
+    premiumQuote=q;showPaymentQuote(q);
+    paymentMessage('Send the exact BTC amount before the quote expires, then enter your TXID. This is a real Bitcoin payment.');
   }catch(e){paymentMessage('Quote error: '+e.message);}
 };
 document.getElementById('paymentVerifyBtn').onclick=async()=>{
-  if(!premiumQuote){paymentMessage('No saved quote. If you already paid, keep your TXID and quote ID for recovery; do not pay again.');return;}
+  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
   const txid=document.getElementById('paymentTxid').value.trim();
   if(!/^[a-fA-F0-9]{64}$/.test(txid)){paymentMessage('Enter a valid 64-character TXID.');return;}
   paymentMessage('Checking blockchain confirmation…');
@@ -602,12 +595,12 @@ document.getElementById('paymentVerifyBtn').onclick=async()=>{
     })});
     const v=await r.json();
     if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
-    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nLicense key: '+(v.license_key||'Contact support with your TXID')+'\nPremium installer is not yet connected. Save your license key and TXID.');}
-    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.')+' Keep your original TXID; do not pay again.');
+    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nPremium installer/activation is not connected to this Basic builder yet. Keep your quote ID and TXID.');}
+    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));
   }catch(e){paymentMessage('Verification error: '+e.message);}
 };
 document.getElementById('paymentRefreshBtn').onclick=async()=>{
-  if(!premiumQuote){paymentMessage('No saved quote. If you already paid, keep your TXID and quote ID for recovery; do not pay again.');return;}
+  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
   try{
     const r=await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(premiumQuote.quote_id));
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Status unavailable');
@@ -621,11 +614,70 @@ document.getElementById('showPremiumChoice').onclick=()=>{
   checkout.classList.add('show');
   checkout.scrollIntoView({behavior:'smooth',block:'start'});
 };
-document.getElementById('restoreLicenseBtn').onclick=()=>{
-  const key=document.getElementById('restoreLicenseKey').value.trim();
-  document.getElementById('restoreLicenseMessage').textContent=key
-    ? 'License restoration is not connected yet. Keep your key; no new payment is needed.'
-    : 'Enter your existing Premium license key.';
+let premiumUnlocked=false;
+async function restorePremiumAccess(){
+  const input=document.getElementById('restoreLicenseKey');
+  const key=input.value.trim().toUpperCase();
+  const msg=document.getElementById('restoreLicenseMessage');
+  const btn=document.getElementById('restoreLicenseBtn');
+  premiumUnlocked=false;
+  document.getElementById('premiumBuildBtn').style.display='none';
+  if(!/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/.test(key)){
+    msg.textContent='Enter your complete original Premium license key.';return;
+  }
+  btn.disabled=true;msg.textContent='Checking your license against Cloudflare D1…';
+  try{
+    const r=await fetch(WORKER+'/premium/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key})});
+    const v=await r.json();
+    if(!r.ok||!v.ok||!v.active)throw Error(v.error||'License not active');
+    premiumUnlocked=true;
+    document.getElementById('premiumBuildBtn').style.display='inline-block';
+    msg.textContent='Premium unlocked. You may build another installer without paying again. Keep your original key.';
+  }catch(e){msg.textContent='Restore failed: '+e.message;}
+  finally{btn.disabled=false;}
+}
+document.getElementById('restoreLicenseBtn').onclick=restorePremiumAccess;
+// The build repository has a separate Premium spec, installer and plan schema.
+// Keep the initial web-generated Premium plan restricted to its verified RSI/Paper defaults.
+const PREMIUM_BASE_PLAN={"schema_version":"allbot.engine.plan.v1.4.9","plan_name":"AllBot Packaged Default \u2014 RSI Observe/Paper Safe","mode":"PAPER","expected_move":"TREND_CHANGE_REVERSAL","pattern":{"id":"RSI_DIVERGENCE_REVERSAL","direction":"Long + Short","core":{"rsi_divergence":{"period":14,"timeframe":"5 Minute","pivot_sensitivity":"Normal","pivot_left":3,"pivot_right":3,"confirmed_price_pivots":true,"established_trend_required":true,"require_price_ll_hh":true,"require_rsi_hl_lh":true,"entry_sequence":"FULL_SEQUENCE","invalidation_buffer_pct":0.25,"atr_period":14,"minimum_remaining_atr":0.75,"preferred_remaining_atr":1.0}}},"scanner":{"symbols":["SPY","IWM","TSLA","MSTR"],"interval_seconds":30,"rvol_lookback":20,"minimum_rvol":1.0,"history_bars":220},"execution":{"max_spread_dollars":0.1,"max_spread_pct":0.15},"behaviour":{"position_dollars":10000,"max_trade_risk":60,"sink_or_swim_minutes":3,"one_share_override":false},"broker":{"type":"IBKR","connection_type":"TWS","host":"127.0.0.1","port":7497,"client_id":71,"timeout":10},"filters":{"strategy":{"bollinger":false,"rsi_level":false,"rsi_divergence":false,"rvol":false,"volume":false,"vwap":false,"time_of_day":false},"trade_quality":{"remaining_atr":true,"spread_liquidity":true,"valid_market_data":true,"reject_halted":true,"ownership_safety":true}},"sentience":{"level":0,"hard_boundaries_cannot_be_overridden":true},"safety":{"external_ownership_protection":true,"validate_before_start":true,"live_requires_explicit_authorization":true}};
+document.getElementById('premiumBuildBtn').onclick=async()=>{
+  const msg=document.getElementById('restoreLicenseMessage');
+  if(!premiumUnlocked){msg.textContent='Restore your license first.';return;}
+  const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
+  if(!token){msg.textContent='Complete the Cloudflare security check before building.';document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  const key=document.getElementById('restoreLicenseKey').value.trim().toUpperCase();
+  const basic=plan();
+  const symbols=basic.symbols;
+  if(!Array.isArray(symbols)||symbols.length<1||symbols.length>10){msg.textContent='Select 1–10 symbols first.';return;}
+  const premium=JSON.parse(JSON.stringify(PREMIUM_BASE_PLAN));
+  premium.plan_name='MyBotBuilder Premium — RSI Paper';
+  premium.mode='PAPER';
+  premium.scanner.symbols=symbols;
+  premium.behaviour.one_share_override=true;
+  premium.sentience.level=0;
+  premium.premium_license_key=key;
+  premium.turnstile_token=token;
+  const btn=document.getElementById('premiumBuildBtn');
+  btn.disabled=true;btn.textContent='BUILDING PREMIUM…';
+  msg.textContent='Submitting Premium Paper installer build…';
+  try{
+    const r=await fetch(WORKER+'/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(premium)});
+    const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Build submission failed');
+    msg.textContent='Premium build started. Waiting for Windows installer…';
+    for(let n=0;n<90;n++){
+      await new Promise(resolve=>setTimeout(resolve,5000));
+      const sr=await fetch(WORKER+'/build/status?id='+encodeURIComponent(v.build_id)+'&sha='+encodeURIComponent(v.commit_sha));
+      const s=await sr.json();if(!sr.ok||!s.ok)throw Error(s.error||'Build status failed');
+      if(s.status==='failed'||s.conclusion==='failure')throw Error('GitHub Premium build failed');
+      if(s.ready){
+        msg.textContent='Premium installer ready. Save your original key for future reinstalls.';
+        const a=document.createElement('a');a.href=WORKER+'/download?id='+encodeURIComponent(v.build_id);a.textContent='DOWNLOAD PREMIUM INSTALLER';a.className='premium-button';a.style.display='inline-block';a.style.marginTop='10px';a.style.textDecoration='none';
+        document.getElementById('premiumBuildBtn').after(a);return;
+      }
+    }
+    throw Error('Build is taking longer than expected. Check GitHub Actions using your build ID: '+v.build_id);
+  }catch(e){msg.textContent='Premium build: '+e.message;}
+  finally{btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';}
 };
 document.getElementById('buildRetry').onclick=buildPlan;
 function onTurnstileError(code){document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
