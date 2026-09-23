@@ -101,6 +101,10 @@ select option:disabled{color:#81909e;background:#17212d}
 .build-download{display:none;margin:16px auto 0;max-width:360px}
 .build-download.show{display:block}
 .turnstile-help{margin:10px auto 0;max-width:640px;color:#ffcf8b;text-align:center;font-size:12px}
+
+/* Premium build progress — actual status only, no fabricated percentage */
+.premium-progress{display:none;margin-top:16px;padding:20px;border:1px solid #c59a3d;border-radius:11px;background:linear-gradient(145deg,#192632,#111b24);color:#e7edf3}
+.premium-progress.show{display:block}.premium-progress h3{margin:8px 0 2px;font-size:21px;color:#ffdc88}.premium-progress .pp-badge{display:inline-block;border:1px solid #9e762d;border-radius:20px;padding:4px 10px;color:#ffe09c;font-size:11px;font-weight:800;letter-spacing:.7px}.pp-sub{color:#aabccb;margin:0 0 14px}.pp-track{height:9px;background:#293b49;border-radius:20px;overflow:hidden;margin:15px 0 7px}.pp-fill{width:0;height:100%;background:linear-gradient(90deg,#c58c2c,#ffe19a);border-radius:20px;transition:width .4s}.pp-fill.indeterminate{width:35%;animation:pp-slide 1.7s ease-in-out infinite}@keyframes pp-slide{0%{transform:translateX(-105%)}100%{transform:translateX(390%)}}.pp-meta{display:flex;justify-content:space-between;gap:12px;color:#b7c9d7;font-size:12px}.pp-steps{display:grid;gap:11px;margin:20px 0}.pp-step{display:flex;align-items:center;gap:12px;color:#9fb0bd}.pp-mark{display:grid;place-items:center;flex:0 0 25px;height:25px;border:2px solid #627789;border-radius:50%;font-size:14px;font-weight:900}.pp-step.done{color:#dcebe4}.pp-step.done .pp-mark{background:#20a86a;border-color:#20a86a;color:white}.pp-step.current{color:#ffdc88;font-weight:700}.pp-step.current .pp-mark{border-color:#efbc54;color:#efbc54}.pp-info{padding:13px;border:1px solid #315a77;border-radius:8px;background:#132c3e;color:#c3deee;font-size:13px;line-height:1.6}.pp-error{color:#ffac9b}.pp-link{display:none;margin-top:13px;text-decoration:none}.pp-link.show{display:inline-block}@media(max-width:600px){.premium-progress{padding:14px}.pp-meta{flex-direction:column}}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -187,7 +191,21 @@ select option:disabled{color:#81909e;background:#17212d}
           <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
         </div>
       </div>
-      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button></div>
+      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button>
+<div class="premium-progress" id="premiumProgress" role="status" aria-live="polite">
+  <span class="pp-badge">PREMIUM UNLOCKED</span><h3 id="ppHeading">Building your Premium Bot</h3>
+  <p class="pp-sub">Paper edition · Windows installer</p>
+  <div class="pp-track" aria-label="Build activity"><div class="pp-fill indeterminate" id="ppFill"></div></div>
+  <div class="pp-meta"><span id="ppDetail">Preparing your build…</span><span id="ppElapsed">Elapsed: 0s</span></div>
+  <div class="pp-steps">
+    <div class="pp-step" id="ppStep0"><span class="pp-mark">1</span><span>Premium license verified</span></div>
+    <div class="pp-step" id="ppStep1"><span class="pp-mark">2</span><span>Configuration submitted</span></div>
+    <div class="pp-step" id="ppStep2"><span class="pp-mark">3</span><span>Building Windows installer</span></div>
+    <div class="pp-step" id="ppStep3"><span class="pp-mark">4</span><span>Download Premium Bot</span></div>
+  </div>
+  <div class="pp-info" id="ppInfo">Your payment and active license are recorded in Cloudflare. Keep your original key: you can restore Premium without paying again. After a refresh in the same tab, restore your key to resume checking a saved build. Keep your build ID as a backup.</div>
+  <a class="premium-button pp-link" id="ppDownload">DOWNLOAD PREMIUM INSTALLER</a>
+</div></div>
 
       <div class="premium-cta" id="premiumCheckout">
         <h3>₿ Premium Bitcoin Checkout — $10 USD</h3>
@@ -595,7 +613,7 @@ document.getElementById('paymentVerifyBtn').onclick=async()=>{
     })});
     const v=await r.json();
     if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
-    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nPremium installer/activation is not connected to this Basic builder yet. Keep your quote ID and TXID.');}
+    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nSave your original Premium license key and use Restore Access to unlock your installer.');}
     else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));
   }catch(e){paymentMessage('Verification error: '+e.message);}
 };
@@ -615,24 +633,65 @@ document.getElementById('showPremiumChoice').onclick=()=>{
   checkout.scrollIntoView({behavior:'smooth',block:'start'});
 };
 let premiumUnlocked=false;
-async function restorePremiumAccess(){
-  const input=document.getElementById('restoreLicenseKey');
-  const key=input.value.trim().toUpperCase();
-  const msg=document.getElementById('restoreLicenseMessage');
-  const btn=document.getElementById('restoreLicenseBtn');
-  premiumUnlocked=false;
-  document.getElementById('premiumBuildBtn').style.display='none';
-  if(!/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/.test(key)){
-    msg.textContent='Enter your complete original Premium license key.';return;
+const PP_STORAGE='mybotbuilder_premium_pending_build_v1';
+let ppStarted=0,ppTimer=null,ppPolling=false;
+function ppShow(stage,detail){
+  const box=document.getElementById('premiumProgress');box.classList.add('show');
+  const names=['License verified','Submitting configuration','Building Windows installer','Installer ready'];
+  document.getElementById('ppHeading').textContent=stage===3?'Your Premium Bot is ready':stage===-1?'Premium build needs attention':'Building your Premium Bot';
+  document.getElementById('ppDetail').textContent=detail||names[stage]||'Checking status…';
+  for(let i=0;i<4;i++){
+    const el=document.getElementById('ppStep'+i);el.className='pp-step'+(stage===3||i<stage?' done':i===stage?' current':'');
+    el.querySelector('.pp-mark').textContent=(stage===3||i<stage)?'✓':String(i+1);
   }
+  const fill=document.getElementById('ppFill');fill.className='pp-fill'+(stage===3?'':stage===-1?'':' indeterminate');
+  fill.style.width=stage===3?'100%':stage===-1?'0%':'';
+  document.getElementById('ppInfo').classList.toggle('pp-error',stage===-1);
+  if(stage===-1)document.getElementById('ppInfo').textContent='Your payment and license are still saved. Keep your key and build ID; check GitHub Actions or retry status before starting another build.';
+  if(stage===3)document.getElementById('ppInfo').textContent='Installer ready. Keep your original license key for future reinstalls. No additional payment required.';
+}
+
+function ppClock(){if(ppTimer)clearInterval(ppTimer);ppTimer=setInterval(()=>{if(!ppStarted)return;const sec=Math.floor((Date.now()-ppStarted)/1000);document.getElementById('ppElapsed').textContent='Elapsed: '+Math.floor(sec/60)+'m '+String(sec%60).padStart(2,'0')+'s';},1000)}
+function ppSave(build){try{sessionStorage.setItem(PP_STORAGE,JSON.stringify(build))}catch(e){}}
+function ppLoad(){try{return JSON.parse(sessionStorage.getItem(PP_STORAGE)||'null')}catch(e){return null}}
+async function ppPoll(build){
+  if(ppPolling)return;ppPolling=true;ppStarted=build.started||Date.now();ppClock();
+  const btn=document.getElementById('premiumBuildBtn');btn.disabled=true;btn.textContent='BUILD IN PROGRESS…';
+  ppShow(2,'Checking GitHub Actions for your Windows installer…');
+  try{
+    for(let n=0;n<120;n++){
+      const sr=await fetch(WORKER+'/build/status?id='+encodeURIComponent(build.build_id)+'&sha='+encodeURIComponent(build.commit_sha));
+      const status=await sr.json();if(!sr.ok||!status.ok)throw Error(status.error||'Build status unavailable');
+      if(status.status==='failed'||status.conclusion==='failure'||status.conclusion==='cancelled')throw Error('GitHub build '+(status.conclusion||'failed'));
+      if(status.ready){
+        const url=WORKER+'/download?id='+encodeURIComponent(build.build_id);
+        const a=document.getElementById('ppDownload');a.href=url;a.classList.add('show');
+        ppShow(3,'Windows installer ready to download.');
+        document.getElementById('restoreLicenseMessage').textContent='Premium installer ready. Keep your original key.';
+        try{sessionStorage.removeItem(PP_STORAGE)}catch(e){}
+        return;
+      }
+      ppShow(2,status.status==='queued'?'Build queued in GitHub Actions…':'Windows installer build running; checking every 5 seconds…');
+      await new Promise(resolve=>setTimeout(resolve,5000));
+    }
+    ppShow(-1,'Still building or status unavailable. Save your build ID: '+build.build_id);
+    document.getElementById('ppInfo').textContent='Status checking timed out; this does not cancel your GitHub build. Restore your key to resume checking. Build ID: '+build.build_id;
+  }catch(e){ppShow(-1,'Status check: '+e.message);document.getElementById('ppInfo').textContent='Your payment and license remain valid. Restore your key to retry this build status check. Build ID: '+build.build_id;}
+  finally{ppPolling=false;btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';if(ppTimer)clearInterval(ppTimer)}
+}
+async function restorePremiumAccess(){
+  const input=document.getElementById('restoreLicenseKey');const key=input.value.trim().toUpperCase();
+  const msg=document.getElementById('restoreLicenseMessage');const btn=document.getElementById('restoreLicenseBtn');
+  premiumUnlocked=false;document.getElementById('premiumBuildBtn').style.display='none';
+  if(!/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/.test(key)){msg.textContent='Enter your complete original Premium license key.';return;}
   btn.disabled=true;msg.textContent='Checking your license against Cloudflare D1…';
   try{
     const r=await fetch(WORKER+'/premium/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key})});
-    const v=await r.json();
-    if(!r.ok||!v.ok||!v.active)throw Error(v.error||'License not active');
-    premiumUnlocked=true;
-    document.getElementById('premiumBuildBtn').style.display='inline-block';
-    msg.textContent='Premium unlocked. You may build another installer without paying again. Keep your original key.';
+    const v=await r.json();if(!r.ok||!v.ok||!v.active)throw Error(v.error||'License not active');
+    premiumUnlocked=true;document.getElementById('premiumBuildBtn').style.display='inline-block';
+    msg.textContent='Premium unlocked. Build another installer without paying again. Keep your original key.';
+    const saved=ppLoad();if(saved&&saved.build_id&&saved.commit_sha){msg.textContent='Premium restored. Resuming your previous installer build…';ppPoll(saved)}
+    else{ppShow(0,'Premium license verified. Ready to build your Paper installer.');document.getElementById('premiumProgress').scrollIntoView({behavior:'smooth',block:'nearest'})}
   }catch(e){msg.textContent='Restore failed: '+e.message;}
   finally{btn.disabled=false;}
 }
@@ -643,41 +702,27 @@ const PREMIUM_BASE_PLAN={"schema_version":"allbot.engine.plan.v1.4.9","plan_name
 document.getElementById('premiumBuildBtn').onclick=async()=>{
   const msg=document.getElementById('restoreLicenseMessage');
   if(!premiumUnlocked){msg.textContent='Restore your license first.';return;}
+  const pending=ppLoad();if(pending&&pending.build_id){msg.textContent='Resuming your existing build. Do not start a duplicate.';ppPoll(pending);return;}
   const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
   if(!token){msg.textContent='Complete the Cloudflare security check before building.';document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});return;}
   const key=document.getElementById('restoreLicenseKey').value.trim().toUpperCase();
-  const basic=plan();
-  const symbols=basic.symbols;
+  const basic=plan();const symbols=basic.symbols;
   if(!Array.isArray(symbols)||symbols.length<1||symbols.length>10){msg.textContent='Select 1–10 symbols first.';return;}
   const premium=JSON.parse(JSON.stringify(PREMIUM_BASE_PLAN));
-  premium.plan_name='MyBotBuilder Premium — RSI Paper';
-  premium.mode='PAPER';
-  premium.scanner.symbols=symbols;
-  premium.behaviour.one_share_override=true;
-  premium.sentience.level=0;
-  premium.premium_license_key=key;
-  premium.turnstile_token=token;
-  const btn=document.getElementById('premiumBuildBtn');
-  btn.disabled=true;btn.textContent='BUILDING PREMIUM…';
-  msg.textContent='Submitting Premium Paper installer build…';
+  premium.plan_name='MyBotBuilder Premium — RSI Paper';premium.mode='PAPER';premium.scanner.symbols=symbols;
+  premium.behaviour.one_share_override=true;premium.sentience.level=0;
+  premium.premium_license_key=key;premium.turnstile_token=token;
+  const btn=document.getElementById('premiumBuildBtn');btn.disabled=true;btn.textContent='SUBMITTING PREMIUM…';
+  ppStarted=Date.now();ppClock();ppShow(1,'Submitting your configuration to GitHub Actions…');
   try{
     const r=await fetch(WORKER+'/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(premium)});
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Build submission failed');
-    msg.textContent='Premium build started. Waiting for Windows installer…';
-    for(let n=0;n<90;n++){
-      await new Promise(resolve=>setTimeout(resolve,5000));
-      const sr=await fetch(WORKER+'/build/status?id='+encodeURIComponent(v.build_id)+'&sha='+encodeURIComponent(v.commit_sha));
-      const s=await sr.json();if(!sr.ok||!s.ok)throw Error(s.error||'Build status failed');
-      if(s.status==='failed'||s.conclusion==='failure')throw Error('GitHub Premium build failed');
-      if(s.ready){
-        msg.textContent='Premium installer ready. Save your original key for future reinstalls.';
-        const a=document.createElement('a');a.href=WORKER+'/download?id='+encodeURIComponent(v.build_id);a.textContent='DOWNLOAD PREMIUM INSTALLER';a.className='premium-button';a.style.display='inline-block';a.style.marginTop='10px';a.style.textDecoration='none';
-        document.getElementById('premiumBuildBtn').after(a);return;
-      }
-    }
-    throw Error('Build is taking longer than expected. Check GitHub Actions using your build ID: '+v.build_id);
-  }catch(e){msg.textContent='Premium build: '+e.message;}
-  finally{btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';}
+    if(!v.build_id||!v.commit_sha)throw Error('Build accepted but missing tracking identifiers. Check GitHub Actions before retrying.');
+    const build={build_id:v.build_id,commit_sha:v.commit_sha,started:ppStarted};ppSave(build);
+    msg.textContent='Premium build submitted. Waiting for Windows installer…';
+    ppPolling=false;await ppPoll(build);
+  }catch(e){ppShow(-1,'Build submission: '+e.message);msg.textContent='Premium build: '+e.message;}
+  finally{if(!ppPolling){btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';}}
 };
 document.getElementById('buildRetry').onclick=buildPlan;
 function onTurnstileError(code){document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
@@ -686,13 +731,13 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
   
 <style>
   body::before {
-    content: "BUILD v1.6.7";
+    content: "BUILD v1.6.8";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 5px;
-    background: blue;
+    background: #ff00ff;
     z-index: 99999;
     font-size: 0;
   }
