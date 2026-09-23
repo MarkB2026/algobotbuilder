@@ -624,5 +624,19 @@ document.getElementById('buildRetry').onclick=buildPlan;
 function onTurnstileError(code){document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
 function onTurnstileExpired(){document.getElementById('turnstileHelp').textContent='Security check expired. Please verify again before building.';}
 </script>
+  
+<style>
+  body::before {
+    content: "BUILD v1.6.3";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #ff00ff;
+    z-index: 99999;
+    font-size: 0;
+  }
+</style>
 </body>
 </html>
