@@ -91,6 +91,16 @@ select option:disabled{color:#81909e;background:#17212d}
 .restore-box{border:1px solid #385263;background:#101d28;border-radius:10px;padding:16px;margin:18px 0}.restore-box h3{margin:0 0 6px}.restore-box p{margin:0 0 12px;color:var(--muted)}.restore-row{display:flex;gap:9px}.restore-row input{flex:1}.restore-row button{white-space:nowrap;border:1px solid #4d879d;background:#1b3543;color:#c4eefa;border-radius:7px;padding:8px 16px;cursor:pointer}.restore-note{font-size:12px;color:#cbbd91;margin-top:9px}
 #premiumCheckout{display:none}#premiumCheckout.show{display:block}
 @media(max-width:680px){.build-choices{grid-template-columns:1fr}.restore-row{flex-direction:column}}
+
+/* Build progress lives beside the edition cards, not in a duplicate sticky footer. */
+.build-status{margin:20px 0;padding:22px;border:1px solid #34738a;border-radius:12px;background:linear-gradient(150deg,#122c3a,#101a24);text-align:center}
+.build-status.show{display:block}
+.build-status-title{font-size:21px}
+.build-status-text{font-size:14px;min-height:22px}
+.build-status.ready{border-color:#3eac77}.build-status.failed{border-color:#d16b70}
+.build-download{display:none;margin:16px auto 0;max-width:360px}
+.build-download.show{display:block}
+.turnstile-help{margin:10px auto 0;max-width:640px;color:#ffcf8b;text-align:center;font-size:12px}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -195,8 +205,9 @@ select option:disabled{color:#81909e;background:#17212d}
       </div>
 
       <div id="turnstileWrap" style="display:flex;justify-content:center;margin-top:22px;">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx"></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired"></div>
       </div>
+      <div id="turnstileHelp" class="turnstile-help" role="status" aria-live="polite"></div>
 
       <div id="buildStatus" class="build-status">
         <div id="buildSpinner" class="build-spinner"></div>
@@ -204,12 +215,12 @@ select option:disabled{color:#81909e;background:#17212d}
         <div id="buildStatusText" class="build-status-text">
   Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
 </div>
+        <a id="buildDownload" class="choice-action build-download" href="#" download>DOWNLOAD BASIC BOT</a>
+        <button id="buildRetry" type="button" class="choice-action build-download">TRY BUILD AGAIN</button>
       </div>
     </div>
   </div>
 </section>
-
-<div class="buildbar"><div><b>YOUR STRATEGY. YOUR RULES. YOUR BOT.</b><div class="summary">Simple Builder · Premium intelligence visible but locked</div></div><button class="buildbtn" id="buildBtn">BUILD FREE BASIC BOT</button></div>
 </div>
 
 <script>
@@ -371,6 +382,7 @@ function setBuildState(kind,title,message){
 
   panel.classList.add('show');
   spinner.className='build-spinner';
+  panel.classList.remove('ready','failed');
 
   if(kind==='ready') spinner.classList.add('ready');
   if(kind==='failed') spinner.classList.add('failed');
@@ -437,7 +449,8 @@ function showTurnstile(){
 }
   
 async function buildPlan(){
-  const buildButton=document.getElementById('buildBtn');
+  const buildButtons=[document.getElementById('freeBuildChoice')];
+  const setButtons=(disabled,label)=>buildButtons.forEach(b=>{b.disabled=disabled;b.textContent=label;});
 
   showPage('review');
   renderReview();
@@ -446,7 +459,8 @@ async function buildPlan(){
     document.querySelector('[name="cf-turnstile-response"]')?.value;
 
   if(!turnstileToken){
-    alert('Please complete the security check before building your bot.');
+    document.getElementById('turnstileHelp').textContent='Security verification is unavailable or incomplete. If Cloudflare says it cannot connect, try disabling VPN/ad blocking for this site or retry later. The build cannot proceed without verification.';
+    document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
 
@@ -473,8 +487,10 @@ async function buildPlan(){
   botPlan.turnstile_token=turnstileToken;
 
 
-  buildButton.disabled=true;
-  buildButton.textContent='BUILDING...';
+  setButtons(true,'BUILDING...');
+  document.getElementById('buildDownload').classList.remove('show');
+  document.getElementById('buildRetry').classList.remove('show');
+  document.getElementById('buildStatus').scrollIntoView({behavior:'smooth',block:'center'});
   setBuildState('building','BUILDING YOUR BOT','Submitting configuration...');
 
   try{
@@ -513,13 +529,12 @@ async function buildPlan(){
         setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
         document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
 
-        buildButton.disabled=false;
-        buildButton.textContent='DOWNLOAD ALGOBOT';
-        buildButton.onclick=()=>{
-          buildButton.textContent='✓ DOWNLOAD STARTED';
-          window.location.href=
-            WORKER+'/download?id='+encodeURIComponent(buildId);
-        };
+        setButtons(false,'BUILD FREE BASIC BOT');
+        const download=document.getElementById('buildDownload');
+        download.href=WORKER+'/download?id='+encodeURIComponent(buildId);
+        download.classList.add('show');
+        document.getElementById('buildStatus').classList.add('ready');
+        document.getElementById('buildStatus').scrollIntoView({behavior:'smooth',block:'center'});
         return;
       }
     }
@@ -529,9 +544,9 @@ async function buildPlan(){
     showTurnstile();
     setBuildState('failed','BOT BUILD FAILED',error.message);
 
-    buildButton.disabled=false;
-    buildButton.textContent='TRY BUILD AGAIN';
-    buildButton.onclick=buildPlan;
+    setButtons(false,'BUILD FREE BASIC BOT');
+    document.getElementById('buildRetry').classList.add('show');
+    document.getElementById('buildStatus').classList.add('failed');
 
     if(window.turnstile){
       try{ turnstile.reset(); }catch(e){}
@@ -603,7 +618,9 @@ document.getElementById('restoreLicenseBtn').onclick=()=>{
     ? 'License restoration is not connected yet. Keep your key; no new payment is needed.'
     : 'Enter your existing Premium license key.';
 };
-document.getElementById('buildBtn').onclick=buildPlan;
+document.getElementById('buildRetry').onclick=buildPlan;
+function onTurnstileError(code){document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
+function onTurnstileExpired(){document.getElementById('turnstileHelp').textContent='Security check expired. Please verify again before building.';}
 </script>
 </body>
 </html>
