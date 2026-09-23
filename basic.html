@@ -226,11 +226,11 @@ select option:disabled{color:#81909e;background:#17212d}
 <script>
 const tabs=[...document.querySelectorAll('.tab')];
 
-function showPage(id){
+function showPage(id, scrollToTop=true){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
   tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===id));
   if(id==='review') renderReview();
-  window.scrollTo({top:0,behavior:'smooth'});
+  if(scrollToTop) window.scrollTo({top:0,behavior:'smooth'});
 }
 
 tabs.forEach(t=>t.onclick=()=>showPage(t.dataset.page));
@@ -452,13 +452,15 @@ async function buildPlan(){
   const buildButtons=[document.getElementById('freeBuildChoice')];
   const setButtons=(disabled,label)=>buildButtons.forEach(b=>{b.disabled=disabled;b.textContent=label;});
 
-  showPage('review');
+  // The visitor is already on Review & Build: do not jump back to the top.
+  showPage('review', false);
   renderReview();
 
   const turnstileToken=
     document.querySelector('[name="cf-turnstile-response"]')?.value;
 
   if(!turnstileToken){
+    setBuildState('failed','SECURITY CHECK REQUIRED','Complete the Cloudflare verification just above this panel, then click Build again.');
     document.getElementById('turnstileHelp').textContent='Security verification is unavailable or incomplete. If Cloudflare says it cannot connect, try disabling VPN/ad blocking for this site or retry later. The build cannot proceed without verification.';
     document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});
     return;
@@ -490,8 +492,8 @@ async function buildPlan(){
   setButtons(true,'BUILDING...');
   document.getElementById('buildDownload').classList.remove('show');
   document.getElementById('buildRetry').classList.remove('show');
-  document.getElementById('buildStatus').scrollIntoView({behavior:'smooth',block:'center'});
   setBuildState('building','BUILDING YOUR BOT','Submitting configuration...');
+  document.getElementById('buildStatus').scrollIntoView({behavior:'smooth',block:'center'});
 
   try{
     const response=await fetch(WORKER+'/',{
