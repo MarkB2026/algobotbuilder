@@ -559,6 +559,8 @@ async function buildPlan(){
 
 // Payment-test checkout. Deliberately does not claim a Premium installer or license.
 let premiumQuote=null;
+try { premiumQuote=JSON.parse(localStorage.getItem('mbbPremiumPendingQuote')||'null'); } catch (_) { premiumQuote=null; }
+function savePremiumQuote(q){premiumQuote=q;try{localStorage.setItem('mbbPremiumPendingQuote',JSON.stringify(q));}catch(_){}}
 const payMessage=document.getElementById('paymentMessage');
 function paymentMessage(text){payMessage.textContent=text;}
 function showPaymentQuote(q){
@@ -573,18 +575,23 @@ function showPaymentQuote(q){
   copy.onclick=()=>navigator.clipboard.writeText(q.bitcoin_address).then(()=>paymentMessage('Address copied.')).catch(()=>paymentMessage('Select and copy the address above.'));
   el.append(copy);
 }
+if(premiumQuote && premiumQuote.quote_id){
+  showPaymentQuote(premiumQuote);
+  document.getElementById('paymentPanel').classList.add('show');
+  paymentMessage('Recovered your previous payment quote. If you already paid, enter the original TXID and verify; do not pay again.');
+}
 document.getElementById('premiumUnlockBtn').onclick=async()=>{
   document.getElementById('paymentPanel').classList.add('show');
   paymentMessage('Fetching signed quote…');
   try{
     const r=await fetch(WORKER+'/premium/quote');const q=await r.json();
     if(!r.ok||!q.ok)throw Error(q.error||'Could not create quote');
-    premiumQuote=q;showPaymentQuote(q);
-    paymentMessage('Send the exact BTC amount before the quote expires, then enter your TXID. This is a real Bitcoin payment.');
+    savePremiumQuote(q);showPaymentQuote(q);
+    paymentMessage('Send the exact BTC amount within 60 minutes, then enter your TXID. Once registered, blockchain confirmation may arrive later. Do not send a second payment.');
   }catch(e){paymentMessage('Quote error: '+e.message);}
 };
 document.getElementById('paymentVerifyBtn').onclick=async()=>{
-  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
+  if(!premiumQuote){paymentMessage('No saved quote. If you already paid, keep your TXID and quote ID for recovery; do not pay again.');return;}
   const txid=document.getElementById('paymentTxid').value.trim();
   if(!/^[a-fA-F0-9]{64}$/.test(txid)){paymentMessage('Enter a valid 64-character TXID.');return;}
   paymentMessage('Checking blockchain confirmation…');
@@ -595,12 +602,12 @@ document.getElementById('paymentVerifyBtn').onclick=async()=>{
     })});
     const v=await r.json();
     if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
-    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nPremium installer/activation is not connected to this Basic builder yet. Keep your quote ID and TXID.');}
-    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));
+    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nLicense key: '+(v.license_key||'Contact support with your TXID')+'\nPremium installer is not yet connected. Save your license key and TXID.');}
+    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.')+' Keep your original TXID; do not pay again.');
   }catch(e){paymentMessage('Verification error: '+e.message);}
 };
 document.getElementById('paymentRefreshBtn').onclick=async()=>{
-  if(!premiumQuote){paymentMessage('Request a quote first.');return;}
+  if(!premiumQuote){paymentMessage('No saved quote. If you already paid, keep your TXID and quote ID for recovery; do not pay again.');return;}
   try{
     const r=await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(premiumQuote.quote_id));
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Status unavailable');
