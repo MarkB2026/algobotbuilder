@@ -175,8 +175,20 @@ select option:disabled{color:#81909e;background:#17212d}
 /* Less gold: blue primary UI, gold reserved for Bitcoin pricing. */.build-choice.paid{border-color:#487a98;background:linear-gradient(155deg,#192c3c,#111b25)}.paid .choice-label{border-color:#487a98;color:#b0e2f5}.paid .choice-price{color:#d9f5ff}.paid .choice-action,.premium-button{background:linear-gradient(180deg,#44c5ec,#1688b4);color:#051922}.premium-workspace .premium-button{background:linear-gradient(180deg,#44c5ec,#1688b4)!important;color:#051922}.premium-card.launch{border-color:#4d7087;background:linear-gradient(145deg,#1b2c3b,#111b23)}.premium-card.launch h3,.premium-card.launch .lock{color:#c6eaff}.premium-section-label{border-bottom-color:#38586b}.premium-cta{border-color:#41667d;background:#13212d}.premium-cta h3{color:#d5f1ff}.payment-panel{border-color:#45677b;background:#101f2b}.payment-panel code{color:#b6e9ff}.payment-message{color:#aee1f5}.premium-progress{border-color:#456c83}.premium-progress h3{color:#d7effa}.premium-progress .pp-badge{border-color:#4b819b;color:#c5e8f6}.pp-fill{background:linear-gradient(90deg,#1a91bc,#79d7f1)}
 @media(max-width:930px){.path-grid{grid-template-columns:1fr}.path-card{min-height:0}.launch-intro{padding-top:16px}}@media(max-width:560px){.launch-intro h1{font-size:30px}.path-card{padding:18px}}
 </style>
+<style>
+/* Builder v1.6.24: compact header and brighter navigation. */
+.shell{padding-top:13px}
+.builder-top-badge{display:flex;justify-content:flex-end;margin:0 0 9px}
+.tabs{background:rgba(10,19,27,.96)}
+.tab{background:#17445a;border:1px solid #347e9a;color:#e0f6ff;font-weight:700}
+.tab:hover{background:#1d607b;border-color:#51c5e7}
+.tab.active{background:linear-gradient(180deg,#42d2f2,#159bce);border-color:#62d8f5;color:#061d2a;box-shadow:0 0 0 1px #4ec9e955}
+.tab:focus-visible{outline:2px solid #7ee7ff;outline-offset:2px}
+.add:disabled{opacity:.52;cursor:not-allowed}
+.free-indicator-count{margin-top:8px;color:#a7d7e8;font-size:12px}
+</style>
 </head><body><div class="shell">
-<div class="hero"><div><div class="brand"><span>You</span>BuildBots<span class="brand-dot">.com</span></div><div class="tag">YOU BUILD BOTS. WE WRITE THE CODE.</div></div><div class="badge">LOCAL WINDOWS BOTS · FREE + PREMIUM</div></div>
+<div class="builder-top-badge"><span class="badge">LOCAL WINDOWS BOTS · FREE + PREMIUM</span></div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 16px;flex-wrap:wrap"><a href="index.html" style="color:#8dd4e4;text-decoration:none;font-weight:800">← BACK TO YOUBUILDBOTS</a><span style="color:#9eb9c8;font-size:13px">DEDICATED BOT BUILDER</span></div>
 <button id="startFreePath" type="button" hidden></button><button id="explorePremiumPath" type="button" hidden></button>
 <div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Features</button><button class="tab" data-page="review">5 · Review & Build</button></div>
@@ -187,7 +199,7 @@ select option:disabled{color:#81909e;background:#17212d}
 <div id="symbolError" class="symbol-error" role="alert" aria-live="polite"></div><div id="symbolChips" class="symbol-chips"></div>
 <div class="note">The bot's universe is limited to this list. A whitelisted symbol does <strong>not</strong> authorize adoption of an existing broker position. Basic supports up to 10 approved symbols. Existing broker positions are never adopted; open positions require manual reconciliation after a restart.</div></div></div>
 <div class="indicator-availability"><strong>Available in Brain v0.2:</strong> RSI, EMA, ATR and RVOL. Other indicators are greyed out and marked Coming Soon. Basic uses its own engine calculations. Validate your settings in Observe and IBKR Paper before trading.</div>
-<div class="section"><div class="head"><span>ENTRY RULES</span><small>Add one or more conditions</small></div><div class="body"><div id="rules"><div class="rule"><select name="indicator"><option selected>RSI</option><option disabled>MACD — Coming Soon</option><option>EMA</option><option disabled>SMA — Coming Soon</option><option disabled>VWAP — Coming Soon</option><option disabled>Price — Coming Soon</option><option>ATR</option><option disabled>Volume — Coming Soon</option><option>RVOL</option><option disabled>Bollinger Bands — Coming Soon</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="30" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button></div></div><button class="add" type="button" id="addRule">+ ADD INDICATOR / CONDITION</button><div class="checks"><label class="check"><input type="checkbox" name="all_rules" checked> Require all entry rules</label><label class="check"><input type="checkbox" name="confirmed_bar" checked> Confirm on closed bar</label><label class="check"><input type="checkbox" name="trend_filter"> Trend filter</label><label class="check"><input type="checkbox" name="rvol_filter"> Minimum RVOL filter</label></div></div></div>
+<div class="section"><div class="head"><span>ENTRY RULES</span><small>Add one or more conditions</small></div><div class="body"><div id="rules"><div class="rule"><select name="indicator"><option selected>RSI</option><option disabled>MACD — Coming Soon</option><option>EMA</option><option disabled>SMA — Coming Soon</option><option disabled>VWAP — Coming Soon</option><option disabled>Price — Coming Soon</option><option>ATR</option><option disabled>Volume — Coming Soon</option><option>RVOL</option><option disabled>Bollinger Bands — Coming Soon</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="30" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button></div></div><button class="add" type="button" id="addRule">+ ADD INDICATOR / CONDITION</button><div id="freeIndicatorCount" class="free-indicator-count" role="status" aria-live="polite">Free: 1 of 3 entry conditions selected. You can change them after downloading.</div><div class="checks"><label class="check"><input type="checkbox" name="all_rules" checked> Require all entry rules</label><label class="check"><input type="checkbox" name="confirmed_bar" checked> Confirm on closed bar</label><label class="check"><input type="checkbox" name="trend_filter"> Trend filter</label><label class="check"><input type="checkbox" name="rvol_filter"> Minimum RVOL filter</label></div></div></div>
 <div class="section"><div class="head"><span>RSI DIVERGENCE</span><small>Confirmed-pivot entry gate</small></div><div class="body"><div class="checks"><label class="check"><input type="checkbox" name="div_enabled" checked> Require RSI divergence</label><label class="check"><input type="checkbox" name="div_confirm" checked> Require price confirmation (close beyond previous bar)</label></div><div class="grid three"><label class="field">RSI Period<input name="div_rsi" type="number" min="2" value="14"></label><label class="field">Pivot Width (bars)<input name="div_pivot" type="number" min="1" max="10" value="2"></label><label class="field">Lookback (bars)<input name="div_lookback" type="number" min="10" max="250" value="60"></label><label class="field">Minimum RSI Difference<input name="div_delta" type="number" min="0" step="0.5" value="2"></label></div><div class="note">Confirmed pivots use completed bars. Divergence gates the indicator rules above. Test in Observe before Paper.</div></div></div>
 <div class="section"><div class="head"><span>TRADE QUALITY FILTERS</span><span class="pill">OPTIONAL</span></div><div class="body"><div class="grid three"><label class="field">Minimum Price<input name="min_price" type="number" value="1"></label><label class="field">Minimum Volume<input name="min_volume" type="number" value="100000"></label><label class="field">Minimum RVOL<input name="min_rvol" type="number" step=".1" value="1.0"></label></div></div></div>
 </section>
@@ -373,11 +385,27 @@ function syncPortControl(){
 modeSelect.addEventListener('change',syncPortControl);
 syncPortControl();
 
+const FREE_MAX_ENTRY_RULES=3;
+function updateFreeIndicatorCount(){
+  const count=document.querySelectorAll('#rules .rule').length;
+  const label=document.getElementById('freeIndicatorCount');
+  const button=document.getElementById('addRule');
+  if(label)label.textContent=`Free: ${count} of ${FREE_MAX_ENTRY_RULES} entry conditions selected. ${count>=FREE_MAX_ENTRY_RULES?'Limit reached.':'You can change them after downloading.'}`;
+  if(button){button.disabled=count>=FREE_MAX_ENTRY_RULES;button.title=count>=FREE_MAX_ENTRY_RULES?'Free edition limit: 3 entry conditions':'';}
+}
+document.getElementById('rules').addEventListener('click',e=>{
+  if(e.target.closest('button') && e.target.closest('.rule')){
+    requestAnimationFrame(updateFreeIndicatorCount);
+  }
+});
+updateFreeIndicatorCount();
 document.getElementById('addRule').onclick=()=>{
+  if(document.querySelectorAll('#rules .rule').length>=FREE_MAX_ENTRY_RULES){updateFreeIndicatorCount();return;}
   const d=document.createElement('div');
   d.className='rule';
   d.innerHTML=`<select name="indicator"><option>RSI</option><option disabled>MACD — Coming Soon</option><option>EMA</option><option disabled>SMA — Coming Soon</option><option disabled>VWAP — Coming Soon</option><option disabled>Price — Coming Soon</option><option>ATR</option><option disabled>Volume — Coming Soon</option><option>RVOL</option><option disabled>Bollinger Bands — Coming Soon</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="50" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button>`;
   document.getElementById('rules').appendChild(d);
+  updateFreeIndicatorCount();
 };
 
 function plan(){
@@ -592,6 +620,12 @@ async function buildPlan(){
   showPage('review', false);
   renderReview();
 
+  if(document.querySelectorAll('#rules .rule').length>FREE_MAX_ENTRY_RULES){
+    alert('Free supports a maximum of 3 entry conditions. Remove extra conditions before building.');
+    showPage('strategy', false);
+    return;
+  }
+
   const turnstileToken=
     document.querySelector('[name="cf-turnstile-response"]')?.value;
 
@@ -604,6 +638,7 @@ async function buildPlan(){
 
   const botPlan=plan();
   // UI safety: never send an unsupported indicator if an old saved page or devtools changes the selection.
+  if(botPlan.entry.rules.length>FREE_MAX_ENTRY_RULES){alert('Free supports up to 3 entry conditions.');return;}
   const supportedIndicators=new Set(['RSI','EMA','ATR','RVOL']);
   if(botPlan.entry.rules.some(r=>!supportedIndicators.has(r.indicator)) || !new Set(['RSI','EMA']).has(botPlan.exit.indicator)){
     alert('Unsupported indicator: entry supports RSI, EMA, ATR and RVOL; exit supports RSI and EMA.');
