@@ -1732,8 +1732,9 @@ const commitSha = result.commit_sha;
 
 
       const statusResponse = await fetch(
-        "https://falling-sky-7997.algobotbuilder.workers.dev/status?id=" +
-        encodeURIComponent(buildId)
+        "https://falling-sky-7997.algobotbuilder.workers.dev/build/status?id=" +
+encodeURIComponent(buildId) +
+"&sha=" + encodeURIComponent(commitSha)
       );
 
 
