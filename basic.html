@@ -106,6 +106,8 @@ select option:disabled{color:#81909e;background:#17212d}
 .premium-progress{display:none;margin-top:16px;padding:20px;border:1px solid #c59a3d;border-radius:11px;background:linear-gradient(145deg,#192632,#111b24);color:#e7edf3}
 .premium-progress.show{display:block}.premium-progress h3{margin:8px 0 2px;font-size:21px;color:#ffdc88}.premium-progress .pp-badge{display:inline-block;border:1px solid #9e762d;border-radius:20px;padding:4px 10px;color:#ffe09c;font-size:11px;font-weight:800;letter-spacing:.7px}.pp-sub{color:#aabccb;margin:0 0 14px}.pp-track{height:9px;background:#293b49;border-radius:20px;overflow:hidden;margin:15px 0 7px}.pp-fill{width:0;height:100%;background:linear-gradient(90deg,#c58c2c,#ffe19a);border-radius:20px;transition:width .4s}.pp-fill.indeterminate{width:35%;animation:pp-slide 1.7s ease-in-out infinite}@keyframes pp-slide{0%{transform:translateX(-105%)}100%{transform:translateX(390%)}}.pp-meta{display:flex;justify-content:space-between;gap:12px;color:#b7c9d7;font-size:12px}.pp-steps{display:grid;gap:11px;margin:20px 0}.pp-step{display:flex;align-items:center;gap:12px;color:#9fb0bd}.pp-mark{display:grid;place-items:center;flex:0 0 25px;height:25px;border:2px solid #627789;border-radius:50%;font-size:14px;font-weight:900}.pp-step.done{color:#dcebe4}.pp-step.done .pp-mark{background:#20a86a;border-color:#20a86a;color:white}.pp-step.current{color:#ffdc88;font-weight:700}.pp-step.current .pp-mark{border-color:#efbc54;color:#efbc54}.pp-info{padding:13px;border:1px solid #315a77;border-radius:8px;background:#132c3e;color:#c3deee;font-size:13px;line-height:1.6}.pp-error{color:#ffac9b}.pp-link{display:none;margin-top:13px;text-decoration:none}.pp-link.show{display:inline-block}@media(max-width:600px){.premium-progress{padding:14px}.pp-meta{flex-direction:column}}
 
+.payment-wait-note{display:none;margin:12px 0;padding:12px;border:1px solid #ae8335;border-radius:8px;background:#332918;color:#ffdf9a;font-size:13px;line-height:1.55}.payment-wait-note.show{display:block}
+.payment-success-actions{display:none;margin-top:15px;padding:17px;border:1px solid #44ad80;border-radius:9px;background:#142e29;color:#e1f5e9}.payment-success-actions.show{display:block}.payment-success-actions strong{font-size:17px;color:#91efbd}.payment-success-actions p{font-size:13px;line-height:1.5}.payment-success-actions .premium-button{margin-top:8px;max-width:100%}.payment-key-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}.payment-key-row code{overflow-wrap:anywhere;font-size:12px}.payment-hint{color:#c6d6cb}
 /* Small optional restore demo; leaves payment and build flows unchanged. */
 .restore-title-row{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap;margin-bottom:6px}
 .restore-title-row h3{margin:0}
@@ -231,7 +233,15 @@ select option:disabled{color:#81909e;background:#17212d}
           </label>
           <button class="premium-button" type="button" id="paymentVerifyBtn">VERIFY PAYMENT</button>
           <button type="button" class="add" id="paymentRefreshBtn">CHECK PAYMENT STATUS</button>
+          <div class="payment-wait-note" id="paymentWaitNote" role="status">⏳ Waiting for Bitcoin confirmation? Keep this page open and avoid refreshing while checking. If you accidentally close it, do not pay again: retain your quote ID and TXID and contact support if you cannot resume.</div>
           <div class="payment-message" id="paymentMessage"></div>
+          <div class="payment-success-actions" id="paymentSuccessActions" aria-live="polite">
+            <strong>✓ Premium payment verified — ready to build</strong>
+            <p id="paymentSuccessKeyNote">Keep your original license key. You will need it for future reinstalls.</p>
+            <div class="payment-key-row" id="paymentKeyRow" style="display:none"><code id="paymentIssuedKey"></code><button type="button" class="add" id="paymentCopyKey">COPY LICENSE KEY</button></div>
+            <button type="button" class="premium-button" id="paymentBuildDownload">BUILD &amp; DOWNLOAD PREMIUM BOT</button>
+            <p class="payment-hint" id="paymentBuildHint">Your Windows installer is generated after you click. The download button appears when the build finishes.</p>
+          </div>
         </div>
       </div>
 
@@ -590,8 +600,32 @@ async function buildPlan(){
 
 // Premium payment and license unlock; license is never persisted in localStorage.
 let premiumQuote=null;
+let paymentIssuedLicenseKey=null;
 const payMessage=document.getElementById('paymentMessage');
 function paymentMessage(text){payMessage.textContent=text;}
+function paymentWaiting(waiting){document.getElementById('paymentWaitNote').classList.toggle('show',!!waiting);}
+function paymentVerified(v){
+  paymentWaiting(false);
+  const key=typeof v.license_key==='string'&&/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/i.test(v.license_key.trim())?v.license_key.trim().toUpperCase():null;
+  if(key){paymentIssuedLicenseKey=key;document.getElementById('paymentIssuedKey').textContent=key;document.getElementById('paymentKeyRow').style.display='flex';document.getElementById('paymentSuccessKeyNote').textContent='SAVE THIS LICENSE KEY NOW. It cannot be recovered if lost. Use it for future reinstalls.';}
+  document.getElementById('paymentSuccessActions').classList.add('show');
+}
+document.getElementById('paymentCopyKey').onclick=()=>{
+  if(paymentIssuedLicenseKey)navigator.clipboard.writeText(paymentIssuedLicenseKey).then(()=>paymentMessage('License key copied. Store it securely.')).catch(()=>paymentMessage('Select and copy your license key above.'));
+};
+document.getElementById('paymentBuildDownload').onclick=async()=>{
+  const key=paymentIssuedLicenseKey||document.getElementById('restoreLicenseKey').value.trim().toUpperCase();
+  const restoreBox=document.querySelector('.restore-box');
+  if(!key){document.getElementById('paymentBuildHint').textContent='Enter your original license key in Reinstalling Premium above, then click this button again. Do not pay again.';restoreBox.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('restoreLicenseKey').focus();return;}
+  document.getElementById('restoreLicenseKey').value=key;
+  const btn=document.getElementById('paymentBuildDownload');btn.disabled=true;btn.textContent='VERIFYING LICENSE…';
+  try{
+    if(!premiumUnlocked)await restorePremiumAccess();
+    if(!premiumUnlocked){document.getElementById('paymentBuildHint').textContent='License verification failed. Check the Restore Access message above.';restoreBox.scrollIntoView({behavior:'smooth',block:'center'});return;}
+    document.getElementById('premiumBuildBtn').click();
+    document.getElementById('premiumProgress').scrollIntoView({behavior:'smooth',block:'center'});
+  }finally{btn.disabled=false;btn.textContent='BUILD & DOWNLOAD PREMIUM BOT';}
+};
 function showPaymentQuote(q){
   const el=document.getElementById('paymentQuote');
   el.replaceChildren();
@@ -617,7 +651,7 @@ document.getElementById('premiumUnlockBtn').onclick=async()=>{
   try{
     const r=await fetch(WORKER+'/premium/quote');const q=await r.json();
     if(!r.ok||!q.ok)throw Error(q.error||'Could not create quote');
-    premiumQuote=q;showPaymentQuote(q);
+    premiumQuote=q;paymentIssuedLicenseKey=null;document.getElementById('paymentSuccessActions').classList.remove('show');document.getElementById('paymentKeyRow').style.display='none';paymentWaiting(false);showPaymentQuote(q);
     paymentMessage('Send the exact BTC amount before the quote expires, then enter your TXID. This is a real Bitcoin payment.');
   }catch(e){paymentMessage('Quote error: '+e.message);}
 };
@@ -633,8 +667,8 @@ document.getElementById('paymentVerifyBtn').onclick=async()=>{
     })});
     const v=await r.json();
     if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
-    if(v.verified){paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nSave your original Premium license key and use Restore Access to unlock your installer.');}
-    else paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));
+    if(v.verified){paymentVerified(v);paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nSave your original Premium license key. Use BUILD & DOWNLOAD PREMIUM BOT below.');}
+    else{paymentWaiting(v.status==='waiting_confirmation');paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));}
   }catch(e){paymentMessage('Verification error: '+e.message);}
 };
 document.getElementById('paymentRefreshBtn').onclick=async()=>{
@@ -642,7 +676,7 @@ document.getElementById('paymentRefreshBtn').onclick=async()=>{
   try{
     const r=await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(premiumQuote.quote_id));
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Status unavailable');
-    paymentMessage('Server payment status: '+v.status+'; confirmed: '+v.confirmed+'; received: '+v.received_sats+' sats.');
+    paymentWaiting(v.status==='waiting_confirmation');if(v.verified||v.status==='verified')paymentVerified(v);paymentMessage('Server payment status: '+v.status+'; confirmed: '+v.confirmed+'; received: '+v.received_sats+' sats.');
   }catch(e){paymentMessage('Status error: '+e.message);}
 };
 
@@ -751,7 +785,7 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
   
 <style>
   body::before {
-    content: "BUILD v1.6.10";
+    content: "BUILD v1.6.13";
     position: fixed;
     top: 0;
     left: 0;
