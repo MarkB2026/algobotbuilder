@@ -338,7 +338,11 @@ function showPage(id, scrollToTop=true){
   
 }
 
-tabs.forEach(t=>t.onclick=()=>showPage(t.dataset.page));
+tabs.forEach(t=>t.onclick=()=>{
+  const currentY = window.scrollY;
+  showPage(t.dataset.page, false);
+  window.scrollTo({top:currentY,behavior:'instant'});
+});
 document.getElementById('startFreePath').onclick=()=>{showPage('strategy');document.getElementById('strategy').scrollIntoView({behavior:'smooth',block:'start'});};
 document.getElementById('explorePremiumPath').onclick=()=>{showPage('premium');document.getElementById('premium').scrollIntoView({behavior:'smooth',block:'start'});};
 
