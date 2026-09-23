@@ -269,7 +269,7 @@ select option:disabled{color:#81909e;background:#17212d}
       </div>
 
       <div id="turnstileWrap" style="display:flex;justify-content:center;margin-top:22px;">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired"></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx" data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired" data-refresh-expired="manual"></div>
       </div>
       <div id="turnstileHelp" class="turnstile-help" role="status" aria-live="polite"></div>
       <div class="premium-action-wrap" id="premiumActionWrap">
@@ -509,12 +509,23 @@ function stopBuildProgressMessages(){
 function hideTurnstile(){
   const wrap=document.getElementById('turnstileWrap');
   if(wrap) wrap.style.display='none';
+  const help=document.getElementById('turnstileHelp');
+  if(help)help.textContent='';
 }
 
 function showTurnstile(){
   const wrap=document.getElementById('turnstileWrap');
   if(wrap) wrap.style.display='flex';
 }
+// Show a fresh challenge only when a build requires it. Never bypass token validation.
+function requestTurnstile(){
+  showTurnstile();
+  const help=document.getElementById('turnstileHelp');
+  if(help)help.textContent='Complete Cloudflare verification to start your build.';
+  if(window.turnstile){try{window.turnstile.reset();}catch(e){}}
+  document.getElementById('turnstileWrap')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
   
 async function buildPlan(){
   const buildButtons=[document.getElementById('freeBuildChoice')];
@@ -530,7 +541,7 @@ async function buildPlan(){
   if(!turnstileToken){
     setBuildState('failed','SECURITY CHECK REQUIRED','Complete the Cloudflare verification just above this panel, then click Build again.');
     document.getElementById('turnstileHelp').textContent='Security verification is unavailable or incomplete. If Cloudflare says it cannot connect, try disabling VPN/ad blocking for this site or retry later. The build cannot proceed without verification.';
-    document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});
+    requestTurnstile();
     return;
   }
 
@@ -670,7 +681,7 @@ document.getElementById('premiumSingleAction').onclick=async()=>{
     if(!premiumUnlocked)await restorePremiumAccess();
     if(!premiumUnlocked){document.getElementById('premiumActionNote').textContent='License verification failed. Check the Restore Access message.';return;}
     const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
-    if(!token){showTurnstile();document.getElementById('turnstileHelp').textContent='Complete Cloudflare verification before building.';document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});return;}
+    if(!token){requestTurnstile();return;}
     singleActionState='building';syncSingleAction();
     document.getElementById('premiumBuildBtn').click();
   }finally{singleActionBusy=false;syncSingleAction();}
@@ -839,7 +850,7 @@ document.getElementById('premiumBuildBtn').onclick=async()=>{
   if(!premiumUnlocked){msg.textContent='Restore your license first.';return;}
   const pending=ppLoad();if(pending&&pending.build_id){msg.textContent='Resuming your existing build. Do not start a duplicate.';ppPoll(pending);return;}
   const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
-  if(!token){msg.textContent='Complete the Cloudflare security check before building.';document.getElementById('turnstileWrap').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(!token){msg.textContent='Complete the Cloudflare security check before building.';requestTurnstile();return;}
   const key=document.getElementById('restoreLicenseKey').value.trim().toUpperCase();
   const basic=plan();const symbols=basic.symbols;
   if(!Array.isArray(symbols)||symbols.length<1||symbols.length>10){msg.textContent='Select 1–10 symbols first.';return;}
@@ -861,19 +872,20 @@ document.getElementById('premiumBuildBtn').onclick=async()=>{
 };
 document.getElementById('buildRetry').onclick=buildPlan;
 syncSingleAction();
-function onTurnstileError(code){document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
-function onTurnstileExpired(){document.getElementById('turnstileHelp').textContent='Security check expired. Please verify again before building.';}
+function onTurnstileSuccess(){hideTurnstile();}
+function onTurnstileError(code){showTurnstile();document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
+function onTurnstileExpired(){hideTurnstile(); /* A new challenge is shown on the next build attempt. */}
 </script>
   
 <style>
   body::before {
-    content: "BUILD v1.6.15";
+    content: "BUILD v1.6.16";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 5px;
-    background: green;
+    background: #ff00ff;
     z-index: 99999;
     font-size: 0;
   }
