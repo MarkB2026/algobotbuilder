@@ -4,8 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 
 <script
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-  async
+  id="turnstileApi" src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
   defer>
 </script>
 <meta name="description" content="YouBuildBots — start with a configurable trading bot, explore advanced controls, or discover specialized turnkey bots. Download and run locally.">
@@ -307,7 +306,7 @@ select option:disabled{color:#81909e;background:#17212d}
       </div>
 
       <div id="turnstileWrap" style="display:flex;justify-content:center;margin-top:22px;">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAAE7jN23hTQ6hBYIx" data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired" data-refresh-expired="manual"></div>
+        <div id="turnstileWidget" aria-label="Cloudflare security verification"></div>
       </div>
       <div id="turnstileHelp" class="turnstile-help" role="status" aria-live="polite"></div>
       <div class="premium-action-wrap" id="premiumActionWrap">
@@ -335,7 +334,7 @@ const tabs=[...document.querySelectorAll('.tab')];
 function showPage(id, scrollToTop=true){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
   tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===id));
-  if(id==='review') renderReview();
+  if(id==='review'){renderReview();requestAnimationFrame(ensureTurnstileRendered);}
   if(scrollToTop) window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -546,26 +545,48 @@ function stopBuildProgressMessages(){
   }
 }
 
-function hideTurnstile(){
+// Render explicitly only after Review & Build is visible. Cloudflare cannot
+// reliably auto-render a widget inside a tab hidden on initial page load.
+let turnstileWidgetId=null;
+function ensureTurnstileRendered(){
   const wrap=document.getElementById('turnstileWrap');
-  if(wrap) wrap.style.display='none';
   const help=document.getElementById('turnstileHelp');
-  if(help)help.textContent='';
+  if(!wrap || !document.getElementById('review').classList.contains('active'))return;
+  wrap.style.display='flex';
+  if(turnstileWidgetId!==null)return;
+  if(!window.turnstile || typeof window.turnstile.render!=='function'){
+    if(help)help.textContent='Loading Cloudflare verification…';
+    return;
+  }
+  try{
+    turnstileWidgetId=window.turnstile.render('#turnstileWidget',{
+      sitekey:'0x4AAAAAAE7jN23hTQ6hBYIx',
+      callback:onTurnstileSuccess,
+      'error-callback':onTurnstileError,
+      'expired-callback':onTurnstileExpired,
+      'refresh-expired':'auto',
+      appearance:'always'
+    });
+    if(help)help.textContent='';
+  }catch(e){
+    if(help)help.textContent='Cloudflare verification could not load: '+e.message;
+  }
 }
-
+function hideTurnstile(){showTurnstile();}
 function showTurnstile(){
   const wrap=document.getElementById('turnstileWrap');
-  if(wrap) wrap.style.display='flex';
+  if(wrap)wrap.style.display='flex';
+  ensureTurnstileRendered();
 }
-// Show a fresh challenge only when a build requires it. Never bypass token validation.
 function requestTurnstile(){
   showTurnstile();
   const help=document.getElementById('turnstileHelp');
   if(help)help.textContent='Complete Cloudflare verification to start your build.';
-  if(window.turnstile){try{window.turnstile.reset();}catch(e){}}
+  if(window.turnstile && turnstileWidgetId!==null){
+    try{window.turnstile.reset(turnstileWidgetId);}catch(e){}
+  }
   document.getElementById('turnstileWrap')?.scrollIntoView({behavior:'smooth',block:'center'});
 }
-
   
 async function buildPlan(){
   const buildButtons=[document.getElementById('freeBuildChoice')];
@@ -670,7 +691,7 @@ async function buildPlan(){
     document.getElementById('buildStatus').classList.add('failed');
 
     if(window.turnstile){
-      try{ turnstile.reset(); }catch(e){}
+      try{ if(turnstileWidgetId!==null)turnstile.reset(turnstileWidgetId); }catch(e){}
     }
   }
 }
@@ -689,8 +710,8 @@ async function buildPlan(){
   restore.before(workspace);
   workspace.querySelector('#restoreSlot').append(restore);
   workspace.querySelector('#quoteSlot').append(checkout);
-  workspace.querySelector('#installSlot').append(progress,security,securityHelp);
-  workspace.querySelector('#actionSlot').append(action);
+  workspace.querySelector('#installSlot').append(progress);
+  workspace.querySelector('#actionSlot').append(security,securityHelp,action);
   restore.classList.add('embedded');checkout.classList.add('embedded');
   // The payment form opens when Buy Premium is clicked, not on initial load.
   document.getElementById('quoteFold').open=false;
@@ -956,11 +977,20 @@ document.getElementById('premiumBuildBtn').onclick=async()=>{
   }catch(e){stopPremiumActivity();singleActionState=ppLoad()?.build_id?'build_issue':'ready_build';syncSingleAction();ppShow(-1,'Build submission: '+e.message);msg.textContent='Premium build: '+e.message;}
   finally{if(!ppPolling){btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';}}
 };
+document.getElementById('turnstileApi').addEventListener('load',ensureTurnstileRendered);
+document.getElementById('turnstileApi').addEventListener('error',()=>{
+  document.getElementById('turnstileHelp').textContent='Cloudflare verification failed to load. Check your network, ad blocker or sitekey hostname.';
+});
 document.getElementById('buildRetry').onclick=buildPlan;
 syncSingleAction();
-function onTurnstileSuccess(){hideTurnstile();if(pendingPremiumSecurity){pendingPremiumSecurity=false;setTimeout(()=>{if(singleActionState==='ready_build')document.getElementById('premiumSingleAction').click();},0);}}
+function onTurnstileSuccess(){document.getElementById('turnstileHelp').textContent='Security verified ✓';if(pendingPremiumSecurity){pendingPremiumSecurity=false;setTimeout(()=>{if(singleActionState==='ready_build')document.getElementById('premiumSingleAction').click();},0);}}
 function onTurnstileError(code){showTurnstile();document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
-function onTurnstileExpired(){pendingPremiumSecurity=false;hideTurnstile(); /* A new challenge is shown on the next build attempt. */}
+function onTurnstileExpired(){
+  pendingPremiumSecurity=false;
+  showTurnstile();
+  document.getElementById('turnstileHelp').textContent='Security verification expired. Complete a new check before building.';
+  if(window.turnstile){try{if(turnstileWidgetId!==null)window.turnstile.reset(turnstileWidgetId);}catch(e){}}
+}
 </script>
   
 
