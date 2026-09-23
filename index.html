@@ -175,12 +175,51 @@ select option:disabled{color:#81909e;background:#17212d}
 /* Less gold: blue primary UI, gold reserved for Bitcoin pricing. */.build-choice.paid{border-color:#487a98;background:linear-gradient(155deg,#192c3c,#111b25)}.paid .choice-label{border-color:#487a98;color:#b0e2f5}.paid .choice-price{color:#d9f5ff}.paid .choice-action,.premium-button{background:linear-gradient(180deg,#44c5ec,#1688b4);color:#051922}.premium-workspace .premium-button{background:linear-gradient(180deg,#44c5ec,#1688b4)!important;color:#051922}.premium-card.launch{border-color:#4d7087;background:linear-gradient(145deg,#1b2c3b,#111b23)}.premium-card.launch h3,.premium-card.launch .lock{color:#c6eaff}.premium-section-label{border-bottom-color:#38586b}.premium-cta{border-color:#41667d;background:#13212d}.premium-cta h3{color:#d5f1ff}.payment-panel{border-color:#45677b;background:#101f2b}.payment-panel code{color:#b6e9ff}.payment-message{color:#aee1f5}.premium-progress{border-color:#456c83}.premium-progress h3{color:#d7effa}.premium-progress .pp-badge{border-color:#4b819b;color:#c5e8f6}.pp-fill{background:linear-gradient(90deg,#1a91bc,#79d7f1)}
 @media(max-width:930px){.path-grid{grid-template-columns:1fr}.path-card{min-height:0}.launch-intro{padding-top:16px}}@media(max-width:560px){.launch-intro h1{font-size:30px}.path-card{padding:18px}}
 </style>
-</head><body><div class="shell"><div class="hero"><div><div class="brand"><span>You</span>BuildBots<span class="brand-dot">.com</span></div><div class="tag">YOU BUILD BOTS. WE WRITE THE CODE.</div></div><div class="badge">LOCAL WINDOWS BOTS · FREE + PREMIUM</div></div>
-<div class="launch-intro"><span class="eyebrow">YOUR STRATEGY. YOUR RULES. YOUR BOT.</span><h1>Build your bot. Or start with one of ours.</h1><p>Choose a strategy, fine-tune its entry rules and risk controls, and download a bot that runs on your own computer. Start free, explore Premium, or browse our specialized turnkey bots.</p></div>
+<style>
+/* v1.6.22: dedicated branded hero and product-first homepage */
+body{background:radial-gradient(ellipse at 76% 0%,#102a3c 0%,#0a131b 52%,#090e13 100%)}
+.shell{max-width:1460px;padding:24px 36px}
+.home-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:36px;align-items:center;min-height:315px;padding:22px 0 16px;position:relative}
+.home-hero-copy{position:relative;z-index:1}
+.home-hero-copy .eyebrow{font-size:12px;letter-spacing:3px;font-weight:900;color:#5bd4f8}
+.home-hero-copy h1{font-size:clamp(36px,4.25vw,62px);line-height:1.05;letter-spacing:-1.5px;margin:21px 0 17px;max-width:760px;color:#f6faff}
+.home-hero-copy p{font-size:17px;line-height:1.65;color:#bed1df;max-width:700px;margin:0}
+.home-hero-logo{display:flex;align-items:center;justify-content:center;min-width:0}
+.home-hero-logo img{display:block;width:min(100%,510px);height:auto;max-height:310px;object-fit:contain;filter:drop-shadow(0 10px 28px #00b7ed16)}
+.path-grid{gap:18px;margin:0 0 22px}.path-card{padding:23px 24px;min-height:340px;border-color:#32708d;background:linear-gradient(150deg,#122536,#101c29)}
+.path-card.featured{border-color:#32708d;background:linear-gradient(150deg,#122536,#101c29)}
+.path-tag{font-size:11px;color:#67d8fc}.path-card h2{font-size:24px}.path-card p{font-size:14px;line-height:1.65}
+.path-card ul{font-size:13px;line-height:1.9;list-style:none;padding:0}.path-card li::before{content:'•';color:#49d2fa;margin-right:12px}
+.path-button{font-size:13px;min-height:52px;padding:14px 18px;border-radius:9px}.path-button.outline{border-color:#298eb9}
+.mini-rsi{margin:0 0 22px;border:1px solid #306d8b;background:linear-gradient(145deg,#112636,#0d1a26);border-radius:12px;overflow:hidden}
+.mini-rsi .mini-head{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #28495c;font-weight:850;letter-spacing:.8px;color:#d9f1ff}
+.mini-rsi .mini-body{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center;padding:28px 32px 32px}
+.mini-rsi h2{font-size:25px;margin:0 0 13px}.mini-rsi p{font-size:15px;line-height:1.65;color:#b8cbd8;max-width:760px;margin:0}
+.mini-chart{width:100%;height:auto;max-height:170px;overflow:visible}.mini-chart .guide{stroke:#286481;stroke-width:1;stroke-dasharray:6 5;fill:none}.mini-chart .plot{stroke:#2dbbff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;filter:drop-shadow(0 0 4px #13a6f466)}
+.truth-strip{margin:22px 0 18px}
+@media(max-width:900px){.home-hero{grid-template-columns:1fr;gap:0;padding-top:14px}.home-hero-logo{justify-content:flex-start}.home-hero-logo img{max-height:230px;width:min(100%,380px)}.mini-rsi .mini-body{grid-template-columns:1fr}.path-card{min-height:0}}
+@media(max-width:560px){.shell{padding:16px}.home-hero-copy h1{font-size:38px}.home-hero-copy p{font-size:15px}.home-hero-logo img{max-height:200px}.mini-rsi .mini-body{padding:20px}.mini-rsi .mini-head{padding:15px 18px}}
+</style>
+</head><body><div class="shell"><header class="home-hero">
+  <div class="home-hero-copy">
+    <div class="eyebrow">YOUR STRATEGY. YOUR RULES. YOUR BOT.</div>
+    <h1>Build your bot.<br>Or start with one of ours.</h1>
+    <p>Choose a strategy, fine-tune its entry rules and risk controls, and download a bot that runs on your own computer. Start free, explore Premium, or browse our specialized turnkey bots.</p>
+  </div>
+  <div class="home-hero-logo"><img src="assets/logo.png?v=1.6.22" alt="YouBuildBots — Build. Download. Trade." width="510" height="510" fetchpriority="high"></div>
+</header>
 <div class="path-grid" aria-label="Choose how to get started">
   <article class="path-card"><span class="path-tag">START HERE · FREE</span><h2>Build your own bot</h2><p>Start with our RSI Divergence Reversal Bot. Choose supported indicators, set your rules, manage risk and generate your personal Windows installer.</p><ul><li>Configure entry filters and approved symbols</li><li>Set stops, exits and paper-trading safeguards</li><li>Review your complete plan before building</li></ul><button class="path-button" type="button" id="startFreePath" onclick="location.href='basic.html'">OPEN BOT BUILDER <span aria-hidden="true">→</span></button></article>
   <article class="path-card featured"><span class="path-tag">PREMIUM · $10 USD</span><h2>Unlock more possibilities</h2><p>Explore advanced trade management and a more configurable dashboard. Premium is being rolled out in stages as each feature passes engine and paper testing.</p><ul><li>Progressive ratcheting and protected profit — planned</li><li>Cooldown and smart re-entry — planned</li><li>Further advanced modules on the roadmap</li></ul><button class="path-button outline" type="button" id="explorePremiumPath" onclick="location.href='basic.html#premium'">EXPLORE PREMIUM <span aria-hidden="true">→</span></button></article>
   <article class="path-card"><span class="path-tag">TURNKEY BOT COLLECTION</span><h2>Choose a ready-made bot</h2><p>Prefer a purpose-built trading system? Explore our specialized bots, each designed around a particular trading style and detailed local controls.</p><ul><li>ScalpBot — intraday focus</li><li>SwingBot — multi-day focus</li><li>More specialized bots as released</li></ul><a class="path-button outline" href="bots.html">BROWSE BOTS <span aria-hidden="true">→</span></a></article>
 </div>
+
+<section class="mini-rsi" aria-label="Mini RSI Bot">
+  <div class="mini-head"><span>MINI RSI BOT</span><span class="pill">COMING SOON</span></div>
+  <div class="mini-body">
+    <div><h2>A focused RSI bot. No complicated setup.</h2><p>Our ready-to-run Mini RSI bot will have its own product details and download when released. Until then, you can configure the current RSI Divergence bot in the dedicated builder.</p></div>
+    <svg class="mini-chart" viewBox="0 0 540 140" role="img" aria-label="Decorative RSI-style trading indicator line"><path class="guide" d="M0 25H540 M0 112H540"/><path class="plot" d="M0 92 L12 80 24 96 36 76 48 99 60 87 72 98 84 73 96 83 108 63 120 74 132 49 144 64 156 38 168 46 180 31 192 54 204 42 216 70 228 58 240 91 252 104 264 78 276 88 288 57 300 73 312 35 324 56 336 48 348 77 360 67 372 93 384 64 396 76 408 51 420 58 432 37 444 52 456 85 468 104 480 77 492 81 504 60 516 67 528 44 540 39"/></svg>
+  </div>
+</section>
 <div class="truth-strip"><strong>What you can build today:</strong> Our dedicated bot builder generates the RSI Divergence Reversal Bot with supported RSI, EMA, ATR and RVOL entry filters. Additional bot families, a fully modular build-from-scratch editor, and local Premium feature unlocking are planned—not yet part of this checkout.</div>
-<section class="section" style="margin:22px 0 26px"><div class="head"><span>MINI RSI BOT</span><span class="pill">COMING SOON</span></div><div class="body" style="padding:24px"><h2 style="margin:0 0 8px">A focused RSI bot. No complicated setup.</h2><p style="color:#b8cbd8;max-width:750px">Our ready-to-run Mini RSI bot will have its own product details and download when released. Until then, you can configure the current RSI Divergence bot in the dedicated builder.</p><a class="path-button" href="basic.html" style="max-width:270px;margin-top:20px">OPEN BOT BUILDER →</a></div></section><div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Build. Download. Trade. · YouBuildBots</div></div></body></html>
+<div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Build. Download. Trade. · YouBuildBots</div></div></body></html>
