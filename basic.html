@@ -193,7 +193,7 @@ select option:disabled{color:#81909e;background:#17212d}
       </div>
       <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button>
 <div class="premium-progress" id="premiumProgress" role="status" aria-live="polite">
-  <span class="pp-badge">PREMIUM UNLOCKED</span><h3 id="ppHeading">Building your Premium Bot</h3>
+  <span class="pp-badge">PREMIUM UNLOCKED</span><h3 id="ppHeading">Premium build progress</h3>
   <p class="pp-sub">Paper edition · Windows installer</p>
   <div class="pp-track" aria-label="Build activity"><div class="pp-fill indeterminate" id="ppFill"></div></div>
   <div class="pp-meta"><span id="ppDetail">Preparing your build…</span><span id="ppElapsed">Elapsed: 0s</span></div>
@@ -691,7 +691,7 @@ async function restorePremiumAccess(){
     premiumUnlocked=true;document.getElementById('premiumBuildBtn').style.display='inline-block';
     msg.textContent='Premium unlocked. Build another installer without paying again. Keep your original key.';
     const saved=ppLoad();if(saved&&saved.build_id&&saved.commit_sha){msg.textContent='Premium restored. Resuming your previous installer build…';ppPoll(saved)}
-    else{ppShow(0,'Premium license verified. Ready to build your Paper installer.');document.getElementById('premiumProgress').scrollIntoView({behavior:'smooth',block:'nearest'})}
+    else{document.getElementById('premiumProgress').classList.remove('show');document.getElementById('ppDownload').classList.remove('show');msg.textContent='Premium unlocked. Ready when you are — click BUILD PREMIUM (PAPER ONLY) to start. Keep your original key.';}
   }catch(e){msg.textContent='Restore failed: '+e.message;}
   finally{btn.disabled=false;}
 }
@@ -731,13 +731,13 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
   
 <style>
   body::before {
-    content: "BUILD v1.6.8";
+    content: "BUILD v1.6.9";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 5px;
-    background: green;
+    background: #ff00ff;
     z-index: 99999;
     font-size: 0;
   }
