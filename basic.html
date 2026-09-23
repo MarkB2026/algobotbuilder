@@ -105,6 +105,19 @@ select option:disabled{color:#81909e;background:#17212d}
 /* Premium build progress — actual status only, no fabricated percentage */
 .premium-progress{display:none;margin-top:16px;padding:20px;border:1px solid #c59a3d;border-radius:11px;background:linear-gradient(145deg,#192632,#111b24);color:#e7edf3}
 .premium-progress.show{display:block}.premium-progress h3{margin:8px 0 2px;font-size:21px;color:#ffdc88}.premium-progress .pp-badge{display:inline-block;border:1px solid #9e762d;border-radius:20px;padding:4px 10px;color:#ffe09c;font-size:11px;font-weight:800;letter-spacing:.7px}.pp-sub{color:#aabccb;margin:0 0 14px}.pp-track{height:9px;background:#293b49;border-radius:20px;overflow:hidden;margin:15px 0 7px}.pp-fill{width:0;height:100%;background:linear-gradient(90deg,#c58c2c,#ffe19a);border-radius:20px;transition:width .4s}.pp-fill.indeterminate{width:35%;animation:pp-slide 1.7s ease-in-out infinite}@keyframes pp-slide{0%{transform:translateX(-105%)}100%{transform:translateX(390%)}}.pp-meta{display:flex;justify-content:space-between;gap:12px;color:#b7c9d7;font-size:12px}.pp-steps{display:grid;gap:11px;margin:20px 0}.pp-step{display:flex;align-items:center;gap:12px;color:#9fb0bd}.pp-mark{display:grid;place-items:center;flex:0 0 25px;height:25px;border:2px solid #627789;border-radius:50%;font-size:14px;font-weight:900}.pp-step.done{color:#dcebe4}.pp-step.done .pp-mark{background:#20a86a;border-color:#20a86a;color:white}.pp-step.current{color:#ffdc88;font-weight:700}.pp-step.current .pp-mark{border-color:#efbc54;color:#efbc54}.pp-info{padding:13px;border:1px solid #315a77;border-radius:8px;background:#132c3e;color:#c3deee;font-size:13px;line-height:1.6}.pp-error{color:#ffac9b}.pp-link{display:none;margin-top:13px;text-decoration:none}.pp-link.show{display:inline-block}@media(max-width:600px){.premium-progress{padding:14px}.pp-meta{flex-direction:column}}
+
+/* Small optional restore demo; leaves payment and build flows unchanged. */
+.restore-title-row{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap;margin-bottom:6px}
+.restore-title-row h3{margin:0}
+.restore-demo-link{border:0;background:transparent;color:#f3c866;text-decoration:underline;text-underline-offset:3px;font-size:12px;font-weight:700;cursor:pointer;padding:0}
+.restore-demo-link:hover,.restore-demo-link:focus-visible{color:#ffe7a7}
+.restore-demo-dialog{border:1px solid #b78b39;border-radius:12px;background:#111e29;color:#f3f6f9;box-shadow:0 24px 75px #000b;padding:22px;width:min(94vw,820px);max-height:90vh}
+.restore-demo-dialog::backdrop{background:#020810d9}
+.restore-demo-dialog header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+.restore-demo-dialog h3{margin:0;font-size:20px;color:#ffdc88}
+.restore-demo-dialog p{color:#bbcedc;font-size:13px;line-height:1.5;margin:6px 0 15px}
+.restore-demo-dialog video{display:block;width:100%;height:auto;max-height:65vh;background:#0c1720;border:1px solid #385263;border-radius:7px}
+.restore-demo-close{background:#213848;color:#d9f3ff;border:1px solid #527f94;border-radius:6px;padding:7px 12px;cursor:pointer;font-size:18px}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
@@ -191,7 +204,7 @@ select option:disabled{color:#81909e;background:#17212d}
           <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
         </div>
       </div>
-      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button>
+      <div class="restore-box"><div class="restore-title-row"><h3>Reinstalling Premium?</h3><button type="button" class="restore-demo-link" id="restoreDemoOpen" aria-haspopup="dialog" aria-controls="restoreDemoDialog">▶ Click here for demo</button></div><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" style="display:none;margin-top:12px">BUILD PREMIUM (PAPER ONLY)</button>
 <div class="premium-progress" id="premiumProgress" role="status" aria-live="polite">
   <span class="pp-badge">PREMIUM UNLOCKED</span><h3 id="ppHeading">Premium build progress</h3>
   <p class="pp-sub">Paper edition · Windows installer</p>
@@ -731,16 +744,35 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
   
 <style>
   body::before {
-    content: "BUILD v1.6.9";
+    content: "BUILD v1.6.10";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 5px;
-    background: yellow;
+    background: #ff00ff;
     z-index: 99999;
     font-size: 0;
   }
 </style>
+
+<dialog id="restoreDemoDialog" class="restore-demo-dialog" aria-labelledby="restoreDemoTitle">
+  <header><h3 id="restoreDemoTitle">Restore Premium — quick demo</h3><button type="button" class="restore-demo-close" id="restoreDemoClose" aria-label="Close demo">×</button></header>
+  <p>Keep your original license key. After refreshing or reinstalling, use Restore Access to unlock Premium without paying again. The key in this demo is masked.</p>
+  <video id="restoreDemoVideo" controls preload="none" playsinline aria-label="Seven-second Premium license restoration demo"><source src="assets/premium-license-restore-demo.mp4" type="video/mp4">Your browser cannot play this demo video.</video>
+</dialog>
+<script>
+(function(){
+  const open=document.getElementById('restoreDemoOpen');
+  const dialog=document.getElementById('restoreDemoDialog');
+  const close=document.getElementById('restoreDemoClose');
+  const video=document.getElementById('restoreDemoVideo');
+  if(!open||!dialog||!close||!video)return;
+  open.addEventListener('click',()=>{dialog.showModal();video.play().catch(()=>{});});
+  close.addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+  dialog.addEventListener('close',()=>{video.pause();video.currentTime=0;});
+})();
+</script>
 </body>
 </html>
