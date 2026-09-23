@@ -94,21 +94,22 @@ select option:disabled{color:#81909e;background:#17212d}
 </style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
-<div style="border:1px solid #276482;background:#102a38;border-radius:9px;padding:13px 16px;margin-bottom:14px;color:#d4edfb"><strong>RSI DIVERGENCE — REVERSAL BOT</strong><br>RSI divergence and price confirmation provide the core setup. The entry rules below are <strong>additional filters</strong>, not independent trading strategies. Bollinger mean reversion and multiple independent strategy instances are planned. <a href="bots.html#reversal" style="color:#79e4ff">View Reversal Bot details ↗</a></div><div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Intelligence</button><button class="tab" data-page="review">5 · Review & Build</button></div>
+<div style="border:1px solid #276482;background:#102a38;border-radius:9px;padding:13px 16px;margin-bottom:14px;color:#d4edfb"><strong>RSI DIVERGENCE — REVERSAL BOT</strong><br>Enable RSI divergence and price confirmation below for the core setup. The entry rules below are <strong>additional filters</strong>, not independent trading strategies. Bollinger mean reversion and multiple independent strategy instances are planned. <a href="bots.html#reversal" style="color:#79e4ff">View Reversal Bot details ↗</a></div><div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Intelligence</button><button class="tab" data-page="review">5 · Review & Build</button></div>
 
 <section id="strategy" class="page active">
 <div class="section"><div class="head"><span>BOT BASICS</span><small>Name it and choose what it trades</small></div><div class="body"><div class="grid"><label class="field">Bot Name<input name="bot_name" value="My Trading Bot"></label><div class="field"><span>Trading Symbols</span><span class="symbol-count" id="symbolCount">1 approved</span></div><label class="field">Direction<select name="direction"><option>LONG</option><option>SHORT</option></select></label><label class="field">Strategy Timeframe<select name="timeframe"><option>1 min</option><option selected>5 min</option><option>15 min</option><option>30 min</option><option>1 hour</option><option>Daily</option></select></label></div></div></div>
 <div class="section"><div class="head"><span>APPROVED SYMBOL WHITELIST</span><small>Only symbols entered here may be scanned or traded</small></div><div class="body">
 <div class="whitelist-entry"><input id="symbolEntry" type="text" placeholder="Add a symbol: SPY, WULF, RIOT..." maxlength="12" autocomplete="off" aria-label="Add approved symbol"><button type="button" id="addSymbol" class="add">+ ADD SYMBOL</button></div>
 <div id="symbolError" class="symbol-error" role="alert" aria-live="polite"></div><div id="symbolChips" class="symbol-chips"></div>
-<div class="note">The bot's universe is limited to this list. A whitelisted symbol does <strong>not</strong> authorize adoption of an existing broker position. Current engine enforcement is pending integration.</div></div></div>
-<div class="indicator-availability"><strong>Available in Brain v0.2:</strong> RSI, EMA, ATR and RVOL. Other indicators are greyed out and marked Coming Soon. Calculations are tested independently; live engine integration is still pending.</div>
+<div class="note">The bot's universe is limited to this list. A whitelisted symbol does <strong>not</strong> authorize adoption of an existing broker position. Basic supports up to 10 approved symbols. Existing broker positions are never adopted; open positions require manual reconciliation after a restart.</div></div></div>
+<div class="indicator-availability"><strong>Available in Brain v0.2:</strong> RSI, EMA, ATR and RVOL. Other indicators are greyed out and marked Coming Soon. Basic uses its own engine calculations. Validate your settings in Observe and IBKR Paper before trading.</div>
 <div class="section"><div class="head"><span>ENTRY RULES</span><small>Add one or more conditions</small></div><div class="body"><div id="rules"><div class="rule"><select name="indicator"><option selected>RSI</option><option disabled>MACD — Coming Soon</option><option>EMA</option><option disabled>SMA — Coming Soon</option><option disabled>VWAP — Coming Soon</option><option disabled>Price — Coming Soon</option><option>ATR</option><option disabled>Volume — Coming Soon</option><option>RVOL</option><option disabled>Bollinger Bands — Coming Soon</option></select><select name="operator"><option>Below</option><option>Above</option><option>Crosses Above</option><option>Crosses Below</option></select><input name="period" type="number" value="14" title="Period"><input name="value" type="number" value="30" title="Value"><button type="button" class="add" style="margin:0;padding:0" onclick="this.parentElement.remove()">×</button></div></div><button class="add" type="button" id="addRule">+ ADD INDICATOR / CONDITION</button><div class="checks"><label class="check"><input type="checkbox" name="all_rules" checked> Require all entry rules</label><label class="check"><input type="checkbox" name="confirmed_bar" checked> Confirm on closed bar</label><label class="check"><input type="checkbox" name="trend_filter"> Trend filter</label><label class="check"><input type="checkbox" name="rvol_filter"> Minimum RVOL filter</label></div></div></div>
+<div class="section"><div class="head"><span>RSI DIVERGENCE</span><small>Confirmed-pivot entry gate</small></div><div class="body"><div class="checks"><label class="check"><input type="checkbox" name="div_enabled" checked> Require RSI divergence</label><label class="check"><input type="checkbox" name="div_confirm" checked> Require price confirmation (close beyond previous bar)</label></div><div class="grid three"><label class="field">RSI Period<input name="div_rsi" type="number" min="2" value="14"></label><label class="field">Pivot Width (bars)<input name="div_pivot" type="number" min="1" max="10" value="2"></label><label class="field">Lookback (bars)<input name="div_lookback" type="number" min="10" max="250" value="60"></label><label class="field">Minimum RSI Difference<input name="div_delta" type="number" min="0" step="0.5" value="2"></label></div><div class="note">Confirmed pivots use completed bars. Divergence gates the indicator rules above. Test in Observe before Paper.</div></div></div>
 <div class="section"><div class="head"><span>TRADE QUALITY FILTERS</span><span class="pill">OPTIONAL</span></div><div class="body"><div class="grid three"><label class="field">Minimum Price<input name="min_price" type="number" value="1"></label><label class="field">Minimum Volume<input name="min_volume" type="number" value="100000"></label><label class="field">Minimum RVOL<input name="min_rvol" type="number" step=".1" value="1.0"></label></div></div></div>
 </section>
 
 <section id="risk" class="page">
-<div class="section"><div class="head"><span>POSITION SIZE</span><small>Hard limits travel with the generated bot</small></div><div class="body"><div class="grid"><label class="field">Quantity<input name="qty" type="number" min="1" value="1"></label><label class="field">Max Position<input name="max_position" type="number" min="1" value="1"></label><label class="field">Max Trade Risk $<input name="max_trade_risk" type="number" value="100"></label><label class="field">1-Share Override<select name="one_share"><option selected>ON</option><option>OFF</option></select></label></div></div></div>
+<div class="section"><div class="head"><span>POSITION SIZE</span><small>Hard limits travel with the generated bot</small></div><div class="body"><div class="grid"><label class="field">Quantity<input name="qty" type="number" min="1" value="1"></label><label class="field">Max Shares per Symbol<input name="max_position" type="number" min="1" value="1"></label><label class="field">Max Open Positions (account-wide)<input name="max_open_positions" type="number" min="1" max="10" value="10"></label><label class="field">Max Trade Risk $<input name="max_trade_risk" type="number" value="100"></label><label class="field">1-Share Override<select name="one_share"><option selected>ON</option><option>OFF</option></select></label></div></div></div>
 <div class="section"><div class="head"><span>INITIAL STOP</span></div><div class="body"><div class="grid three"><label class="field">Stop Type<select name="stop_type"><option selected>Percent</option><option>ATR</option><option>Dollar</option><option>Fixed Price</option></select></label><label class="field">Stop Value<input name="stop_value" type="number" step=".1" value="3"></label><label class="field">ATR Period<input name="atr_period" type="number" value="14"></label></div></div></div>
 <div class="section"><div class="head"><span>TRAILING STOP</span></div><div class="body"><div class="grid"><label class="field">Trailing Stop<select name="trail_enabled"><option selected>Enabled</option><option>Disabled</option></select></label><label class="field">Type<select name="trail_type"><option selected>Percent</option><option>ATR</option><option>Dollar</option></select></label><label class="field">Distance<input name="trail_distance" type="number" step=".1" value="2"></label><label class="field">Activate<select name="trail_activate"><option selected>Immediately</option><option>After Profit $</option><option>After Profit %</option></select></label><label class="field">Activation Value<input name="trail_activate_value" type="number" step=".1" value="0" title="Used for After Profit $ or After Profit %"></label></div></div></div>
 <div class="section"><div class="head"><span>EXIT RULE</span></div><div class="body"><div class="grid"><label class="field">Exit Indicator<select name="exit_indicator"><option selected>RSI</option><option disabled>MACD — Coming Soon</option><option disabled>Price — Coming Soon</option><option>EMA</option><option disabled>VWAP — Coming Soon</option></select></label><label class="field">Condition<select name="exit_operator"><option selected>Above</option><option>Below</option><option>Crosses Above</option><option>Crosses Below</option></select></label><label class="field">Period<input name="exit_period" type="number" value="14"></label><label class="field">Value<input name="exit_value" type="number" value="70"></label></div></div></div>
@@ -116,7 +117,7 @@ select option:disabled{color:#81909e;background:#17212d}
 
 <section id="execution" class="page">
 <div class="section"><div class="head"><span>BROKER & MODE</span></div><div class="body"><div class="grid"><label class="field">Broker<select name="broker"><option selected>IBKR</option><option disabled>MT5 — Coming Later</option></select></label><label class="field">Mode<select name="mode"><option>OBSERVE</option><option selected>PAPER</option><option>LIVE</option></select></label><label class="field">Host<input name="host" value="127.0.0.1"></label><label class="field">Port<input name="port" type="text" value="7497" inputmode="numeric" disabled></label><label class="field">Client ID<input name="client_id" type="number" value="91"></label></div><div class="note">Port is set automatically from Mode. PAPER uses 7497; LIVE uses 7496. OBSERVE uses 7497 for connection testing. The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.</div></div></div>
-<div class="section"><div class="head"><span>SESSION & SAFETY</span></div><div class="body"><div class="grid"><label class="field">Max Daily Trades<input name="max_daily_trades" type="number" value="5"></label><label class="field">Max Daily Loss $<input name="max_daily_loss" type="number" value="200"></label><label class="field">Daily Profit Stop $<input name="daily_profit_stop" type="number" value="300"></label><label class="field">Hard Exit Time<input name="hard_exit" type="time" value="15:55"></label></div><div class="checks"><label class="check"><input name="intraday_only" type="checkbox" checked> Intraday only</label><label class="check"><input name="cancel_orders" type="checkbox" checked> Cancel outstanding orders at shutdown</label><label class="check"><input name="decisions_csv" type="checkbox" checked> Decisions Report CSV</label><label class="check"><input name="hive_optin" type="checkbox"> Share anonymized bot data with The Hive</label></div></div></div>
+<div class="section"><div class="head"><span>SESSION & SAFETY</span></div><div class="body"><div class="grid"><label class="field">Max Daily Trades<input name="max_daily_trades" type="number" value="5"></label><label class="field">Max Daily Loss $<input name="max_daily_loss" type="number" value="200"></label><label class="field">Daily Profit Stop $<input name="daily_profit_stop" type="number" value="300"></label><label class="field">Hard Exit Time<input name="hard_exit" type="time" value="15:55"></label></div><div class="checks"><label class="check"><input name="intraday_only" type="checkbox" checked> Intraday only</label><label class="check"><input name="cancel_orders" type="checkbox" checked> Cancel outstanding orders at shutdown</label><label class="check"><input name="decisions_csv" type="checkbox" checked> Decisions Report CSV</label><label class="check"><input name="hive_optin" type="checkbox" disabled> Hive sharing — coming later</label></div></div></div>
 </section>
 
 <section id="premium" class="page">
@@ -142,7 +143,7 @@ select option:disabled{color:#81909e;background:#17212d}
 
 <section id="review" class="page">
   <div class="section">
-    <div class="head"><span>REVIEW YOUR BOT</span><small>The generated plan stays editable until you build</small></div>
+    <div class="head"><span>REVIEW YOUR BOT</span><small>Review your configuration before building</small></div>
     <div class="body"><div id="reviewText" class="json"></div></div>
   </div>
 
@@ -153,34 +154,34 @@ select option:disabled{color:#81909e;background:#17212d}
         <span class="check">✓ Standalone Windows bot</span>
         <span class="check">✓ Local dashboard</span>
         <span class="check">✓ Decisions CSV</span>
-        <span class="check">✓ Your selected strategy</span>
+        <span class="check">✓ RSI divergence and indicator filters</span>
         <span class="check">✓ Safety controls</span>
       </div>
 
       <div class="note">The installer contains the trading application and required runtime components. You do not need the Python source code to run your bot.</div>
 
-      <div class="build-choice-intro"><h2>Your Bot Is Ready!</h2><p>Choose the edition you'd like to build. Your strategy settings stay the same.</p></div>
+      <div class="build-choice-intro"><h2>Choose Your Bot</h2><p>Choose the edition you'd like to build. Your strategy settings stay the same.</p></div>
       <div class="build-choices">
         <div class="build-choice">
           <span class="choice-label">FREE</span>
           <div class="choice-heading"><h3>Basic Bot</h3><span class="choice-price">$0</span></div>
-          <p>A functional local trading bot with the essential strategy and risk controls.</p>
-          <ul class="choice-features"><li>RSI divergence strategy</li><li>Essential risk and safety controls</li><li>Local dashboard and Windows installer</li><li>No payment or license required</li></ul>
+          <p>Build a locally installed bot with configurable strategy and risk controls. Paper-test before live use.</p>
+          <ul class="choice-features"><li>RSI divergence strategy</li><li>Up to 10 trading symbols</li><li>Initial and trailing stops</li><li>Essential risk and safety controls</li><li>Local dashboard and Windows installer</li><li>No payment or license required</li></ul>
           <button type="button" class="choice-action" id="freeBuildChoice">BUILD FREE BASIC BOT</button>
         </div>
         <div class="build-choice paid">
           <span class="choice-label">PREMIUM UPGRADE</span>
           <div class="choice-heading"><h3>Premium Bot</h3><span class="choice-price">$10</span></div>
           <p>Advanced trade management and additional controls as features are released and tested.</p>
-          <ul class="choice-features"><li>Premium installer and dashboard (integration pending)</li><li>Planned ratcheting and profit protection</li><li>Permanent reusable license</li><li>Pay once with Bitcoin</li></ul>
+          <ul class="choice-features"><li>Premium dashboard (integration pending)</li><li>Ratcheting and profit protection (planned)</li><li>More features coming!</li><li>One-time purchase · No subscription</li></ul>
           <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
         </div>
       </div>
-      <div class="restore-box"><h3>Already purchased Premium?</h3><p>Keep your license key safe. Returning-customer activation will be connected when the Premium installer is ready.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">License restoration is not yet connected in this Basic builder.</div></div>
+      <div class="restore-box"><h3>Reinstalling Premium?</h3><p>Use your existing key to restore access when Premium activation is connected. No additional purchase required.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">License restoration is not yet connected in this Basic builder.</div></div>
 
       <div class="premium-cta" id="premiumCheckout">
         <h3>₿ Premium Bitcoin Checkout — $10 USD</h3>
-        <p>Live payment test: a 15-minute BTC quote and on-chain confirmation. Premium installer generation is not connected to this Basic builder yet. Do not send a second payment while a transaction is pending.</p>
+        <p>Real Bitcoin checkout. Premium installer generation is not connected yet. Do not make another payment if you already paid or have a pending transaction. Keep your quote ID and TXID.</p>
         <button class="premium-button" type="button" id="premiumUnlockBtn">GENERATE BITCOIN QUOTE</button>
         <div class="payment-panel" id="paymentPanel" aria-live="polite">
           <div id="paymentQuote">Requesting Bitcoin quote…</div>
@@ -241,7 +242,7 @@ function addApprovedSymbol(){
   const input=document.getElementById('symbolEntry');const symbol=input.value.trim().toUpperCase();const error=document.getElementById('symbolError');error.textContent='';
   if(!symbolPattern.test(symbol)){error.textContent='Enter a valid ticker (letters, digits, dot or hyphen; max 12 characters).';return;}
   if(approvedSymbols.includes(symbol)){error.textContent=symbol+' is already approved.';return;}
-  if(approvedSymbols.length>=50){error.textContent='Maximum 50 symbols per bot.';return;}
+  if(approvedSymbols.length>=10){error.textContent='Basic supports up to 10 symbols.';return;}
   approvedSymbols.push(symbol);input.value='';renderSymbols();input.focus();
 }
 document.getElementById('addSymbol').addEventListener('click',addApprovedSymbol);
@@ -280,7 +281,7 @@ function plan(){
   return {
     schema:'algobotbuilder.plan.v1.simple',
     bot_name:val('bot_name'),
-    symbol:approvedSymbols[0], // Legacy compatibility until engine accepts symbols[]
+    symbol:approvedSymbols[0], // Backward-compatible primary symbol; engine scans symbols[]
     symbols:[...approvedSymbols],
     trading_universe:{mode:'WHITELIST',symbols:[...approvedSymbols]},
     ownership:{adopt_existing_positions:false,manage_only_bot_opened:true},
@@ -288,6 +289,7 @@ function plan(){
     timeframe:val('timeframe'),
 
     entry:{
+      divergence:{enabled:checked('div_enabled'),price_confirmation:checked('div_confirm'),rsi_period:Number(val('div_rsi')),pivot_width:Number(val('div_pivot')),lookback:Number(val('div_lookback')),min_rsi_delta:Number(val('div_delta'))},
       rules,
       require_all:checked('all_rules'),
       confirmed_bar:checked('confirmed_bar'),
@@ -301,6 +303,7 @@ function plan(){
     risk:{
       quantity:Number(val('qty')),
       max_position:Number(val('max_position')),
+      max_open_positions:Number(val('max_open_positions')),
       max_trade_risk:Number(val('max_trade_risk')),
       one_share_override:val('one_share'),
 
@@ -345,7 +348,7 @@ function plan(){
     },
 
     hive:{
-      share_anonymized_data:checked('hive_optin')
+      share_anonymized_data:false
     },
 
     premium:{
@@ -450,28 +453,25 @@ async function buildPlan(){
   const botPlan=plan();
   // UI safety: never send an unsupported indicator if an old saved page or devtools changes the selection.
   const supportedIndicators=new Set(['RSI','EMA','ATR','RVOL']);
-  if(botPlan.entry.rules.some(r=>!supportedIndicators.has(r.indicator)) || !supportedIndicators.has(botPlan.exit.indicator)){
-    alert('One or more indicators are not yet available in Brain. Please select RSI, EMA, ATR or RVOL.');
+  if(botPlan.entry.rules.some(r=>!supportedIndicators.has(r.indicator)) || !new Set(['RSI','EMA']).has(botPlan.exit.indicator)){
+    alert('Unsupported indicator: entry supports RSI, EMA, ATR and RVOL; exit supports RSI and EMA.');
     return;
   }
-  // Fail closed: existing build service is not yet verified to consume multiple symbols.
-  if(botPlan.symbols.length>1){
-    alert('Your whitelist has '+botPlan.symbols.length+' symbols. Multi-symbol engine support is not integrated yet. Your list is shown in Review, but building is paused to prevent a single-symbol installer.');
+  // The Stage 2 Basic engine scans 1–10 symbols; verify that the deployed Worker
+  // dispatches the current repository revision before enabling public multi-symbol builds.
+  if(botPlan.symbols.length<1 || botPlan.symbols.length>10){alert('Basic requires 1–10 symbols.');return;}
+  if(!Number.isInteger(botPlan.risk.max_open_positions) || botPlan.risk.max_open_positions<1 || botPlan.risk.max_open_positions>10){alert('Max Open Positions must be 1–10.');return;}
+  if(!Number.isInteger(botPlan.risk.quantity) || botPlan.risk.quantity<1 || !Number.isInteger(botPlan.risk.max_position) || botPlan.risk.max_position<1){alert('Quantity and Max Shares per Symbol must be positive integers.');return;}
+  if(botPlan.entry.divergence.enabled){
+    const d=botPlan.entry.divergence;
+    if(!Number.isInteger(d.rsi_period)||d.rsi_period<2||!Number.isInteger(d.pivot_width)||d.pivot_width<1||d.pivot_width>10||!Number.isInteger(d.lookback)||d.lookback<10||d.lookback>250||!Number.isFinite(d.min_rsi_delta)||d.min_rsi_delta<0){alert('Please check your RSI divergence settings.');return;}
+  }
+  if(botPlan.broker.mode==='LIVE'){
+    alert('LIVE builds are disabled until the new multi-symbol engine and recovery procedures pass IBKR Paper validation. Please select OBSERVE or PAPER.');
     return;
   }
   botPlan.turnstile_token=turnstileToken;
 
-  if(botPlan.broker.mode==='LIVE'){
-    const ok=confirm(
-      'LIVE TRADING MODE SELECTED.\n\n' +
-      'This AlgoBot can connect to your live IBKR account and may submit real orders.\n\n' +
-      'Approved symbols: ' + botPlan.symbols.join(', ') + '\n' +
-      'Quantity: ' + botPlan.risk.quantity + '\n' +
-      '1-Share Override: ' + botPlan.risk.one_share_override + '\n\n' +
-      'Continue with this build?'
-    );
-    if(!ok) return;
-  }
 
   buildButton.disabled=true;
   buildButton.textContent='BUILDING...';
