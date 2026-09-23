@@ -8,19 +8,19 @@
   async
   defer>
 </script>
-<meta name="description" content="AlgoBot Builder — an algorithmic trading bot builder for creating configurable trading bots that run locally.">
+<meta name="description" content="Bot Builder — an algorithmic trading bot builder for creating configurable trading bots that run locally.">
 <title>Reversal Bot — RSI Divergence Builder | MyBotBuilder</title>
 <style>
 :root{--bg:#0a0f14;--panel:#111923;--panel2:#16212d;--line:#263746;--text:#eef6fb;--muted:#8da0ae;--cyan:#25c7e8;--cyan2:#0b7e99;--good:#55d694;--gold:#e8b95a;--locked:#78838d}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% 0,#112837 0,#0a0f14 34%);color:var(--text);font:14px/1.45 Segoe UI,Arial,sans-serif}button,input,select{font:inherit}input,select{width:100%;height:40px;border:1px solid var(--line);border-radius:7px;background:#0b1219;color:var(--text);padding:8px 10px}input[type=checkbox]{width:auto;height:auto;accent-color:var(--cyan)}.shell{max-width:1260px;margin:auto;padding:24px}.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.brand{font-size:27px;font-weight:900;letter-spacing:.2px}.brand span{color:var(--cyan)}.tag{color:var(--muted);font-size:13px;margin-top:3px}.badge{border:1px solid #245064;background:#102633;color:#87e7fa;border-radius:999px;padding:7px 11px;font-weight:800;font-size:12px}.tabs{position:sticky;top:0;z-index:5;display:flex;gap:7px;overflow:auto;background:rgba(10,15,20,.94);backdrop-filter:blur(8px);padding:10px 0 12px;margin-bottom:12px}.tab{white-space:nowrap;border:1px solid var(--line);background:#101923;color:#b9c8d2;border-radius:7px;padding:9px 13px;cursor:pointer}.tab.active{background:#123044;border-color:#2386a2;color:#fff}.page{display:none}.page.active{display:block}.section{background:linear-gradient(180deg,var(--panel),#0f171f);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}.head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 15px;border-bottom:1px solid var(--line);font-weight:850;letter-spacing:.35px}.head small{font-weight:500;color:var(--muted);letter-spacing:0}.body{padding:15px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.field{display:grid;gap:6px;color:#aebdca;font-size:12px}.checks{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:13px}.check{display:flex;align-items:center;gap:7px;color:#c7d4dd}.note{margin-top:12px;padding:10px 12px;border-left:3px solid var(--cyan2);background:#0c151d;color:#9fb2bf;border-radius:3px}.rule{display:grid;grid-template-columns:1.2fr .9fr .7fr .7fr 42px;gap:8px;margin-top:8px}.add{margin-top:10px;border:1px dashed #347086;background:#0c1c26;color:#9cecff;border-radius:7px;padding:9px 12px;cursor:pointer}.premium-wrap{border:1px solid #5b4b2a;background:linear-gradient(180deg,#181711,#11151a);box-shadow:inset 0 1px 0 rgba(255,214,128,.06)}.premium-title{color:#ffd782}.premium-badge{background:#302712;border:1px solid #715b29;color:#ffd782;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;letter-spacing:.8px}.premium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.premium-card{position:relative;border:1px solid #39382f;background:#11161b;border-radius:9px;padding:13px;min-height:132px;overflow:hidden}.premium-card h3{margin:0 0 6px;font-size:14px;color:#dce3e8}.premium-card p{margin:0 0 12px;color:#7f8b94;font-size:12px}.premium-card .fake{display:flex;gap:7px;opacity:.42;filter:saturate(.4)}.premium-card select,.premium-card input{height:34px;pointer-events:none}.lock{position:absolute;right:10px;top:10px;color:var(--gold);font-weight:900;font-size:11px}.premium-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:13px;padding:11px 12px;background:#17150e;border:1px solid #443a22;border-radius:8px;color:#a99b77}.premium-footer b{color:#f4ce76}.buildbar{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:16px;padding:14px 15px;background:rgba(13,20,27,.96);border:1px solid #294151;border-radius:10px;backdrop-filter:blur(8px)}.buildbtn{border:0;border-radius:8px;background:linear-gradient(180deg,#34d2ee,#1295b4);color:#031017;font-weight:950;padding:12px 22px;cursor:pointer}.summary{color:#91a4b1;font-size:12px}.json{white-space:pre-wrap;background:#081016;border:1px solid var(--line);padding:14px;border-radius:8px;color:#b9dce7;max-height:420px;overflow:auto}.locked-input{opacity:.45;pointer-events:none}.pill{display:inline-block;border:1px solid #315262;border-radius:999px;padding:3px 7px;color:#9edff0;font-size:10px;font-weight:800}.subhead{font-weight:800;margin:3px 0 10px;color:#dce7ed}@media(max-width:900px){.grid,.grid.three,.premium-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rule{grid-template-columns:1fr 1fr}.hero{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.shell{padding:14px}.grid,.grid.three,.premium-grid{grid-template-columns:1fr}.rule{grid-template-columns:1fr}.buildbar{align-items:stretch;flex-direction:column}.buildbtn{width:100%}}
 
-@keyframes algoSpin{to{transform:rotate(360deg)}}
+@keyframes botSpin{to{transform:rotate(360deg)}}
 .build-status{display:none;margin-top:22px;text-align:center}
 .build-status.show{display:block}
 .build-spinner{
   box-sizing:border-box;width:70px;height:70px;margin:0 auto 14px;
   border:7px solid #173342;border-top-color:#55d8ff;border-radius:50%;
-  animation:algoSpin .85s linear infinite;position:relative
+  animation:botSpin .85s linear infinite;position:relative
 }
 .build-spinner.ready,.build-spinner.failed{animation:none}
 .build-spinner.ready{border:3px solid #3ee47d}
@@ -183,7 +183,7 @@ select option:disabled{color:#81909e;background:#17212d}
           <span class="choice-label">PREMIUM UPGRADE</span>
           <div class="choice-heading"><h3>Premium Bot</h3><span class="choice-price">$10</span></div>
           <p>Advanced trade management and additional controls as features are released and tested.</p>
-          <ul class="choice-features"><li>Premium dashboard (integration pending)</li><li>Ratcheting and profit protection (planned)</li><li>More features coming!</li><li>One-time purchase · No subscription</li></ul>
+          <ul class="choice-features"><li>Includes all Basic features</li><li>Premium dashboard (integration pending)</li><li>Ratcheting and profit protection (planned)</li><li>More features coming!</li><li>One-time purchase · No subscription</li></ul>
           <button type="button" class="choice-action" id="showPremiumChoice">UNLOCK PREMIUM WITH BITCOIN</button>
         </div>
       </div>
@@ -211,9 +211,9 @@ select option:disabled{color:#81909e;background:#17212d}
 
       <div id="buildStatus" class="build-status">
         <div id="buildSpinner" class="build-spinner"></div>
-        <div id="buildStatusTitle" class="build-status-title">BUILDING YOUR ALGOBOT</div>
+        <div id="buildStatusTitle" class="build-status-title">BUILDING YOUR BOT</div>
         <div id="buildStatusText" class="build-status-text">
-  Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
+  Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.
 </div>
         <a id="buildDownload" class="choice-action build-download" href="#" download>DOWNLOAD BASIC BOT</a>
         <button id="buildRetry" type="button" class="choice-action build-download">TRY BUILD AGAIN</button>
@@ -402,11 +402,11 @@ function startBuildProgressMessages(){
   const textEl = document.getElementById('buildStatusText');
 
   const messages = [
-    'Preparing your AlgoBot configuration...',
+    'Preparing your Bot configuration...',
     'Building your trading engine...',
     'Adding your strategy rules and risk controls...',
-    'Building your local AlgoBot dashboard...',
-    'Packaging the AlgoBot application...',
+    'Building your local Bot dashboard...',
+    'Packaging the Bot application...',
     'Creating your Windows installer...',
     'Finishing up — your download should be ready shortly...'
   ];
@@ -414,7 +414,7 @@ function startBuildProgressMessages(){
   let index = 0;
 
   textEl.textContent =
-    'Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
+    'Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.';
 
   if(buildProgressTimer){
     clearInterval(buildProgressTimer);
@@ -510,7 +510,7 @@ async function buildPlan(){
 
     const buildId=result.build_id;
    hideTurnstile();
-    setBuildState('building','BUILDING YOUR BOT','Your custom AlgoBot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
+    setBuildState('building','BUILDING YOUR BOT','Your custom Bot is being compiled and packaged. This usually takes about 3 minutes. Please keep this page open.');
     startBuildProgressMessages();
 
     while(true){
@@ -528,8 +528,8 @@ async function buildPlan(){
 
       if(status.ready){
         stopBuildProgressMessages();
-        setBuildState('ready','✓ YOUR ALGOBOT IS READY','Installer ready to download.');
-        document.title='✓ YOUR ALGOBOT IS READY — AlgoBot Builder';
+        setBuildState('ready','✓ YOUR BOT IS READY','Installer ready to download.');
+        document.title='✓ YOUR BOT IS READY — Bot Builder';
 
         setButtons(false,'BUILD FREE BASIC BOT');
         const download=document.getElementById('buildDownload');
@@ -627,7 +627,7 @@ function onTurnstileExpired(){document.getElementById('turnstileHelp').textConte
   
 <style>
   body::before {
-    content: "BUILD v1.6.3";
+    content: "BUILD v1.6.6";
     position: fixed;
     top: 0;
     left: 0;
