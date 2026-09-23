@@ -144,6 +144,30 @@ select option:disabled{color:#81909e;background:#17212d}
 .payment-success-actions .payment-hint{display:none}
 #turnstileWrap{margin-top:8px!important}
 </style>
+<style>
+/* v1.6.17 — One Premium workspace, collapsible steps, restrained accent color. */
+.premium-workspace{margin:18px 0;border:1px solid #3b596a;border-radius:12px;background:#101d27;padding:17px 18px 20px}
+.premium-workspace-heading h3{margin:0 0 4px;font-size:20px;color:#eaf4fa}.premium-workspace-heading p{margin:0 0 15px;color:#aebfc9;font-size:13px}
+.premium-fold{border:1px solid #334c5c;border-radius:9px;background:#13212b;margin:10px 0;overflow:hidden}
+.premium-fold[open]{border-color:#52758a}.premium-fold>summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:800;color:#dce9ef;display:flex;align-items:center;gap:12px}
+.premium-fold>summary::-webkit-details-marker{display:none}.fold-state{font-size:12px;color:#9cc5d5;font-weight:500;margin-left:auto}.fold-chevron{font-size:19px;color:#a9c4d0;transition:transform .2s}.premium-fold[open] .fold-chevron{transform:rotate(180deg)}
+.fold-body{padding:0 15px 16px}.premium-fold .restore-box.embedded,.premium-fold .premium-cta.embedded{margin:0;padding:8px 0 0;border:0;background:transparent;box-shadow:none}
+.premium-fold .restore-title-row h3{display:none}.premium-fold .restore-title-row{justify-content:flex-end}.premium-fold .restore-box>p{font-size:13px}
+.premium-fold .premium-cta h3{display:none}.premium-fold .premium-cta>p{font-size:12px;color:#b5c4cf}
+.premium-fold .payment-panel{background:#121d24;border:1px solid #344c58}.premium-fold .payment-success-actions{border-color:#387e65;background:#142a26}
+.premium-fold .premium-progress{margin:4px 0 0;border:0;background:transparent;padding:12px 0}.premium-fold .premium-progress h3{color:#e2f2f6}
+.premium-fold .pp-badge{border-color:#43745e;color:#a3e9c3}.premium-fold .pp-step.current{color:#a4d8e8}.premium-fold .pp-step.current .pp-mark{border-color:#68afc7;color:#8fd2e8}
+.premium-fold .pp-fill{background:linear-gradient(90deg,#2d93ae,#6ed7bf)}
+.premium-workspace-action{margin:19px auto 0;text-align:center;max-width:660px}
+.premium-workspace-action .premium-single-action{width:100%;min-height:53px;font-size:16px}
+.premium-workspace-action .premium-single-action.download-ready{background:linear-gradient(#46d28c,#159e63)!important;border-color:#58d6a0!important;color:#06251a!important;box-shadow:0 3px 18px #0d9d5230}
+.premium-activity{font-size:13px;color:#8dd4e4;margin:7px 0 13px;min-height:20px}.premium-activity:not([hidden])::before{content:'◌';display:inline-block;margin-right:9px;animation:premium-spin 1.1s linear infinite}@keyframes premium-spin{to{transform:rotate(360deg)}}
+#paymentSuccessActions .payment-hint{display:none}#paymentSuccessActions{padding:12px}#paymentSuccessActions strong{font-size:14px}
+#paymentWaitNote{border-color:#465b65;background:#1b292e;color:#bed1d9}
+#premiumCheckout .premium-button{background:linear-gradient(#e7c47a,#cda14b)}
+#turnstileWrap{margin-top:15px!important}
+@media(max-width:600px){.premium-workspace{padding:12px}.fold-body{padding:0 10px 12px}.premium-fold>summary{padding:12px}}
+</style>
 </head><body><div class="shell">
 <div class="hero"><div><div class="brand">Reversal Bot <span>— RSI Divergence</span></div><div class="tag">Configure your RSI divergence bot and optional indicator filters. Your bot runs locally.</div></div><div class="badge">RSI DIVERGENCE · BASIC / PRO</div></div>
 <div style="border:1px solid #276482;background:#102a38;border-radius:9px;padding:13px 16px;margin-bottom:14px;color:#d4edfb"><strong>RSI DIVERGENCE — REVERSAL BOT</strong><br>Enable RSI divergence and price confirmation below for the core setup. The entry rules below are <strong>additional filters</strong>, not independent trading strategies. Bollinger mean reversion and multiple independent strategy instances are planned. <a href="bots.html#reversal" style="color:#79e4ff">View Reversal Bot details ↗</a></div><div class="tabs"><button class="tab active" data-page="strategy">1 · Strategy</button><button class="tab" data-page="risk">2 · Risk & Exits</button><button class="tab" data-page="execution">3 · Execution</button><button class="tab" data-page="premium">4 · Premium Intelligence</button><button class="tab" data-page="review">5 · Review & Build</button></div>
@@ -232,7 +256,7 @@ select option:disabled{color:#81909e;background:#17212d}
       <div class="restore-box"><div class="restore-title-row"><h3>Reinstalling Premium?</h3><button type="button" class="restore-demo-link" id="restoreDemoOpen" aria-haspopup="dialog" aria-controls="restoreDemoDialog">▶ Click here for demo</button></div><p>Enter your original Premium license key to unlock a new installation. Keys cannot be recovered if lost.</p><div class="restore-row"><input id="restoreLicenseKey" type="text" autocomplete="off" placeholder="Your Premium license key" aria-label="Premium license key"><button id="restoreLicenseBtn" type="button">RESTORE ACCESS</button></div><div class="restore-note" id="restoreLicenseMessage" aria-live="polite">Enter your original license key; no additional payment is required.</div><button type="button" class="premium-button" id="premiumBuildBtn" hidden aria-hidden="true" tabindex="-1">BUILD PREMIUM (PAPER ONLY)</button>
 <div class="premium-progress" id="premiumProgress" role="status" aria-live="polite">
   <span class="pp-badge">PREMIUM UNLOCKED</span><h3 id="ppHeading">Premium build progress</h3>
-  <p class="pp-sub">Paper edition · Windows installer</p>
+  <p class="pp-sub">Paper edition · Windows installer</p><div id="premiumActivity" class="premium-activity" hidden aria-live="off"></div>
   <div class="pp-track" aria-label="Build activity"><div class="pp-fill indeterminate" id="ppFill"></div></div>
   <div class="pp-meta"><span id="ppDetail">Preparing your build…</span><span id="ppElapsed">Elapsed: 0s</span></div>
   <div class="pp-steps">
@@ -636,7 +660,48 @@ async function buildPlan(){
 }
 
 
+// One collapsible Premium workspace; move existing nodes without replacing their event handlers.
+(function assemblePremiumWorkspace(){
+  const restore=document.querySelector('.restore-box');
+  const checkout=document.getElementById('premiumCheckout');
+  const progress=document.getElementById('premiumProgress');
+  const security=document.getElementById('turnstileWrap');
+  const securityHelp=document.getElementById('turnstileHelp');
+  const action=document.getElementById('premiumActionWrap');
+  const workspace=document.createElement('section');workspace.id='premiumWorkspace';workspace.className='premium-workspace';
+  workspace.innerHTML='<div class="premium-workspace-heading"><h3>Premium · Purchase & installer</h3><p>One payment. One installer build. Your original license works for future reinstalls.</p></div><details id="restoreFold" class="premium-fold"><summary>Already paid? Restore Premium <span class="fold-chevron">⌄</span></summary><div id="restoreSlot" class="fold-body"></div></details><details id="quoteFold" class="premium-fold"><summary>1 · Bitcoin payment <span class="fold-state" id="quoteFoldState">Not started</span><span class="fold-chevron">⌄</span></summary><div id="quoteSlot" class="fold-body"></div></details><details id="installFold" class="premium-fold"><summary>2 · Windows installer <span class="fold-state" id="installFoldState">Awaiting payment</span><span class="fold-chevron">⌄</span></summary><div id="installSlot" class="fold-body"></div></details><div id="actionSlot" class="premium-workspace-action"></div>';
+  restore.before(workspace);
+  workspace.querySelector('#restoreSlot').append(restore);
+  workspace.querySelector('#quoteSlot').append(checkout);
+  workspace.querySelector('#installSlot').append(progress,security,securityHelp);
+  workspace.querySelector('#actionSlot').append(action);
+  restore.classList.add('embedded');checkout.classList.add('embedded');
+  // The payment form opens when Buy Premium is clicked, not on initial load.
+  document.getElementById('quoteFold').open=false;
+  document.getElementById('installFold').open=false;
+  document.getElementById('restoreFold').open=false;
+  hideTurnstile();
+})();
+function showPremiumStage(stage){
+  const quote=document.getElementById('quoteFold'),install=document.getElementById('installFold'),restore=document.getElementById('restoreFold');
+  if(stage==='quote'){quote.open=true;install.open=false;restore.open=false;quote.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(stage==='install'){quote.open=false;install.open=true;restore.open=false;install.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(stage==='restore'){restore.open=true;restore.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  const qs=document.getElementById('quoteFoldState'),is=document.getElementById('installFoldState');
+  if(stage==='quote')qs.textContent='Enter payment details';
+  if(stage==='install'){qs.textContent='Verified ✓';is.textContent='Ready to build';}
+}
+let premiumActivityTimer=null,premiumActivityIndex=0;
+const premiumActivityMessages=['Preparing your Windows installer','Packaging your Premium dashboard','Checking GitHub Actions build status','Finishing the installer package'];
+function startPremiumActivity(){
+  stopPremiumActivity();const el=document.getElementById('premiumActivity');if(!el)return;
+  el.hidden=false;el.textContent=premiumActivityMessages[0]+'…';
+  premiumActivityTimer=setInterval(()=>{premiumActivityIndex=(premiumActivityIndex+1)%premiumActivityMessages.length;el.textContent=premiumActivityMessages[premiumActivityIndex]+'…';},4200);
+}
+function stopPremiumActivity(){if(premiumActivityTimer){clearInterval(premiumActivityTimer);premiumActivityTimer=null;}const el=document.getElementById('premiumActivity');if(el)el.hidden=true;}
+
 // Single customer-facing Premium action. Legacy buttons remain internal event entry points.
+let pendingPremiumSecurity=false;
 let singleActionState='buy';
 let singleActionBusy=false;
 function syncSingleAction(){
@@ -650,6 +715,8 @@ function syncSingleAction(){
   const hints={buy:'Generate a Bitcoin quote to begin.',quote:'Send the exact amount and enter your TXID above, then verify payment.',confirming:'Your payment is pending Bitcoin confirmation. Do not send it again.',ready_build:'Your payment is verified. Start one Windows installer build.',building:'Your build is already running. Please wait; do not start another.',build_issue:'Check the existing build before considering another.',download:'Your installer is ready. Click to download.'};
   b.textContent=labels[singleActionState]||labels.buy;
   b.disabled=singleActionBusy||singleActionState==='building'||singleActionState==='quote';
+  b.classList.toggle('download-ready',singleActionState==='download');
+  document.getElementById('installFoldState').textContent=singleActionState==='download'?'Ready ✓':singleActionState==='building'?'Building…':singleActionState==='ready_build'?'Ready to build':document.getElementById('installFoldState').textContent;
   note.textContent=hints[singleActionState]||hints.buy;
   document.getElementById('paymentBuildDownload').style.display='none';
   document.getElementById('premiumBuildBtn').style.display='none';
@@ -666,7 +733,7 @@ document.getElementById('premiumSingleAction').onclick=async()=>{
   }
   if(singleActionState==='buy'){
     document.getElementById('premiumCheckout').classList.add('show');
-    document.getElementById('premiumUnlockBtn').click();return;
+    showPremiumStage('quote');document.getElementById('premiumUnlockBtn').click();return;
   }
   if(singleActionState==='confirming'){
     document.getElementById('paymentRefreshBtn').click();return;
@@ -681,7 +748,7 @@ document.getElementById('premiumSingleAction').onclick=async()=>{
     if(!premiumUnlocked)await restorePremiumAccess();
     if(!premiumUnlocked){document.getElementById('premiumActionNote').textContent='License verification failed. Check the Restore Access message.';return;}
     const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
-    if(!token){requestTurnstile();return;}
+    if(!token){pendingPremiumSecurity=true;document.getElementById('installFold').open=true;requestTurnstile();return;}
     singleActionState='building';syncSingleAction();
     document.getElementById('premiumBuildBtn').click();
   }finally{singleActionBusy=false;syncSingleAction();}
@@ -697,8 +764,10 @@ function paymentVerified(v){
   paymentWaiting(false);
   const key=typeof v.license_key==='string'&&/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/i.test(v.license_key.trim())?v.license_key.trim().toUpperCase():null;
   if(key){paymentIssuedLicenseKey=key;document.getElementById('paymentIssuedKey').textContent=key;document.getElementById('paymentKeyRow').style.display='flex';document.getElementById('paymentSuccessKeyNote').textContent='SAVE THIS LICENSE KEY NOW. It cannot be recovered if lost. Use it for future reinstalls.';}
+  document.getElementById('installSlot').insertBefore(document.getElementById('paymentSuccessActions'),document.getElementById('premiumProgress'));
   document.getElementById('paymentSuccessActions').classList.add('show');
-  singleActionState='ready_build';syncSingleAction();
+  document.getElementById('paymentMessage').textContent='Payment verified. Save your original license key before building.';
+  singleActionState='ready_build';showPremiumStage('install');syncSingleAction();
 }
 document.getElementById('paymentCopyKey').onclick=()=>{
   if(paymentIssuedLicenseKey)navigator.clipboard.writeText(paymentIssuedLicenseKey).then(()=>paymentMessage('License key copied. Store it securely.')).catch(()=>paymentMessage('Select and copy your license key above.'));
@@ -706,7 +775,7 @@ document.getElementById('paymentCopyKey').onclick=()=>{
 document.getElementById('paymentBuildDownload').onclick=async()=>{
   const key=paymentIssuedLicenseKey||document.getElementById('restoreLicenseKey').value.trim().toUpperCase();
   const restoreBox=document.querySelector('.restore-box');
-  if(!key){document.getElementById('paymentBuildHint').textContent='Enter your original license key in Reinstalling Premium above, then click this button again. Do not pay again.';restoreBox.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('restoreLicenseKey').focus();return;}
+  if(!key){document.getElementById('paymentBuildHint').textContent='Restore your original license key to continue without paying again.';restoreBox.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('restoreLicenseKey').focus();return;}
   document.getElementById('restoreLicenseKey').value=key;
   const btn=document.getElementById('paymentBuildDownload');btn.disabled=true;btn.textContent='VERIFYING LICENSE…';
   try{
@@ -743,7 +812,7 @@ document.getElementById('premiumUnlockBtn').onclick=async()=>{
   try{
     const r=await fetch(WORKER+'/premium/quote');const q=await r.json();
     if(!r.ok||!q.ok)throw Error(q.error||'Could not create quote');
-    premiumQuote=q;document.getElementById('premiumUnlockBtn').style.display='none';singleActionState='quote';paymentIssuedLicenseKey=null;document.getElementById('paymentSuccessActions').classList.remove('show');document.getElementById('paymentKeyRow').style.display='none';paymentWaiting(false);showPaymentQuote(q);syncSingleAction();
+    premiumQuote=q;document.getElementById('paymentPanel').appendChild(document.getElementById('paymentSuccessActions'));document.getElementById('premiumUnlockBtn').style.display='none';singleActionState='quote';document.getElementById('quoteFoldState').textContent='Awaiting payment';paymentIssuedLicenseKey=null;document.getElementById('paymentSuccessActions').classList.remove('show');document.getElementById('paymentKeyRow').style.display='none';paymentWaiting(false);showPaymentQuote(q);syncSingleAction();
     paymentMessage('Send the exact BTC amount before the quote expires, then enter your TXID. This is a real Bitcoin payment.');
   }catch(e){paymentMessage('Quote error: '+e.message);}
 };
@@ -759,8 +828,8 @@ document.getElementById('paymentVerifyBtn').onclick=async()=>{
     })});
     const v=await r.json();
     if(!r.ok||!v.ok)throw Error(v.error||'Verification failed');
-    if(v.verified){paymentVerified(v);paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nSave your original Premium license key. Use BUILD & DOWNLOAD PREMIUM BOT below.');}
-    else{paymentWaiting(v.status==='waiting_confirmation');if(v.status==='waiting_confirmation'){singleActionState='confirming';syncSingleAction();}paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));}
+    if(v.verified){paymentVerified(v);paymentMessage('✓ Bitcoin payment verified! Quote ID: '+premiumQuote.quote_id+'\nSave your original Premium license key. Continue with the installer panel.');}
+    else{paymentWaiting(v.status==='waiting_confirmation');if(v.status==='waiting_confirmation'){singleActionState='confirming';document.getElementById('quoteFoldState').textContent='Awaiting confirmation';syncSingleAction();}paymentMessage('Payment status: '+v.status+'. '+(v.error||'Try again after confirmation.'));}
   }catch(e){paymentMessage('Verification error: '+e.message);}
 };
 document.getElementById('paymentRefreshBtn').onclick=async()=>{
@@ -768,21 +837,22 @@ document.getElementById('paymentRefreshBtn').onclick=async()=>{
   try{
     const r=await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(premiumQuote.quote_id));
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Status unavailable');
-    paymentWaiting(v.status==='waiting_confirmation');if(v.status==='waiting_confirmation'){singleActionState='confirming';syncSingleAction();}if(v.verified||v.status==='verified')paymentVerified(v);paymentMessage('Server payment status: '+v.status+'; confirmed: '+v.confirmed+'; received: '+v.received_sats+' sats.');
+    paymentWaiting(v.status==='waiting_confirmation');if(v.status==='waiting_confirmation'){singleActionState='confirming';document.getElementById('quoteFoldState').textContent='Awaiting confirmation';syncSingleAction();}if(v.verified||v.status==='verified'){paymentVerified(v);}else paymentMessage('Server payment status: '+v.status+'; confirmed: '+v.confirmed+'; received: '+v.received_sats+' sats.');
   }catch(e){paymentMessage('Status error: '+e.message);}
 };
 
 document.getElementById('freeBuildChoice').onclick=buildPlan;
 document.getElementById('showPremiumChoice').onclick=()=>{
   const checkout=document.getElementById('premiumCheckout');
-  checkout.classList.add('show');
-  checkout.scrollIntoView({behavior:'smooth',block:'start'});
+  checkout.classList.add('show');showPremiumStage('quote');
 };
 let premiumUnlocked=false;
 const PP_STORAGE='mybotbuilder_premium_pending_build_v1';
 let ppStarted=0,ppTimer=null,ppPolling=false;
 function ppShow(stage,detail){
-  const box=document.getElementById('premiumProgress');box.classList.add('show');
+  const box=document.getElementById('premiumProgress');box.classList.add('show');document.getElementById('installFold').open=true;
+  document.getElementById('installFoldState').textContent=stage===3?'Ready ✓':stage===-1?'Needs attention':'Building…';
+  if(stage===3||stage===-1)stopPremiumActivity();
   const names=['License verified','Submitting configuration','Building Windows installer','Installer ready'];
   document.getElementById('ppHeading').textContent=stage===3?'Your Premium Bot is ready':stage===-1?'Premium build needs attention':'Building your Premium Bot';
   document.getElementById('ppDetail').textContent=detail||names[stage]||'Checking status…';
@@ -803,7 +873,7 @@ function ppLoad(){try{return JSON.parse(sessionStorage.getItem(PP_STORAGE)||'nul
 async function ppPoll(build){
   if(ppPolling)return;ppPolling=true;ppStarted=build.started||Date.now();ppClock();
   const btn=document.getElementById('premiumBuildBtn');btn.disabled=true;btn.textContent='BUILD IN PROGRESS…';singleActionState='building';syncSingleAction();hideTurnstile();
-  ppShow(2,'Checking GitHub Actions for your Windows installer…');
+  ppShow(2,'Checking GitHub Actions for your Windows installer…');startPremiumActivity();
   try{
     for(let n=0;n<120;n++){
       const sr=await fetch(WORKER+'/build/status?id='+encodeURIComponent(build.build_id)+'&sha='+encodeURIComponent(build.commit_sha));
@@ -823,7 +893,7 @@ async function ppPoll(build){
     ppShow(-1,'Still building or status unavailable. Save your build ID: '+build.build_id);singleActionState='build_issue';syncSingleAction();
     document.getElementById('ppInfo').textContent='Status checking timed out; this does not cancel your GitHub build. Restore your key to resume checking. Build ID: '+build.build_id;
   }catch(e){singleActionState='build_issue';syncSingleAction();ppShow(-1,'Status check: '+e.message);document.getElementById('ppInfo').textContent='Your payment and license remain valid. Restore your key to retry this build status check. Build ID: '+build.build_id;}
-  finally{ppPolling=false;btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';if(ppTimer)clearInterval(ppTimer)}
+  finally{stopPremiumActivity();ppPolling=false;btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';if(ppTimer)clearInterval(ppTimer)}
 }
 async function restorePremiumAccess(){
   const input=document.getElementById('restoreLicenseKey');const key=input.value.trim().toUpperCase();
@@ -834,10 +904,10 @@ async function restorePremiumAccess(){
   try{
     const r=await fetch(WORKER+'/premium/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key})});
     const v=await r.json();if(!r.ok||!v.ok||!v.active)throw Error(v.error||'License not active');
-    premiumUnlocked=true;singleActionState='ready_build';syncSingleAction();
+    premiumUnlocked=true;singleActionState='ready_build';showPremiumStage('install');syncSingleAction();
     msg.textContent='Premium unlocked. Build another installer without paying again. Keep your original key.';
     const saved=ppLoad();if(saved&&saved.build_id&&saved.commit_sha){msg.textContent='Premium restored. Resuming your previous installer build…';ppPoll(saved)}
-    else{document.getElementById('premiumProgress').classList.remove('show');document.getElementById('ppDownload').classList.remove('show');msg.textContent='Premium unlocked. Ready when you are — click BUILD PREMIUM (PAPER ONLY) to start. Keep your original key.';}
+    else{document.getElementById('premiumProgress').classList.remove('show');document.getElementById('ppDownload').classList.remove('show');msg.textContent='Premium unlocked. Use the centered Start Installer Build button below. Keep your original key.';}
   }catch(e){msg.textContent='Restore failed: '+e.message;}
   finally{btn.disabled=false;}
 }
@@ -859,7 +929,7 @@ document.getElementById('premiumBuildBtn').onclick=async()=>{
   premium.behaviour.one_share_override=true;premium.sentience.level=0;
   premium.premium_license_key=key;premium.turnstile_token=token;
   const btn=document.getElementById('premiumBuildBtn');btn.disabled=true;btn.textContent='SUBMITTING PREMIUM…';
-  ppStarted=Date.now();ppClock();ppShow(1,'Submitting your configuration to GitHub Actions…');singleActionState='building';syncSingleAction();
+  ppStarted=Date.now();ppClock();ppShow(1,'Submitting your configuration to GitHub Actions…');startPremiumActivity();singleActionState='building';syncSingleAction();
   try{
     const r=await fetch(WORKER+'/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(premium)});
     const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Build submission failed');
@@ -867,14 +937,14 @@ document.getElementById('premiumBuildBtn').onclick=async()=>{
     const build={build_id:v.build_id,commit_sha:v.commit_sha,started:ppStarted};ppSave(build);
     msg.textContent='Premium build submitted. Waiting for Windows installer…';
     ppPolling=false;await ppPoll(build);
-  }catch(e){singleActionState=ppLoad()?.build_id?'build_issue':'ready_build';syncSingleAction();ppShow(-1,'Build submission: '+e.message);msg.textContent='Premium build: '+e.message;}
+  }catch(e){stopPremiumActivity();singleActionState=ppLoad()?.build_id?'build_issue':'ready_build';syncSingleAction();ppShow(-1,'Build submission: '+e.message);msg.textContent='Premium build: '+e.message;}
   finally{if(!ppPolling){btn.disabled=false;btn.textContent='BUILD PREMIUM (PAPER ONLY)';}}
 };
 document.getElementById('buildRetry').onclick=buildPlan;
 syncSingleAction();
-function onTurnstileSuccess(){hideTurnstile();}
+function onTurnstileSuccess(){hideTurnstile();if(pendingPremiumSecurity){pendingPremiumSecurity=false;setTimeout(()=>{if(singleActionState==='ready_build')document.getElementById('premiumSingleAction').click();},0);}}
 function onTurnstileError(code){showTurnstile();document.getElementById('turnstileHelp').textContent='Cloudflare security check cannot connect (error '+String(code||'unknown')+'). Try reloading, disabling VPN/ad blocking for this site, or using another network. If it persists, the site owner must check Turnstile hostname and CSP settings.';}
-function onTurnstileExpired(){hideTurnstile(); /* A new challenge is shown on the next build attempt. */}
+function onTurnstileExpired(){pendingPremiumSecurity=false;hideTurnstile(); /* A new challenge is shown on the next build attempt. */}
 </script>
   
 <style>
