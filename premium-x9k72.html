@@ -985,7 +985,7 @@ body.plan-open .main{padding-right:14px}
         </div>
 
         <div style="color:var(--muted);font-size:12px">
-          One-time Bitcoin payment for this Premium AlgoBot build.
+          One-time Bitcoin payment for a reusable Premium builder license.
         </div>
       </div>
 
@@ -997,6 +997,18 @@ body.plan-open .main{padding-right:14px}
       </div>
 
       <div class="popup-section">
+        <div class="popup-section-title">RESTORE PREMIUM LICENSE</div>
+        <input id="premiumLicenseInput" type="text" autocomplete="off" placeholder="MBB-XXXXXXXX-..." style="width:100%;font-family:Consolas,monospace">
+        <div class="popup-actions"><button type="button" id="premiumActivateBtn">ACTIVATE LICENSE</button></div>
+        <div id="premiumLicenseStatus" class="popup-state" style="display:none"></div>
+        <button type="button" id="premiumCopyLicense" style="display:none;margin-top:8px">COPY MY LICENSE KEY</button>
+      </div>
+      <div class="popup-section" id="premiumBetaCodeBox" style="display:none">
+        <div class="popup-section-title">PRIVATE BETA INVITATION</div>
+        <input id="premiumBetaCode" type="password" autocomplete="off" placeholder="Invitation code" style="width:100%">
+        <div style="color:var(--muted);font-size:11px;margin-top:6px">An invitation code is required when Bitcoin payments are disabled.</div>
+      </div>
+      <div class="popup-section" id="premiumBitcoinSection">
         <div class="popup-section-title">BITCOIN PAYMENT</div>
 
         <div id="premiumPaymentStatus" class="popup-state">
@@ -1065,6 +1077,42 @@ body.plan-open .main{padding-right:14px}
 let premiumQuote = null;
 let premiumQuoteTimerInterval = null;
 
+const PREMIUM_LICENSE_STORAGE = 'mybotbuilder_premium_license';
+let premiumLicenseKey = localStorage.getItem(PREMIUM_LICENSE_STORAGE) || '';
+let premiumPaymentRequired = true;
+function premiumSetStatus(message, kind='payment-success') {
+  const el=document.getElementById('premiumLicenseStatus');
+  el.style.display='block'; el.className='popup-state '+kind;
+  el.textContent=message;
+}
+function premiumShowLicense(key) {
+  premiumLicenseKey=key.trim().toUpperCase();
+  localStorage.setItem(PREMIUM_LICENSE_STORAGE,premiumLicenseKey);
+  document.getElementById('premiumLicenseInput').value=premiumLicenseKey;
+  document.getElementById('premiumCopyLicense').style.display='inline-block';
+  document.getElementById('premiumBetaBuildBtn').disabled=false;
+  document.getElementById('premiumBetaBuildBtn').textContent='BUILD PREMIUM BOT';
+  premiumSetStatus('Premium license active. Save your key to restore access on another device.');
+}
+async function premiumActivate(key) {
+  const response=await fetch(PREMIUM_WORKER+'/premium/activate',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({license_key:key})
+  });
+  const data=await response.json();
+  if(!response.ok || !data.active) throw new Error(data.error || 'License not active');
+  premiumShowLicense(key);
+}
+document.getElementById('premiumActivateBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('premiumActivateBtn');btn.disabled=true;
+  try { await premiumActivate(document.getElementById('premiumLicenseInput').value); }
+  catch(error) { premiumSetStatus(error.message,'payment-fail'); }
+  finally {btn.disabled=false;}
+});
+document.getElementById('premiumCopyLicense').addEventListener('click',async()=>{
+  try {await navigator.clipboard.writeText(premiumLicenseKey);premiumSetStatus('License key copied. Keep it somewhere safe.');}
+  catch {premiumSetStatus('Select and copy the key shown above.','payment-pending');}
+});
 async function loadPremiumBitcoinQuote() {
   const statusEl = document.getElementById('premiumPaymentStatus');
   const amountEl = document.getElementById('premiumBtcAmount');
@@ -1074,8 +1122,7 @@ const premiumBuildBtn =
   document.getElementById('premiumBetaBuildBtn');
 
 premiumBuildBtn.disabled = true;
-premiumBuildBtn.textContent =
-  'VERIFY PAYMENT TO BUILD';
+premiumBuildBtn.textContent = 'VERIFY PAYMENT TO BUILD';
   statusEl.classList.remove(
   'payment-fail',
   'payment-success',
@@ -1095,6 +1142,11 @@ premiumBuildBtn.textContent =
       throw new Error(data.error || 'Unable to create Bitcoin quote');
     }
 
+    premiumPaymentRequired = data.payment_required !== false;
+    document.getElementById('premiumBetaCodeBox').style.display=premiumPaymentRequired?'none':'block';
+    document.getElementById('premiumBitcoinSection').style.display=premiumPaymentRequired?'block':'none';
+    document.getElementById('premiumVerifyBtn').disabled=!premiumPaymentRequired;
+    document.getElementById('premiumBetaBox').style.display=premiumPaymentRequired?'none':'block';
     premiumQuote = data;
 
     localStorage.setItem(
@@ -1122,8 +1174,7 @@ if (data.payment_required === false) {
 
   // Beta: payment is waived.
   premiumBuildBtn.disabled = false;
-  premiumBuildBtn.textContent =
-    'BUILD PREMIUM ALGOBOT — BETA ACCESS';
+  premiumBuildBtn.textContent = 'BUILD PREMIUM BOT — INVITATION REQUIRED';
 
   statusEl.classList.remove(
     'payment-fail',
@@ -1132,8 +1183,8 @@ if (data.payment_required === false) {
   statusEl.classList.add('payment-success');
 
   statusEl.innerHTML =
-    '<b>✓ BETA ACCESS ACTIVE</b><br>' +
-    'Bitcoin payment is currently waived during beta.';
+    '<b>PRIVATE BETA</b><br>' +
+    'Bitcoin payment is waived; enter your invitation code to build.';
 
 } else {
 
@@ -1147,6 +1198,10 @@ if (data.payment_required === false) {
     'Send the exact amount shown below.';
 }
 
+    if(premiumPaymentRequired && premiumLicenseKey){
+      try {await premiumActivate(premiumLicenseKey);}
+      catch {localStorage.removeItem(PREMIUM_LICENSE_STORAGE);premiumLicenseKey='';}
+    }
   } catch (error) {
     console.error(error);
 
@@ -1172,9 +1227,9 @@ function startPremiumQuoteCountdown(expiresAt) {
 
       timerEl.textContent = 'Expired';
 
-      document.getElementById('premiumPaymentStatus').innerHTML =
-        '<b>QUOTE EXPIRED</b><br>' +
-        'Close this window and open it again for a new quote.';
+      if(!premiumLicenseKey && !document.getElementById('premiumTxid').value.trim()) {
+        document.getElementById('premiumPaymentStatus').textContent='Quote expired. If you already sent BTC, keep your quote and TXID and contact support; do not pay again.';
+      }
 
       return;
     }
@@ -1253,7 +1308,9 @@ document.getElementById('premiumPaymentClose').addEventListener('click', () => {
 
     const data = await response.json();
 
-   if (data.verified) {
+   if (data.verified && data.license_key) {
+     premiumShowLicense(data.license_key);
+
   statusEl.classList.remove(
     'payment-fail',
     'payment-pending'
@@ -2354,6 +2411,14 @@ document.getElementById('websiteAddRule').addEventListener('click',addWebsiteRul
          return;
        }
 
+       if(premiumPaymentRequired) {
+         if(!premiumLicenseKey) {statusEl.textContent='Activate your Premium license or verify payment first.';return;}
+         plan.premium_license_key=premiumLicenseKey;
+       } else {
+         const code=document.getElementById('premiumBetaCode').value.trim();
+         if(!code) {statusEl.textContent='Enter your private beta invitation code first.';return;}
+         plan.premium_beta_code=code;
+       }
        plan.turnstile_token=turnstileToken;
 
        buildBtn.disabled=true;
@@ -2510,7 +2575,7 @@ document.getElementById('websiteAddRule').addEventListener('click',addWebsiteRul
 
          buildBtn.disabled=false;
          buildBtn.textContent=
-           'BUILD PREMIUM BOT — BETA ACCESS';
+           premiumPaymentRequired?'BUILD PREMIUM BOT':'BUILD PREMIUM BOT — INVITATION REQUIRED';
        }
 
      }
