@@ -264,6 +264,23 @@ body{background:radial-gradient(ellipse at 76% 0%,#102a3c 0%,#0a131b 52%,#090e13
 .mini-rsi .mini-body p{max-width:800px}
 @media(max-width:900px){.path-grid.home-products{grid-template-columns:1fr}.home-products .path-card{min-height:0}}
 @media(max-width:560px){.home-products .path-card{padding:19px}.home-product-head{gap:12px}.home-glyph{width:54px;height:54px;flex-basis:54px;font-size:29px}.mini-rsi .mini-body{grid-template-columns:1fr}}
+
+/* DIYBot: concise bottom-of-page comparison; existing homepage remains unchanged. */
+.diy-section{margin:0 0 22px;padding:25px 28px;border:1px solid #32708d;border-radius:12px;background:linear-gradient(145deg,#122536,#101c29)}
+.diy-section .philosophy-tag{font-size:11px;letter-spacing:1.6px;font-weight:900;color:#67d8fc}
+.diy-section>h2{font-size:clamp(24px,2.7vw,34px);margin:9px 0 9px;color:#f1f8fc}
+.diy-intro{color:#b8cbd8;max-width:1000px;line-height:1.65;margin:0 0 20px;font-size:14px}
+.diy-compare{display:grid;grid-template-columns:1fr 1.15fr;gap:16px}
+.diy-panel{border:1px solid #31566b;background:#142c3d;border-radius:10px;padding:21px;display:flex;flex-direction:column;gap:12px}
+.diy-panel.advanced{border-color:#3b809d;background:linear-gradient(145deg,#18384c,#112635)}
+.diy-panel-head{display:flex;gap:13px;align-items:center}.diy-panel .home-glyph{width:53px;height:53px;flex-basis:53px;font-size:26px}
+.diy-panel h3{margin:0;color:#eff9ff;font-size:23px}.diy-panel p{margin:0;color:#b9cfdd;line-height:1.65}
+.diy-indicators{display:flex;gap:7px;flex-wrap:wrap}.diy-indicators span{border:1px solid #37637b;background:#0e2230;border-radius:6px;color:#b9e8f8;font-size:11px;font-weight:800;padding:5px 8px}
+.diy-example{border-left:3px solid #4acaf0;padding:10px 12px;background:#0d2230;color:#d6effa;border-radius:4px;font-size:13px;line-height:1.7}
+.diy-features{display:grid;grid-template-columns:1fr 1fr;gap:9px}.diy-feature{display:flex;gap:9px;align-items:flex-start;color:#c8e3ef;font-size:13px;line-height:1.5}.diy-feature b{color:#62d9f5;font-size:16px;line-height:1.1}
+.diy-status{margin-top:auto;color:#9ce7c9;font-size:12px;font-weight:700}.diy-disclaimer{color:#91acbc;font-size:11px;line-height:1.6;margin:15px 0 0}
+@media(max-width:850px){.diy-compare{grid-template-columns:1fr}}
+@media(max-width:560px){.diy-section{padding:20px 16px}.diy-panel{padding:17px}.diy-features{grid-template-columns:1fr}}
 </style>
 </head><body><div class="shell"><header class="home-hero">
   <svg class="hero-trading-line" viewBox="0 0 1400 330" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -323,6 +340,34 @@ Your bot. Your computer. Your rules.</p>
     <div class="philosophy-item"><div class="philosophy-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><strong>Your time</strong><span>Automate routine tasks instead of watching charts all day.</span></div></div>
   </div>
   <p class="philosophy-note">Automated trading still involves market risk, software errors, broker outages and missed fills. No bot can guarantee profits or flawless execution.</p>
+</section>
+<section class="diy-section" aria-labelledby="diy-title">
+  <div class="philosophy-tag">BUILD YOUR OWN OR GO BEYOND IF / THEN</div>
+  <h2 id="diy-title">Finding a trade is one thing. Managing it is another.</h2>
+  <p class="diy-intro">Create a traditional rule-based strategy with DIYBot, or explore specialized bots that combine scanning, trade sequencing and dynamic position management. The entry signal is only the beginning.</p>
+  <div class="diy-compare">
+    <article class="diy-panel">
+      <div class="diy-panel-head"><div class="home-glyph" aria-hidden="true">◇</div><div><span class="path-tag">FREE NO-CODE BUILDER · PLANNED</span><h3>DIYBot</h3></div></div>
+      <p>Build your own IF / THEN bot. Choose indicators, combine entry and exit conditions, and set basic risk controls—without writing code.</p>
+      <div class="diy-indicators" aria-label="Proposed indicators"><span>RSI</span><span>MACD</span><span>EMA / SMA</span><span>VWAP</span><span>Bollinger Bands</span><span>ATR</span><span>RVOL</span><span>More</span></div>
+      <div class="diy-example"><strong>IF</strong> RSI is below 30 AND price crosses above EMA 20<br><strong>THEN</strong> buy, with your chosen stop and target.</div>
+      <div class="diy-status">Coming soon · Downloadable local bot planned</div>
+    </article>
+    <article class="diy-panel advanced">
+      <div class="diy-panel-head"><div class="home-glyph" aria-hidden="true">⚡</div><div><span class="path-tag">PURPOSE-BUILT TRADING SYSTEMS</span><h3>Beyond simple IF / THEN</h3></div></div>
+      <p>Our specialized bots coordinate the entire trade lifecycle—not just a signal and a fixed exit. Different strategies use different combinations of these capabilities:</p>
+      <div class="diy-features">
+        <div class="diy-feature"><b>⌕</b><span>Multi-symbol scanning and candidate qualification</span></div>
+        <div class="diy-feature"><b>◷</b><span>Entry windows, cooldowns and smart re-entry</span></div>
+        <div class="diy-feature"><b>↗</b><span>Progressive ratcheting and profit protection</span></div>
+        <div class="diy-feature"><b>⇄</b><span>Switching from price-based stops to option-value trailing stops</span></div>
+        <div class="diy-feature"><b>◇</b><span>Volatility-aware trade management and conditional exits</span></div>
+        <div class="diy-feature"><b>⬡</b><span>Position ownership and coordinated bot controls</span></div>
+      </div>
+      <a class="path-button outline" href="bots.html">EXPLORE ADVANCED BOTS <span aria-hidden="true">→</span></a>
+    </article>
+  </div>
+  <p class="diy-disclaimer">DIYBot is a planned product. Advanced capabilities vary by bot and edition; some Premium protections remain on the roadmap and are not included in the current RSI/Paper edition.</p>
 </section>
 <div class="truth-strip"><strong>Available to try today:</strong> The free RSI Divergence Reversal Bot beta supports RSI, EMA, ATR and RVOL entry filters. Additional free downloads and advanced Premium features will be added as they are tested and released.</div>
 <div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Download. Customize. Trade. · Free Trading Bots</div></div></body></html>
