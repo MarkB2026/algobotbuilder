@@ -131,6 +131,19 @@ select option:disabled{color:#81909e;background:#17212d}
 #paymentQuote>p{color:#d0dbe3}
 #paymentQuote>p b{color:#c6d5de}
 .payment-wait-note{border-color:#79643a;background:#28271e;color:#d9cba9}
+.home-library-links{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-top:auto}
+.home-library-links .path-button{margin-top:0}
+.home-tools-link{color:#8ee7fa;text-decoration:none;font-size:13px;font-weight:850;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid #327b8d;padding:7px 1px}
+.home-tools-link:hover,.home-tools-link:focus-visible{color:#fff;border-bottom-color:#8ee7fa}
+@media(max-width:560px){.home-library-links{align-items:stretch;flex-direction:column;gap:8px}.home-tools-link{text-align:center}}
+
+/* Compact tools banner inside the Mini-RSI feature box */
+.mini-tools-banner{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 22px 20px;padding:13px 17px;border:1px solid #2d6278;border-radius:9px;background:linear-gradient(100deg,#173044,#122636)}
+.mini-tools-banner strong{display:block;color:#e6f8ff;font-size:14px;letter-spacing:.2px}
+.mini-tools-banner span{display:block;color:#a9c6d5;font-size:12px;margin-top:3px}
+.mini-tools-banner a{flex-shrink:0;color:#8ee7fa;font-size:12px;font-weight:800;letter-spacing:.6px;text-decoration:none;border:1px solid #39849d;border-radius:7px;padding:10px 13px}
+.mini-tools-banner a:hover,.mini-tools-banner a:focus-visible{color:#fff;border-color:#8ee7fa;background:#1d4254}
+@media(max-width:580px){.mini-tools-banner{flex-direction:column;align-items:stretch;margin:0 14px 15px}.mini-tools-banner a{text-align:center}}
 </style>
 <style>
 /* v1.6.15: one centered customer-facing Premium action, no duplicate build controls */
@@ -316,10 +329,10 @@ Your bot. Your computer. Your rules.</p>
     <a class="path-button" href="basic.html">GET DIVERGENCE BOT <span aria-hidden="true">→</span></a>
   </article>
   <article class="path-card">
-    <div class="home-product-head"><div class="home-glyph-stack" aria-hidden="true"><div class="home-glyph small">⚡</div><div class="home-glyph small">◈</div><div class="home-glyph small">0D</div></div><div><span class="path-tag">EXPLORE THE COLLECTION</span><h2>Turnkey Bots &amp; Tools</h2></div></div>
-    <p>Discover ready-to-use trading bots, dividend trackers, options tools and dashboards. Download locally, with more free releases on the way.</p>
+    <div class="home-product-head"><div class="home-glyph-stack" aria-hidden="true"><div class="home-glyph small">⚡</div><div class="home-glyph small">◈</div><div class="home-glyph small">0D</div></div><div><span class="path-tag">EXPLORE THE COLLECTION</span><h2>Explore Trading Bots</h2></div></div>
+    <p>Explore ready-to-use trading bots and upcoming releases. Looking for utilities? Our trading tools have their own download library.</p>
     <div class="home-availability">Browse available downloads and upcoming releases</div>
-    <a class="path-button outline" href="bots.html">EXPLORE BOTS &amp; TOOLS <span aria-hidden="true">→</span></a>
+    <div class="home-library-links"><a class="path-button outline" href="bots.html">EXPLORE BOTS <span aria-hidden="true">→</span></a><a class="home-tools-link" href="TOOLS.html">TRADING TOOLS <span aria-hidden="true">↗</span></a></div>
   </article>
 </div>
 <section class="mini-rsi" aria-label="Mini RSI Bot">
@@ -330,6 +343,10 @@ Your bot. Your computer. Your rules.</p>
       <p>Download Mini-RSI for Windows. Configure its RSI strategy and risk settings locally, connect IBKR, and begin in Observe or Paper mode.</p>
       <a class="path-button" style="display:inline-flex;margin-top:15px;min-width:230px" href="https://falling-sky-7997.algobotbuilder.workers.dev/mini-rsi/download">DOWNLOAD MINI-RSI <span aria-hidden="true">↓</span></a>
       <p style="font-size:12px;margin-top:10px">Free Windows installer · ZIP contains MiniRSI_Setup.exe · Test in Observe before Paper.</p></div>
+  </div>
+  <div class="mini-tools-banner" aria-label="Trading tools library">
+    <div><strong>Looking for trading tools?</strong><span>Options Plotter, Dividend Tracker and more — separate from the bots.</span></div>
+    <a href="TOOLS.html">EXPLORE TOOLS ↗</a>
   </div>
 </section>
 <section class="philosophy" aria-labelledby="philosophy-title">
