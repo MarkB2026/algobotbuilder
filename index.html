@@ -247,6 +247,23 @@ body{background:radial-gradient(ellipse at 76% 0%,#102a3c 0%,#0a131b 52%,#090e13
 @media(max-width:560px){.philosophy{padding:20px 16px}.philosophy-grid{grid-template-columns:1fr}.philosophy-item{align-items:center}}
 /* v1.6.27: hide hero logo on mobile only */
 @media(max-width:900px){.home-hero-logo{display:none}}
+
+/* Homepage: catalogue-matched glyphs and two clear download paths. */
+.path-grid.home-products{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.home-products .path-card{min-height:295px;padding:25px 27px}
+.home-products .path-card h2{margin:3px 0 0;font-size:clamp(25px,2.5vw,34px)}
+.home-products .path-card p{font-size:15px;line-height:1.65}
+.home-products .path-button{margin-top:auto}
+.home-product-head{display:flex;align-items:center;gap:17px;margin-bottom:8px}
+.home-glyph{width:66px;height:66px;flex:0 0 66px;display:grid;place-items:center;background:#173241;border:1px solid #35637b;border-radius:13px;color:#70dcf3;font-size:36px;font-weight:800;line-height:1}
+.home-glyph.small{width:48px;height:48px;flex-basis:48px;font-size:19px;border-radius:10px}
+.home-glyph-stack{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.home-products .path-tag{display:block;margin-bottom:6px}
+.home-products .home-availability{color:#9ce7c9;font-size:12px;font-weight:700}
+.mini-rsi .mini-body{grid-template-columns:auto 1fr;gap:20px}
+.mini-rsi .mini-body p{max-width:800px}
+@media(max-width:900px){.path-grid.home-products{grid-template-columns:1fr}.home-products .path-card{min-height:0}}
+@media(max-width:560px){.home-products .path-card{padding:19px}.home-product-head{gap:12px}.home-glyph{width:54px;height:54px;flex-basis:54px;font-size:29px}.mini-rsi .mini-body{grid-template-columns:1fr}}
 </style>
 </head><body><div class="shell"><header class="home-hero">
   <svg class="hero-trading-line" viewBox="0 0 1400 330" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -274,17 +291,25 @@ Your bot. Your computer. Your rules.</p>
   </div>
   <div class="home-hero-logo"><img src="assets/logo.png?v=1.6.22" alt="Free Trading Bots — Download. Customize. Trade." width="510" height="510" fetchpriority="high"></div>
 </header>
-<div class="path-grid" aria-label="Free and Premium editions">
-  <article class="path-card"><span class="path-tag">FREE EDITIONS</span><h2>No strings attached</h2><p>Start with the free RSI Divergence Reversal Bot. Other bots will offer free editions as they are released, with local settings you can customize.</p><ul><li>Free RSI Divergence edition available in beta</li><li>Configurable risk controls and paper-trading safeguards</li><li>More free bot editions as testing is completed</li></ul><p class="customize-last"><strong>Customize your bot after downloading</strong> using its local controls.</p><button class="path-button" type="button" id="startFreePath" onclick="location.href='basic.html'">GET FREE RSI BOT <span aria-hidden="true">→</span></button></article>
-  <article class="path-card featured"><span class="path-tag">OPTIONAL PREMIUM · RSI $10 USD</span><h2>Upgrade when you need more</h2><p>Each bot can have its own optional Premium edition. The current $10 RSI/Paper edition is separate; advanced trade-management features shown below remain planned until tested.</p><ul><li>Progressive ratcheting and protected profit — planned</li><li>Cooldown and smart re-entry — planned</li><li>Further advanced modules on the roadmap</li></ul><p class="customize-last"><strong>Customize your bot after downloading</strong> within the features available in your edition.</p><button class="path-button outline" type="button" id="explorePremiumPath" onclick="location.href='basic.html#premium'">EXPLORE PREMIUM <span aria-hidden="true">→</span></button></article>
-  <article class="path-card"><span class="path-tag">EXPLORE THE COLLECTION</span><h2>Find your trading bot</h2><p>Explore specialized trading bots. Our plan is a free edition of every bot, with optional Premium features where available.</p><ul><li>ScalpBot — intraday focus</li><li>SwingBot — multi-day focus</li><li>More specialized bots as released</li></ul><p class="customize-last"><strong>Customize your bot after downloading</strong> — never a fixed, locked strategy.</p><a class="path-button outline" href="bots.html">BROWSE BOTS <span aria-hidden="true">→</span></a></article>
+<div class="path-grid home-products" aria-label="Featured bot and turnkey downloads">
+  <article class="path-card featured">
+    <div class="home-product-head"><div class="home-glyph" aria-hidden="true">↩</div><div><span class="path-tag">FEATURED BOT · FREE BETA</span><h2>RSI Divergence Bot</h2></div></div>
+    <p>Trade bullish and bearish RSI divergence with configurable entry filters, risk controls and a local Windows dashboard.</p>
+    <div class="home-availability">Free edition available now · Optional Premium on the bot page</div>
+    <a class="path-button" href="basic.html">GET DIVERGENCE BOT <span aria-hidden="true">→</span></a>
+  </article>
+  <article class="path-card">
+    <div class="home-product-head"><div class="home-glyph-stack" aria-hidden="true"><div class="home-glyph small">⚡</div><div class="home-glyph small">◈</div><div class="home-glyph small">0D</div></div><div><span class="path-tag">EXPLORE THE COLLECTION</span><h2>Turnkey Bots &amp; Tools</h2></div></div>
+    <p>Discover ready-to-use trading bots, dividend trackers, options tools and dashboards. Download locally, with more free releases on the way.</p>
+    <div class="home-availability">Browse available downloads and upcoming releases</div>
+    <a class="path-button outline" href="bots.html">EXPLORE BOTS &amp; TOOLS <span aria-hidden="true">→</span></a>
+  </article>
 </div>
-
 <section class="mini-rsi" aria-label="Mini RSI Bot">
   <div class="mini-head"><span>MINI RSI BOT</span><span class="pill">COMING SOON</span></div>
   <div class="mini-body">
-    <div><h2>A focused RSI bot. No complicated setup.</h2><p>The Mini RSI bot is coming soon. In the meantime, try the free RSI Divergence beta and adjust its supported settings locally.</p></div>
-    <svg class="mini-chart" viewBox="0 0 540 140" role="img" aria-label="Decorative RSI-style trading indicator line"><path class="guide" d="M0 25H540 M0 112H540"/><path class="plot" d="M0 92 L12 80 24 96 36 76 48 99 60 87 72 98 84 73 96 83 108 63 120 74 132 49 144 64 156 38 168 46 180 31 192 54 204 42 216 70 228 58 240 91 252 104 264 78 276 88 288 57 300 73 312 35 324 56 336 48 348 77 360 67 372 93 384 64 396 76 408 51 420 58 432 37 444 52 456 85 468 104 480 77 492 81 504 60 516 67 528 44 540 39"/></svg>
+    <div class="home-glyph" aria-hidden="true" style="font-size:23px">RSI</div>
+    <div><h2>New to trading bots? Start here.</h2><p>Our upcoming Mini RSI Bot is designed for beginners: connect your broker, choose a few settings and get started with a ready-made strategy. Paper trading first.</p></div>
   </div>
 </section>
 <section class="philosophy" aria-labelledby="philosophy-title">
@@ -299,5 +324,5 @@ Your bot. Your computer. Your rules.</p>
   </div>
   <p class="philosophy-note">Automated trading still involves market risk, software errors, broker outages and missed fills. No bot can guarantee profits or flawless execution.</p>
 </section>
-<div class="truth-strip"><strong>Available to try today:</strong> The free RSI Divergence Reversal Bot beta supports RSI, EMA, ATR and RVOL entry filters. Free editions of additional bot families and local Premium upgrades are planned, not yet released.</div>
+<div class="truth-strip"><strong>Available to try today:</strong> The free RSI Divergence Reversal Bot beta supports RSI, EMA, ATR and RVOL entry filters. Additional free downloads and advanced Premium features will be added as they are tested and released.</div>
 <div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Download. Customize. Trade. · Free Trading Bots</div></div></body></html>
