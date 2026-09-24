@@ -212,7 +212,8 @@ select option:disabled{color:#81909e;background:#17212d}
 </section>
 
 <section id="execution" class="page">
-<div class="section"><div class="head"><span>BROKER & MODE</span></div><div class="body"><div class="grid"><label class="field">Broker<select name="broker"><option selected>IBKR</option><option disabled>MT5 — Coming Later</option></select></label><label class="field">Mode<select name="mode"><option>OBSERVE</option><option selected>PAPER</option><option>LIVE</option></select></label><label class="field">Host<input name="host" value="127.0.0.1"></label><label class="field">Port<input name="port" type="text" value="7497" inputmode="numeric" disabled></label><label class="field">Client ID<input name="client_id" type="number" value="91"></label></div><div class="note">Port is set automatically from Mode. PAPER uses 7497; LIVE uses 7496. OBSERVE uses 7497 for connection testing. The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.</div></div></div>
+<div class="section"><div class="head"><span>BROKER & MODE</span></div><div class="body"><div class="grid"><label class="field">Broker<select name="broker"><option selected>IBKR</option><option value="MT5">MT5 — BETA (Demo / Observe)</option></select></label><label class="field">Mode<select name="mode"><option>OBSERVE</option><option selected>PAPER</option><option>LIVE</option></select></label><label class="field">Host<input name="host" value="127.0.0.1"></label><label class="field">Port<input name="port" type="text" value="7497" inputmode="numeric" disabled></label><label class="field">Client ID<input name="client_id" type="number" value="91"></label></div><div class="note" id="brokerHelp">Port is set automatically from Mode. PAPER uses 7497; LIVE uses 7496. OBSERVE uses 7497 for connection testing. The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.</div></div></div>
+<div class="section" id="mt5Connection" hidden><div class="head"><span>MT5 BETA · LOCAL TERMINAL</span><small>Demo account only · installer pending adapter verification</small></div><div class="body"><div class="grid three"><label class="field">MT5 Terminal Path<input name="mt5_path" value="C:\Program Files\MetaTrader 5\terminal64.exe" placeholder="C:\Program Files\MetaTrader 5\terminal64.exe"></label><label class="field">Demo Account Number (optional)<input name="mt5_login" type="text" inputmode="numeric" autocomplete="off" placeholder="Use account signed in locally"></label><label class="field">Broker Server (optional)<input name="mt5_server" autocomplete="off" placeholder="e.g. Broker-Demo"></label></div><div class="note">MT5 works differently from IBKR: install and open the MetaTrader 5 desktop terminal, then sign in to your broker's <strong>demo</strong> server inside MT5. The eventual local bot will connect through that terminal. The path above is a common Windows default; change it if yours differs. Leave account and server blank to use the terminal's active session. <strong>Never enter your MT5 password on this website.</strong> These settings are configuration only; the MT5 installer is still gated until the adapter is tested.</div></div></div>
 <div class="section"><div class="head"><span>SESSION & SAFETY</span></div><div class="body"><div class="grid"><label class="field">Max Daily Trades<input name="max_daily_trades" type="number" value="5"></label><label class="field">Max Daily Loss $<input name="max_daily_loss" type="number" value="200"></label><label class="field">Daily Profit Stop $<input name="daily_profit_stop" type="number" value="300"></label><label class="field">Hard Exit Time<input name="hard_exit" type="time" value="15:55"></label></div><div class="checks"><label class="check"><input name="intraday_only" type="checkbox" checked> Intraday only</label><label class="check"><input name="cancel_orders" type="checkbox" checked> Cancel outstanding orders at shutdown</label><label class="check"><input name="decisions_csv" type="checkbox" checked> Decisions Report CSV</label><label class="check"><input name="hive_optin" type="checkbox" disabled> Hive sharing — coming later</label></div></div></div>
 </section>
 
@@ -262,7 +263,7 @@ select option:disabled{color:#81909e;background:#17212d}
           <span class="choice-label">FREE</span>
           <div class="choice-heading"><h3>Basic Bot</h3><span class="choice-price">$0</span></div>
           <p>Generate your own locally installed RSI Divergence bot from the strategy and risk settings you selected above. Start in Observe or Paper.</p>
-          <ul class="choice-features"><li>RSI divergence strategy</li><li>Up to 10 trading symbols</li><li>Initial and trailing stops</li><li>Essential risk and safety controls</li><li>Local dashboard and Windows installer</li><li>No payment or license required</li></ul>
+          <ul class="choice-features"><li>RSI divergence strategy</li><li>Up to 10 trading symbols</li><li>Initial and trailing stops</li><li>Essential risk and safety controls</li><li>Local dashboard and Windows installer (IBKR)</li><li>MT5 beta configuration preview; MT5 installer pending verification</li><li>No payment or license required</li></ul>
           <button type="button" class="choice-action" id="freeBuildChoice">BUILD FREE BASIC BOT</button>
         </div>
         <div class="build-choice paid">
@@ -375,14 +376,25 @@ document.getElementById('addSymbol').addEventListener('click',addApprovedSymbol)
 document.getElementById('symbolEntry').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addApprovedSymbol();}});
 renderSymbols();
 
+const brokerSelect=document.querySelector('[name="broker"]');
 const modeSelect=document.querySelector('[name="mode"]');
 const portInput=document.querySelector('[name="port"]');
 function syncPortControl(){
-  portInput.value=modeSelect.value==='LIVE' ? '7496' : '7497';
+  const mt5=brokerSelect.value==='MT5';
+  const liveOption=[...modeSelect.options].find(o=>o.value==='LIVE');
+  liveOption.disabled=mt5;
+  if(mt5 && modeSelect.value==='LIVE')modeSelect.value='PAPER';
+  portInput.value=mt5?'N/A':(modeSelect.value==='LIVE'?'7496':'7497');
   portInput.disabled=true;
+  document.querySelector('[name="host"]').disabled=mt5;
+  document.querySelector('[name="client_id"]').disabled=mt5;
+  document.getElementById('mt5Connection').hidden=!mt5;
+  document.getElementById('brokerHelp').textContent=mt5
+    ?'MT5 BETA: Select OBSERVE or PAPER and enter your local MT5 terminal details below. Sign in to your demo account in the MT5 desktop terminal, not here. MT5 installer execution has not yet passed an end-to-end demo trade test; build support depends on the deployed engine. LIVE is unavailable. IBKR Host, Port and Client ID do not apply to MT5.'
+    :'Port is set automatically from Mode. PAPER uses 7497; LIVE uses 7496. OBSERVE uses 7497 for connection testing. The generated bot connects locally to your running IBKR TWS / Gateway. Brokerage login credentials are not entered into this builder.';
 }
-
 modeSelect.addEventListener('change',syncPortControl);
+brokerSelect.addEventListener('change',syncPortControl);
 syncPortControl();
 
 const FREE_MAX_ENTRY_RULES=3;
@@ -475,8 +487,9 @@ function plan(){
       name:val('broker'),
       mode:val('mode'),
       host:val('host'),
-      port:(val('mode')==='LIVE' ? 7496 : 7497),
-      client_id:Number(val('client_id'))
+      port:val('broker')==='MT5' ? null : (val('mode')==='LIVE' ? 7496 : 7497),
+      client_id:val('broker')==='MT5' ? null : Number(val('client_id')),
+      ...(val('broker')==='MT5' ? {mt5:{terminal_path:val('mt5_path').trim(),login:val('mt5_login').trim() || null,server:val('mt5_server').trim() || null,credentials:'LOCAL_TERMINAL_ONLY'}} : {})
     },
 
     safety:{
@@ -655,6 +668,10 @@ async function buildPlan(){
   }
   if(botPlan.broker.mode==='LIVE'){
     alert('LIVE builds are disabled until the new multi-symbol engine and recovery procedures pass IBKR Paper validation. Please select OBSERVE or PAPER.');
+    return;
+  }
+  if(botPlan.broker.name==='MT5'){
+    setBuildState('failed','MT5 BETA — ENGINE VERIFICATION PENDING','MT5 is now selectable for configuration and review, but downloadable MT5 installers remain gated until the Worker and Windows engine are verified to package an MT5 adapter. IBKR builds are unaffected.');
     return;
   }
   botPlan.turnstile_token=turnstileToken;
