@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Standard installers | Free Trading Bots</title>
+  <style>
+    body{font:16px/1.5 system-ui,sans-serif;background:#0b1720;color:#e8f2f7;margin:0}
+    main{max-width:830px;margin:auto;padding:28px 18px 70px}a{color:#8bd3f2}
+    h1{line-height:1.2}.card{border:1px solid #315064;background:#132734;border-radius:12px;padding:20px;margin:16px 0}
+    .button,button{display:inline-block;background:#45b7da;color:#061720;border:0;border-radius:7px;padding:10px 16px;font:700 15px system-ui;cursor:pointer;text-decoration:none}
+    button:disabled{opacity:.5;cursor:wait}input{font:inherit;padding:9px;border-radius:6px;max-width:100%;box-sizing:border-box}
+    .row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:10px 0}.muted{color:#b1c2cc}
+    #quoteDetails{white-space:pre-wrap}#status{min-height:24px}code{overflow-wrap:anywhere}
+  </style>
+</head>
+<body><main>
+  <a href="index.html">← Free Trading Bots</a>
+  <h1>Download a bot, then configure it on your PC</h1>
+  <p>These standard Windows installers start with local settings. Broker connections are not set up for you. Begin in Observe or Paper mode.</p>
+  <p><a href="basic.html">Try the customizable website demo beta</a> if you want a unique build. Its temporary download expires after 24 hours.</p>
+  <section class="card"><h2>Mini-RSI</h2><p>Set RSI thresholds and risk controls locally.</p><a class="button" href="https://falling-sky-7997.algobotbuilder.workers.dev/release-preview/mini-rsi">Download Mini-RSI</a></section>
+  <section class="card"><h2>IF/THEN</h2><p>Set your conditions locally.</p><a class="button" href="https://falling-sky-7997.algobotbuilder.workers.dev/release-preview/if-then">Download IF/THEN</a></section>
+  <section class="card"><h2>Basic Reversal</h2><p>RSI divergence defaults; edit the strategy after installation.</p><a class="button" href="https://falling-sky-7997.algobotbuilder.workers.dev/release-preview/basic-reversal">Download Basic Reversal</a></section>
+  <section class="card"><h2>Premium</h2>
+    <p>Purchase with Bitcoin or restore an active license. Configure Premium locally after installing. Keep your license key for reinstalls.</p>
+    <button id="quoteButton" type="button">Get Bitcoin quote</button>
+    <div id="quoteDetails" class="muted" aria-live="polite"></div>
+    <div class="row"><input id="txid" aria-label="Bitcoin transaction ID" placeholder="Transaction ID (TXID)" size="66"><button id="verifyButton" type="button">Verify payment</button><button id="statusButton" type="button">Check confirmation</button></div>
+    <div class="row"><input id="license" aria-label="Premium license key" placeholder="Your Premium license key" size="69" autocomplete="off"><button id="restoreButton" type="button">Restore license</button><button id="downloadButton" type="button" disabled>Download Premium</button></div>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+</main><script>
+const WORKER='https://falling-sky-7997.algobotbuilder.workers.dev';
+const $=id=>document.getElementById(id);
+let quote=null,active=false;
+const key=()=> $('license').value.trim().toUpperCase();
+const status=message=>{ $('status').textContent=message; };
+async function json(response){const data=await response.json();if(!response.ok||!data.ok)throw Error(data.error||'Request failed');return data;}
+function verified(data){
+  if(data.license_key){ $('license').value=data.license_key; status('Payment verified. Save your license key now; it cannot be recovered if lost.'); }
+  else status('Payment verified. Enter your saved license key to download.');
+  $('restoreButton').click();
+}
+$('quoteButton').onclick=async()=>{
+  status('Requesting Bitcoin quote…');
+  try{
+    quote=await json(await fetch(WORKER+'/premium/quote'));
+    $('quoteDetails').textContent=`Send exactly ${quote.required_btc} BTC to ${quote.bitcoin_address}\nQuote expires: ${new Date(quote.expires_at).toLocaleString()}\nQuote ID: ${quote.quote_id}`;
+    status('Send the exact amount before expiry. Enter the TXID after sending.');
+  }catch(e){status(e.message);}
+};
+$('verifyButton').onclick=async()=>{
+  if(!quote){status('Get a quote first.');return;}
+  const txid=$('txid').value.trim();if(!/^[a-fA-F0-9]{64}$/.test(txid)){status('Enter a valid 64-character TXID.');return;}
+  status('Checking Bitcoin payment…');
+  try{
+    const data=await json(await fetch(WORKER+'/premium/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({txid,quote_id:quote.quote_id,quote_signature:quote.quote_signature,required_sats:quote.required_sats,expires_at:quote.expires_at})}));
+    if(data.verified)verified(data);else status(`Payment status: ${data.status}. Check again after confirmation.`);
+  }catch(e){status(e.message);}
+};
+$('statusButton').onclick=async()=>{
+  if(!quote){status('Get a quote first.');return;}
+  try{const data=await json(await fetch(WORKER+'/premium/status?quote_id='+encodeURIComponent(quote.quote_id)));if(data.verified||data.status==='verified')verified(data);else status(`Payment status: ${data.status}.`);}
+  catch(e){status(e.message);}
+};
+$('restoreButton').onclick=async()=>{
+  active=false;$('downloadButton').disabled=true;
+  if(!/^MBB-[A-F0-9]{8}(?:-[A-F0-9]{8}){7}$/.test(key())){status('Enter your complete original Premium license key.');return;}
+  status('Checking license…');
+  try{const data=await json(await fetch(WORKER+'/premium/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key()})}));if(!data.active)throw Error('License not active');active=true;$('downloadButton').disabled=false;status('License active. Download the standard installer.');}
+  catch(e){status(e.message);}
+};
+$('downloadButton').onclick=async()=>{
+  if(!active)return;
+  const button=$('downloadButton');button.disabled=true;status('Preparing download…');
+  try{
+    const response=await fetch(WORKER+'/release-preview/premium',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key()})});
+    if(!response.ok){let error;try{error=(await response.json()).error}catch{}throw Error(error||'Premium installer unavailable');}
+    const objectUrl=URL.createObjectURL(await response.blob());const link=document.createElement('a');link.href=objectUrl;link.download='Premium_Setup.exe';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),60_000);status('Premium installer download started. Keep your license key.');
+  }catch(e){status(e.message);}finally{button.disabled=false;}
+};
+</script></body></html>
