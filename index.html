@@ -369,6 +369,22 @@ body{background:radial-gradient(ellipse at 76% 0%,#102a3c 0%,#0a131b 52%,#090e13
 .home-more>.home-more-heading{padding:18px 22px;font-size:19px;font-weight:800;color:#e7f6ff}
 .home-more>.home-more-heading small{display:block;font-size:13px;color:#a7c3d1;font-weight:400;margin-top:4px}
 </style>
+<style id="home-primary-icons-style">
+/* Icon-rich homepage product banners: scoped to the two primary cards only. */
+.home-primary .illustrated-card{position:relative;isolation:isolate;overflow:hidden;min-height:380px;padding:26px 24px;gap:13px;background:linear-gradient(125deg,#122737,#102333);border-color:#37718c}
+.home-primary .illustrated-card:nth-child(2){background:linear-gradient(125deg,#122737,#102333)}
+.home-primary .illustrated-card>.primary-label,.home-primary .illustrated-card>h2,.home-primary .illustrated-card>p,.home-primary .illustrated-card>.feature-chips,.home-primary .illustrated-card>.path-button{position:relative;z-index:1}
+.home-primary .illustrated-card>h2{font-size:clamp(24px,2.35vw,34px);line-height:1.16;max-width:100%;}
+.home-primary .illustrated-card>p{max-width:72%;font-size:13px;line-height:1.55}
+.home-primary .feature-art{position:absolute;right:7px;top:68px;width:37%;max-width:220px;opacity:.94;pointer-events:none;z-index:0;filter:drop-shadow(0 0 13px #00c9f41c)}
+.home-primary .feature-art svg{width:100%;height:auto;display:block}
+.home-primary .feature-chips{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 10px;max-width:100%}
+.home-primary .feature-chips span{border:1px solid #376781;background:#142e40db;border-radius:7px;padding:6px 9px;color:#d8e9f4;font-size:11px;white-space:nowrap}
+.home-primary .feature-chips b{color:#46dcf5;font-size:15px;margin-right:3px}
+.home-primary .illustrated-card>.path-button{background:#25c7e8;color:#061b24;max-width:320px}
+@media(max-width:1020px){.home-primary .illustrated-card>p{max-width:100%;padding-right:0}.home-primary .feature-art{opacity:.18;right:5px;top:90px;width:48%}}
+@media(max-width:680px){.home-primary .illustrated-card{min-height:0}.home-primary .feature-art{width:32%;opacity:.22}.home-primary .feature-chips span{white-space:normal}}
+</style>
 </head>
  <body>
   <nav aria-label="Main navigation" class="site-nav">
@@ -435,42 +451,42 @@ Your bot. Your computer. Your rules.
      <div class="hero-logo-tagline">Trading made easy</div>
     </div>
    </header>
-   <section aria-label="Choose bots or tools" class="home-primary">
-    <article>
-     <div class="primary-label">
+<section aria-label="Choose bots or tools" class="home-primary">
+<article class="illustrated-card bot-card"><div aria-hidden="true" class="feature-art"><svg fill="none" viewbox="0 0 220 180" xmlns="http://www.w3.org/2000/svg"><path d="M8 156H215M26 128H213M51 101H213" opacity=".4" stroke="#245b75"></path><path d="M20 143l32-23 25 8 31-44 30 13 40-54 29-14" stroke="#31d7f4" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path><path d="M194 29h14v14" stroke="#31d7f4" stroke-linecap="round" stroke-width="4"></path><g fill="#1b8fb0" stroke="#5ce8f7" stroke-width="2"><rect height="23" rx="2" width="8" x="45" y="126"></rect><rect height="30" rx="2" width="8" x="76" y="111"></rect><rect height="34" rx="2" width="8" x="107" y="91"></rect><rect height="39" rx="2" width="8" x="177" y="50"></rect></g><rect fill="#16445c" height="67" rx="24" stroke="#58e5fa" stroke-width="3" width="79" x="80" y="57"></rect><rect fill="#0a1b2b" height="43" rx="16" width="59" x="90" y="68"></rect><ellipse cx="108" cy="89" fill="#43e4f7" rx="5" ry="8"></ellipse><ellipse cx="132" cy="89" fill="#43e4f7" rx="5" ry="8"></ellipse><path d="M116 101q5 5 10 0" stroke="#43e4f7" stroke-width="2"></path><path d="M120 57V44" stroke="#65e9ff" stroke-width="3"></path><circle cx="120" cy="41" fill="#72f1ff" r="6"></circle><path d="M95 124v21h48v-21" fill="#145574" stroke="#58e5fa" stroke-width="2"></path></svg></div>
+<div class="primary-label">
       DOWNLOAD &amp; CUSTOMIZE
      </div>
-     <h2>
+<h2>
       Autonomous Trading Bots
      </h2>
-     <p>
+<p>
       Browse free downloadable trading bots, interactive demos and upcoming releases. Go beyond simple IF / THEN signals with bots designed for market scanning, trade sequencing and dynamic position management—because finding a trade is only the beginning.
-     </p>
-     <a class="path-button" href="bots.html">
+     </p><div aria-label="Features" class="feature-chips"><span><b aria-hidden="true">⌕</b> Market scanning</span><span><b aria-hidden="true">↗</b> Entry &amp; exit rules</span><span><b aria-hidden="true">⚙</b> Risk management</span><span><b aria-hidden="true">▤</b> Multiple strategies</span><span><b aria-hidden="true">⌘</b> Customizable</span></div>
+<a class="path-button" href="bots.html">
       EXPLORE THE BOTS
       <span aria-hidden="true">
        →
       </span>
-     </a>
-    </article>
-    <article>
-     <div class="primary-label">
+</a>
+</article>
+<article class="illustrated-card tools-card"><div aria-hidden="true" class="feature-art"><svg fill="none" viewbox="0 0 220 180" xmlns="http://www.w3.org/2000/svg"><rect fill="#132f4a" height="108" rx="10" stroke="#50cbea" stroke-width="2" width="125" x="66" y="18"></rect><rect fill="#0c1d30" height="77" rx="4" width="103" x="77" y="31"></rect><path d="M84 90l20-19 17 8 22-32 17 13 14-18" stroke="#43e5f6" stroke-linejoin="round" stroke-width="3"></path><path d="M91 99V90m19 9V80m19 19V70m19 29V61m19 38V53" stroke="#226b91" stroke-width="5"></path><path d="M111 127v15m-23 0h76" stroke="#4ac9e5" stroke-width="4"></path><rect fill="#1d4164" height="82" rx="8" stroke="#79dff6" stroke-width="2" width="67" x="133" y="88"></rect><rect fill="#376d96" height="17" rx="3" width="47" x="143" y="99"></rect><g fill="#60c8e5"><rect height="11" rx="2" width="11" x="144" y="125"></rect><rect height="11" rx="2" width="11" x="161" y="125"></rect><rect height="11" rx="2" width="11" x="178" y="125"></rect><rect height="11" rx="2" width="11" x="144" y="142"></rect><rect height="11" rx="2" width="11" x="161" y="142"></rect><rect height="11" rx="2" width="11" x="178" y="142"></rect></g><circle cx="49" cy="128" fill="#123f62" r="34" stroke="#46cde8" stroke-width="2"></circle><path d="M49 94v34h34" fill="#37c5f4"></path><path d="M49 128l-25 23a34 34 0 0025 11 34 34 0 0034-34z" fill="#1d8fc7"></path></svg></div>
+<div class="primary-label">
       STANDALONE UTILITIES
      </div>
-     <h2>
+<h2>
       Dynamic Trading Tools
      </h2>
-     <p>
+<p>
       Explore the Options Plotter, Dividend Tracker and other tools. Download the utilities you need without installing a trading bot.
-     </p>
-     <a class="path-button outline" href="tools.html">
+     </p><div aria-label="Features" class="feature-chips"><span><b aria-hidden="true">⌁</b> Options analysis</span><span><b aria-hidden="true">▥</b> Dividend tracking</span><span><b aria-hidden="true">▦</b> Trade calculators</span><span><b aria-hidden="true">◴</b> Analytics</span><span><b aria-hidden="true">⚒</b> Standalone utilities</span></div>
+<a class="path-button" href="tools.html">
       EXPLORE THE TOOLS
       <span aria-hidden="true">
        →
       </span>
-     </a>
-    </article>
-   </section>
+</a>
+</article>
+</section>
    <section aria-label="Why run trading bots locally" class="local-advantage">
     <div class="path-tag">
      YOUR COMPUTER. YOUR CONTROL.
