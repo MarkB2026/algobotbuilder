@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1425" height="340" viewBox="0 0 1425 340" role="img" aria-label="BOTOMETRICS — AUTOMATE • ANALYZE • TRADE">
+  <title>Botometrics</title>
+  <desc>White BOTO, cyan METRICS with the I formed by a cyan candlestick with a short upper wick and almost no lower wick; spaced tagline.</desc>
+  <defs>
+    <linearGradient id="cyan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25d7ed"/><stop offset="1" stop-color="#23c7e6"/></linearGradient>
+  </defs>
+  <!-- Transparent background; designed for dark navy website headers. -->
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="300" font-size="180" dominant-baseline="alphabetic">
+    <text x="2" y="216" fill="#ffffff" textLength="527" lengthAdjust="spacingAndGlyphs">BOTO</text>
+    <text x="544" y="216" fill="url(#cyan)" textLength="544" lengthAdjust="spacingAndGlyphs">METR</text>
+    <!-- The I is a single candlestick: long body, short top wick, tiny bottom wick. -->
+    <path d="M1119 46 V85" stroke="#25d7ed" stroke-width="7"/>
+    <rect x="1109" y="85" width="20" height="132" fill="url(#cyan)"/>
+    <path d="M1119 217 V226" stroke="#25d7ed" stroke-width="6"/>
+    <text x="1152" y="216" fill="url(#cyan)" textLength="268" lengthAdjust="spacingAndGlyphs">CS</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="43" font-weight="300" fill="#cbd7e5" letter-spacing="11">
+    <text x="62" y="298" textLength="354" lengthAdjust="spacing">AUTOMATE</text>
+    <text x="598" y="298" textLength="308" lengthAdjust="spacing">ANALYZE</text>
+    <text x="1095" y="298" textLength="210" lengthAdjust="spacing">TRADE</text>
+  </g>
+  <circle cx="508" cy="286" r="10" fill="#25d7ed"/>
+  <circle cx="1000" cy="286" r="10" fill="#25d7ed"/>
+</svg>
