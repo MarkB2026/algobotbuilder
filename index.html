@@ -165,6 +165,9 @@ select option:disabled{color:#81909e;background:#17212d}
 .mini-head-tools{font-size:11px;color:#8de2f2}
 @media(max-width:820px){.mini-rsi .mini-body.mini-split{grid-template-columns:1fr}.mini-head-tools{display:none}}
 @media(max-width:560px){.mini-left{align-items:flex-start;flex-direction:column}.mini-rsi .mini-body.mini-split{padding:15px}.mini-tools-panel{padding:15px}}
+
+/* v1.6.32: matched homepage primary buttons */
+.home-primary .path-button{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;background:#24bde5;color:#051923;border:0}.home-primary .path-button:hover{filter:brightness(1.13)}
 </style>
 <style>
 /* v1.6.15: one centered customer-facing Premium action, no duplicate build controls */
@@ -381,7 +384,7 @@ Your bot. Your computer. Your rules.</p>
 <div class="home-hero-logo"><img alt="Free Trading Bots — Download. Customize. Trade." fetchpriority="high" height="510" src="assets/logo.png?v=1.6.22" width="510"/></div>
 </header><section aria-label="Choose bots or tools" class="home-primary">
 <article><div class="primary-label">DOWNLOAD &amp; CUSTOMIZE</div><h2>Trading Bots</h2><p>Browse free downloadable trading bots, interactive demos and upcoming releases. Configure your strategy, choose your settings and run the bot on your own Windows computer.</p><a class="path-button" href="bots.html">EXPLORE THE BOTS <span aria-hidden="true">→</span></a></article>
-<article><div class="primary-label">STANDALONE UTILITIES</div><h2>Trading Tools</h2><p>Explore the Options Plotter, Dividend Tracker and other tools. Download the utilities you need without installing a trading bot.</p><a class="path-button outline" href="tools.html">EXPLORE THE TOOLS <span aria-hidden="true">→</span></a></article>
+<article><div class="primary-label">STANDALONE UTILITIES</div><h2>Trading Tools</h2><p>Explore the Options Plotter, Dividend Tracker and other tools. Download the utilities you need without installing a trading bot.</p><a class="path-button" href="tools.html">EXPLORE THE TOOLS <span aria-hidden="true">→</span></a></article>
 </section><section aria-label="Why run trading bots locally" class="local-advantage"><div class="path-tag">YOUR COMPUTER. YOUR CONTROL.</div><h2>Why run your bots locally?</h2><p>Download the bot and run it on your own computer—not on our cloud or servers. Set up your broker connection yourself, customize your strategies and risk settings, and decide when the bot runs. No recurring subscription is required for the free editions.</p><div class="local-grid"><div><strong>Runs on your PC</strong><span>Your local Windows installation does the work. You control when it starts and stops.</span></div><div><strong>Your broker connection</strong><span>Configure supported broker API connections locally for bots that offer them. Connections are not set up by default.</span></div><div><strong>Change the settings</strong><span>Adjust available strategies, indicators and risk controls rather than using a fixed cloud bot.</span></div><div><strong>Free to keep</strong><span>Free editions have no trial expiry or recurring licence cost. Optional Premium features are separate.</span></div></div></section><details class="home-more"><summary>How we approach automated trading <small>Rules, discipline, precision and realistic risks</small></summary><div class="more-content"><section aria-labelledby="philosophy-title" class="philosophy">
 <div class="philosophy-tag">BUILT FOR DISCIPLINE, NOT PROMISES</div>
 <h2 id="philosophy-title">Your strategy. Your rules. Consistent execution.</h2>
@@ -393,31 +396,4 @@ Your bot. Your computer. Your rules.</p>
 <div class="philosophy-item"><div class="philosophy-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div><div><strong>Your time</strong><span>Automate routine tasks instead of watching charts all day.</span></div></div>
 </div>
 <p class="philosophy-note">Automated trading still involves market risk, software errors, broker outages and missed fills. No bot can guarantee profits or flawless execution.</p>
-</section></div></details><details class="home-more"><summary>Build your own bot &amp; advanced strategies <small>DIYBot, IF / THEN rules, advanced trade management and the roadmap</small></summary><div class="more-content"><section aria-labelledby="diy-title" class="diy-section">
-<div class="philosophy-tag">BUILD YOUR OWN OR GO BEYOND IF / THEN</div>
-<h2 id="diy-title">Finding a trade is one thing. Managing it is another.</h2>
-<p class="diy-intro">Create a traditional rule-based strategy with DIYBot, or explore specialized bots that combine scanning, trade sequencing and dynamic position management. The entry signal is only the beginning.</p>
-<div class="diy-compare">
-<article class="diy-panel">
-<div class="diy-panel-head"><div aria-hidden="true" class="home-glyph">◇</div><div><span class="path-tag">FREE NO-CODE BUILDER · PLANNED</span><h3>DIYBot</h3></div></div>
-<p>Build your own IF / THEN bot. Choose indicators, combine entry and exit conditions, and set basic risk controls—without writing code.</p>
-<div aria-label="Proposed indicators" class="diy-indicators"><span>RSI</span><span>MACD</span><span>EMA / SMA</span><span>VWAP</span><span>Bollinger Bands</span><span>ATR</span><span>RVOL</span><span>More</span></div>
-<div class="diy-example"><strong>IF</strong> RSI is below 30 AND price crosses above EMA 20<br/><strong>THEN</strong> buy, with your chosen stop and target.</div>
-<div class="diy-status">Coming soon · Downloadable local bot planned</div>
-</article>
-<article class="diy-panel advanced">
-<div class="diy-panel-head"><div aria-hidden="true" class="home-glyph">⚡</div><div><span class="path-tag">PURPOSE-BUILT TRADING SYSTEMS</span><h3>Beyond simple IF / THEN</h3></div></div>
-<p>Our specialized bots coordinate the entire trade lifecycle—not just a signal and a fixed exit. Different strategies use different combinations of these capabilities:</p>
-<div class="diy-features">
-<div class="diy-feature"><b>⌕</b><span>Multi-symbol scanning and candidate qualification</span></div>
-<div class="diy-feature"><b>◷</b><span>Entry windows, cooldowns and smart re-entry</span></div>
-<div class="diy-feature"><b>↗</b><span>Progressive ratcheting and profit protection</span></div>
-<div class="diy-feature"><b>⇄</b><span>Switching from price-based stops to option-value trailing stops</span></div>
-<div class="diy-feature"><b>◇</b><span>Volatility-aware trade management and conditional exits</span></div>
-<div class="diy-feature"><b>⬡</b><span>Position ownership and coordinated bot controls</span></div>
-</div>
-<a class="path-button outline" href="bots.html">EXPLORE ADVANCED BOTS <span aria-hidden="true">→</span></a>
-</article>
-</div>
-<p class="diy-disclaimer">DIYBot is a planned product. Advanced capabilities vary by bot and edition; some Premium protections remain on the roadmap and are not included in the current RSI/Paper edition.</p>
-</section></div></details><div class="truth-strip"><strong>Available to try today:</strong> The free RSI Divergence Reversal Bot beta supports RSI, EMA, ATR and RVOL entry filters. Additional free downloads and advanced Premium features will be added as they are tested and released.</div><div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Download. Customize. Trade. · Free Trading Bots</div></div></body></html>
+</section></div></details><details class="home-more"><summary>Build your own bot &amp; advanced strategies <small>DIYBot, IF / THEN rules, advanced trade management and the roadmap</small></summary><div class="more-content"></div></details><div class="truth-strip"><strong>Available to try today:</strong> The free RSI Divergence Reversal Bot beta supports RSI, EMA, ATR and RVOL entry filters. Additional free downloads and advanced Premium features will be added as they are tested and released.</div><div style="border-top:1px solid #304a5b;padding:22px 0;color:#8da0ae;font-size:12px">Download. Customize. Trade. · Free Trading Bots</div></div></body></html>
