@@ -364,7 +364,12 @@ body{background:radial-gradient(ellipse at 76% 0%,#102a3c 0%,#0a131b 52%,#090e13
   <style id="site-navigation-style">
    .site-nav{position:relative;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1160px;margin:auto;padding:13px 24px;border-bottom:1px solid #294251;font:600 14px/1.4 Inter,Segoe UI,Arial,sans-serif}.site-nav .site-brand{color:#f1f8fc;text-decoration:none;font-weight:850;font-size:17px;white-space:nowrap}.site-nav .site-brand span{color:#25c7e8}.site-nav .site-links{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.site-nav .site-links a{padding:9px 13px;border-radius:8px;color:#b7cbd7;text-decoration:none;transition:background .2s,color .2s}.site-nav .site-links a:hover,.site-nav .site-links a[aria-current="page"]{background:#193748;color:#7ce7ff}.site-nav .site-links .site-highlight{border:1px solid #426579;color:#e9f8ff}@media(max-width:700px){.site-nav{align-items:flex-start;flex-direction:column;gap:8px}.site-nav .site-links{gap:2px}.site-nav .site-links a{padding:8px 10px;font-size:13px}}
   </style>
- </head>
+ 
+<style id="home-static-approach-fix">
+.home-more>.home-more-heading{padding:18px 22px;font-size:19px;font-weight:800;color:#e7f6ff}
+.home-more>.home-more-heading small{display:block;font-size:13px;color:#a7c3d1;font-weight:400;margin-top:4px}
+</style>
+</head>
  <body>
   <nav aria-label="Main navigation" class="site-nav">
    <a class="site-brand" href="index.html">
@@ -439,7 +444,7 @@ Your bot. Your computer. Your rules.
       Autonomous Trading Bots
      </h2>
      <p>
-      Browse free downloadable trading bots, interactive demos and upcoming releases. Configure your strategy, choose your settings and run the bot on your own Windows computer.
+      Browse free downloadable trading bots, interactive demos and upcoming releases. Go beyond simple IF / THEN signals with bots designed for market scanning, trade sequencing and dynamic position management—because finding a trade is only the beginning.
      </p>
      <a class="path-button" href="bots.html">
       EXPLORE THE BOTS
@@ -511,13 +516,13 @@ Your bot. Your computer. Your rules.
      </div>
     </div>
    </section>
-   <details class="home-more">
-    <summary>
+   <section class="home-more">
+    <div class="home-more-heading">
      How we approach automated trading
      <small>
       Rules, discipline, precision and realistic risks
      </small>
-    </summary>
+    </div>
     <div class="more-content">
      <section aria-labelledby="philosophy-title" class="philosophy">
       <div class="philosophy-tag">
@@ -614,165 +619,8 @@ Your bot. Your computer. Your rules.
       </p>
      </section>
     </div>
-   </details>
-   <details class="home-more">
-    <summary>
-     Build your own bot &amp; advanced strategies
-     <small>
-      DIYBot, IF / THEN rules, advanced trade management and the roadmap
-     </small>
-    </summary>
-    <div class="more-content">
-     <section aria-labelledby="diy-title" class="diy-section">
-      <div class="philosophy-tag">
-       BUILD YOUR OWN OR GO BEYOND IF / THEN
-      </div>
-      <h2 id="diy-title">
-       Finding a trade is one thing. Managing it is another.
-      </h2>
-      <p class="diy-intro">
-       Create a traditional rule-based strategy with DIYBot, or explore specialized bots that combine scanning, trade sequencing and dynamic position management. The entry signal is only the beginning.
-      </p>
-      <div class="diy-compare">
-       <article class="diy-panel">
-        <div class="diy-panel-head">
-         <div aria-hidden="true" class="home-glyph">
-          ◇
-         </div>
-         <div>
-          <span class="path-tag">
-           FREE NO-CODE BUILDER · PLANNED
-          </span>
-          <h3>
-           DIYBot
-          </h3>
-         </div>
-        </div>
-        <p>
-         Build your own IF / THEN bot. Choose indicators, combine entry and exit conditions, and set basic risk controls—without writing code.
-        </p>
-        <div aria-label="Proposed indicators" class="diy-indicators">
-         <span>
-          RSI
-         </span>
-         <span>
-          MACD
-         </span>
-         <span>
-          EMA / SMA
-         </span>
-         <span>
-          VWAP
-         </span>
-         <span>
-          Bollinger Bands
-         </span>
-         <span>
-          ATR
-         </span>
-         <span>
-          RVOL
-         </span>
-         <span>
-          More
-         </span>
-        </div>
-        <div class="diy-example">
-         <strong>
-          IF
-         </strong>
-         RSI is below 30 AND price crosses above EMA 20
-         <br/>
-         <strong>
-          THEN
-         </strong>
-         buy, with your chosen stop and target.
-        </div>
-        <div class="diy-status">
-         Coming soon · Downloadable local bot planned
-        </div>
-       </article>
-       <article class="diy-panel advanced">
-        <div class="diy-panel-head">
-         <div aria-hidden="true" class="home-glyph">
-          ⚡
-         </div>
-         <div>
-          <span class="path-tag">
-           PURPOSE-BUILT TRADING SYSTEMS
-          </span>
-          <h3>
-           Beyond simple IF / THEN
-          </h3>
-         </div>
-        </div>
-        <p>
-         Our specialized bots coordinate the entire trade lifecycle—not just a signal and a fixed exit. Different strategies use different combinations of these capabilities:
-        </p>
-        <div class="diy-features">
-         <div class="diy-feature">
-          <b>
-           ⌕
-          </b>
-          <span>
-           Multi-symbol scanning and candidate qualification
-          </span>
-         </div>
-         <div class="diy-feature">
-          <b>
-           ◷
-          </b>
-          <span>
-           Entry windows, cooldowns and smart re-entry
-          </span>
-         </div>
-         <div class="diy-feature">
-          <b>
-           ↗
-          </b>
-          <span>
-           Progressive ratcheting and profit protection
-          </span>
-         </div>
-         <div class="diy-feature">
-          <b>
-           ⇄
-          </b>
-          <span>
-           Switching from price-based stops to option-value trailing stops
-          </span>
-         </div>
-         <div class="diy-feature">
-          <b>
-           ◇
-          </b>
-          <span>
-           Volatility-aware trade management and conditional exits
-          </span>
-         </div>
-         <div class="diy-feature">
-          <b>
-           ⬡
-          </b>
-          <span>
-           Position ownership and coordinated bot controls
-          </span>
-         </div>
-        </div>
-        <a class="path-button outline" href="bots.html">
-         EXPLORE ADVANCED BOTS
-         <span aria-hidden="true">
-          →
-         </span>
-        </a>
-       </article>
-      </div>
-      <p class="diy-disclaimer">
-       DIYBot is a planned product. Advanced capabilities vary by bot and edition; some Premium protections remain on the roadmap and are not included in the current RSI/Paper edition.
-      </p>
-     </section>
-    </div>
-   </details>
+   </section>
+   
    <div class="truth-strip">
     <strong>
      Available to try today:
