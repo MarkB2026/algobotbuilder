@@ -1739,7 +1739,4 @@ body {
   border-top: 10px solid red !important;
 }
 
-/* Hide the oversized IF → THEN graphic */
-.diy-callout-art {
-    display: none;
-}
+
